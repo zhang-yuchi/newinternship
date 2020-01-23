@@ -3,7 +3,7 @@
 <div class='controls'>
 <div class="btn">
         <slot></slot>
-        <el-button>注销登录</el-button>
+        <el-button @click="logout">注销登录</el-button>
     </div>
         <img class="logo" src="../../assets/img/logo.jpg" alt="">
 </div>
@@ -28,7 +28,12 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    logout(){
+        //清除操作
+        
+        //跳转
+        this.$router.replace('/')
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {

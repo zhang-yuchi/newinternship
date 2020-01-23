@@ -2,12 +2,14 @@
 <template>
   <div class>
     <layout>
-      <el-tabs class="select-menu" v-model="activeName" slot="select" @tab-click="handleClick">
-        <el-tab-pane label="全部学生" name="first"></el-tab-pane>
-        <el-tab-pane label="已填写鉴定表" name="second"></el-tab-pane>
-        <el-tab-pane label="已填写报告册一阶段" name="third"></el-tab-pane>
-        <el-tab-pane label="已填写报告册二阶段" name="fourth"></el-tab-pane>
-      </el-tabs>
+      <el-select slot="select" v-model="value" placeholder="请选择查看学生" class="select-menu">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
       <stunav slot="aside">
         <el-row class="tac">
           <el-col :span="12">
@@ -47,8 +49,34 @@ export default {
   data() {
     //这里存放数据
     return {
-      activeName: "first",
-      activeNav: "1"
+      activeNav: "1",
+      options: [
+        {
+          value: "ALL",
+          label: "全部"
+        },
+        {
+          value: "NOT",
+          label: "尚未填写"
+        },
+        {
+          value: "FIRST",
+          label: "已填写报告册一阶段"
+        },
+        {
+          value: "SECOND",
+          label: "已填写报告册二阶段"
+        },
+        {
+          value: "DECISION",
+          label: "已填写鉴定表"
+        },
+        {
+          value: "FINISH",
+          label: "已全部填写"
+        }
+      ],
+      value: ""
     };
   },
   //监听属性 类似于data概念
@@ -79,9 +107,13 @@ export default {
 };
 </script>
 <style scoped>
-.select-menu{
+@import "../../assets/css/nav.css";
+.select-menu {
   display: inline-block;
   vertical-align: top;
   margin-right: 30px;
+}
+.el-col{
+  width: 300px;
 }
 </style>

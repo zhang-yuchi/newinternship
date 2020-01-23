@@ -16,9 +16,10 @@
                   <span>修改信息</span>
                 </template>
                 <el-menu-item-group>
-                  <template slot="title">阶段</template>
+                  <!-- <template slot="title">阶段</template> -->
                   <el-menu-item index="4-1" @click="changepsw">修改密码</el-menu-item>
                   <el-menu-item index="4-2" @click="binding">绑定企业</el-menu-item>
+                  <el-menu-item index="4-3" @click="mdfmsg">修改个人信息</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="2">
@@ -36,20 +37,20 @@
                 <i class="el-icon-document"></i>
                 <span slot="title">实习表填写</span>
               </el-menu-item>
-               <el-submenu index="5">
-                    <template slot="title">
-                      <i class="el-icon-document"></i>
-                      <span>我的填写</span>
-                    </template>
-                    <el-menu-item-group>
-                      <template slot="title">报告册</template>
-                      <el-menu-item index="5-1" @click="toCheckReport">查看</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group>
-                      <template slot="title">鉴定表</template>
-                      <el-menu-item index="5-2" @click="toCheckSubmit">查看</el-menu-item>
-                    </el-menu-item-group>
-                  </el-submenu>
+              <el-submenu index="5">
+                <template slot="title">
+                  <i class="el-icon-document"></i>
+                  <span>我的填写</span>
+                </template>
+                <el-menu-item-group>
+                  <template slot="title">报告册</template>
+                  <el-menu-item index="5-1" @click="toCheckReport">查看</el-menu-item>
+                </el-menu-item-group>
+                <el-menu-item-group>
+                  <template slot="title">鉴定表</template>
+                  <el-menu-item index="5-2" @click="toCheckSubmit">查看</el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
             </el-menu>
           </el-col>
         </el-row>
@@ -102,11 +103,14 @@ export default {
     binding() {
       utils.routerCheck(this, "/student/binding");
     },
-    toCheckReport(){
-utils.routerCheck(this, "/student/checkReport");
+    toCheckReport() {
+      utils.routerCheck(this, "/student/checkReport");
     },
-    toCheckSubmit(){
-utils.routerCheck(this, "/student/checkSubmit");
+    toCheckSubmit() {
+      utils.routerCheck(this, "/student/checkSubmit");
+    },
+    mdfmsg(){
+      utils.routerCheck(this, "/student/mdfmsg");
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -125,6 +129,8 @@ utils.routerCheck(this, "/student/checkSubmit");
       this.activeNav = "4-1";
     } else if (this.$route.path.indexOf("binding") !== -1) {
       this.activeNav = "4-2";
+    } else if (this.$route.path.indexOf("mdfmsg") !== -1) {
+      this.activeNav = "4-3";
     } else if (this.$route.path.indexOf("checkReport") !== -1) {
       this.activeNav = "5-1";
     } else if (this.$route.path.indexOf("checkSubmit") !== -1) {
@@ -142,4 +148,8 @@ utils.routerCheck(this, "/student/checkSubmit");
 };
 </script>
 <style scoped>
+@import "../../assets/css/nav.css";
+.el-col{
+  width: 300px;
+}
 </style>

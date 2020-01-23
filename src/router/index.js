@@ -65,6 +65,10 @@ const routes = [
         path:"checkSubmit",
         component:()=>import('../views/student/checkSubmit.vue')
       },
+      {
+        path:"mdfmsg",
+        component:()=>import('../views/student/mdfmsg.vue')
+      }
     ]
   },
   {

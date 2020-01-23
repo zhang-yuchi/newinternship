@@ -1,37 +1,97 @@
 <!--  -->
 <template>
   <div class="main">
-    <stunav>
-      <el-row class="tac">
-        <el-col :span="12">
-          <el-menu
-            default-active="1"
-            class="el-menu-vertical-demo"
-          >
-            <el-menu-item index="1" @click='tomsg'>
-              <i class="el-icon-user"></i>
-              <span slot="title">个人信息</span>
-            </el-menu-item>
-            <el-submenu index="2">
-              <template slot="title">
-                <i class="el-icon-document"></i>
-                <span>报告册填写</span>
-              </template>
-              <el-menu-item-group>
-                <template slot="title">阶段</template>
-                <el-menu-item index="2-1" @click="toFirstReport" disabled>第一阶段填写</el-menu-item>
-                <el-menu-item index="2-2" @click="toSecondReport">第二阶段填写</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-menu-item index="3" @click="toSubmit">
-              <i class="el-icon-document"></i>
-              <span slot="title">实习表填写</span>
-            </el-menu-item>
-          </el-menu>
-        </el-col>
-      </el-row>
-    </stunav>
-    <router-view/>
+    <!-- <el-container>
+      <el-header>
+          <controls/>
+      </el-header>
+      <el-container>
+        <el-aside width="400px">
+          <stunav>
+            <el-row class="tac">
+              <el-col :span="12">
+                <el-menu :default-active="activeNav" class="el-menu-vertical-demo">
+                  <el-menu-item index="1" @click="tomsg">
+                    <i class="el-icon-user"></i>
+                    <span slot="title">个人信息</span>
+                  </el-menu-item>
+                  <el-submenu index="4">
+                    <template slot="title">
+                      <i class="el-icon-user"></i>
+                      <span>修改信息</span>
+                    </template>
+                    <el-menu-item-group>
+                      <template slot="title">阶段</template>
+                      <el-menu-item index="4-1" @click="changepsw">修改密码</el-menu-item>
+                      <el-menu-item index="4-2" @click="binding">绑定企业</el-menu-item>
+                    </el-menu-item-group>
+                  </el-submenu>
+
+                  <el-submenu index="2">
+                    <template slot="title">
+                      <i class="el-icon-document"></i>
+                      <span>报告册填写</span>
+                    </template>
+                    <el-menu-item-group>
+                      <template slot="title">阶段</template>
+                      <el-menu-item index="2-1" @click="toFirstReport" disabled>第一阶段填写</el-menu-item>
+                      <el-menu-item index="2-2" @click="toSecondReport">第二阶段填写</el-menu-item>
+                    </el-menu-item-group>
+                  </el-submenu>
+                  <el-menu-item index="3" @click="toSubmit">
+                    <i class="el-icon-document"></i>
+                    <span slot="title">实习表填写</span>
+                  </el-menu-item>
+                </el-menu>
+              </el-col>
+            </el-row>
+          </stunav>
+        </el-aside>
+        <el-main>
+          <router-view />
+        </el-main>
+      </el-container>
+    </el-container> -->
+    <layout>
+        <stunav slot="aside">
+            <el-row class="tac">
+              <el-col :span="12">
+                <el-menu :default-active="activeNav" class="el-menu-vertical-demo">
+                  <el-menu-item index="1" @click="tomsg">
+                    <i class="el-icon-user"></i>
+                    <span slot="title">个人信息</span>
+                  </el-menu-item>
+                  <el-submenu index="4">
+                    <template slot="title">
+                      <i class="el-icon-user"></i>
+                      <span>修改信息</span>
+                    </template>
+                    <el-menu-item-group>
+                      <template slot="title">阶段</template>
+                      <el-menu-item index="4-1" @click="changepsw">修改密码</el-menu-item>
+                      <el-menu-item index="4-2" @click="binding">绑定企业</el-menu-item>
+                    </el-menu-item-group>
+                  </el-submenu>
+                  <el-submenu index="2">
+                    <template slot="title">
+                      <i class="el-icon-document"></i>
+                      <span>报告册填写</span>
+                    </template>
+                    <el-menu-item-group>
+                      <template slot="title">阶段</template>
+                      <el-menu-item index="2-1" @click="toFirstReport" disabled>第一阶段填写</el-menu-item>
+                      <el-menu-item index="2-2" @click="toSecondReport">第二阶段填写</el-menu-item>
+                    </el-menu-item-group>
+                  </el-submenu>
+                  <el-menu-item index="3" @click="toSubmit">
+                    <i class="el-icon-document"></i>
+                    <span slot="title">实习表填写</span>
+                  </el-menu-item>
+                </el-menu>
+              </el-col>
+            </el-row>
+          </stunav>
+    </layout>
   </div>
 </template>
 
@@ -39,16 +99,20 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import stunav from "../../components/content/nav.vue";
-import utils from '../../command/utils.js'
+import utils from "../../command/utils.js";
+import layout from "../../components/content/layout.vue";
 
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
-    stunav
+    stunav,
+    layout,
   },
   data() {
     //这里存放数据
-    return {};
+    return {
+      activeNav: "1"
+    };
   },
   //监听属性 类似于data概念
   computed: {},
@@ -56,24 +120,44 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    tomsg(){
-        utils.routerCheck(this,'/student/msg')
+    //路由跳转
+    tomsg() {
+      utils.routerCheck(this, "/student/msg");
     },
-    toFirstReport(){
-        
+    toFirstReport() {
+      utils.routerCheck(this, "/student/report");
     },
-    toSecondReport(){
-
+    toSecondReport() {
+      utils.routerCheck(this, "/student/secondreport");
     },
-    toSubmit(){
-
+    toSubmit() {
+      utils.routerCheck(this, "/student/submit");
+    },
+    changepsw() {
+      utils.routerCheck(this, "/student/changepsw");
+    },
+    binding() {
+      utils.routerCheck(this, "/student/binding");
     }
-
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    if (this.$route.path.indexOf("msg") !== -1) {
+      this.activeNav = "1";
+    } else if (this.$route.path.indexOf("secondreport") !== -1) {
+      this.activeNav = "2-2";
+    } else if (this.$route.path.indexOf("submit") !== -1) {
+      this.activeNav = "3";
+    } else if (this.$route.path.indexOf("report") !== -1) {
+      this.activeNav = "2-1";
+    }else if(this.$route.path.indexOf("changepsw") !== -1){
+      this.activeNav = "4-1";
+    }else if(this.$route.path.indexOf("binding") !== -1){
+      this.activeNav = "4-2";
+    }
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -85,7 +169,5 @@ export default {
 };
 </script>
 <style scoped>
-.main {
-  width: 400px;
-}
+
 </style>

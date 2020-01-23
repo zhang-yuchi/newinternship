@@ -19,20 +19,48 @@ const routes = [
     component:()=>import('../views/index/index.vue')
   },
   {
+    //学生相关路由
     path: '/student',
     component: () => import('../views/student/index.vue'),
+    meta:{
+      title:"个人中心"
+    },
     children:[
       {
         path:"",
-        redirect:"/student/msg"
+        redirect:"/student/msg",
+        meta:{
+          title:"个人中心"
+        }
       },
       {
         path:"msg",
         component:()=>import('../views/student/msg.vue')
-      }
+      },
+      {
+        path:"report",
+        component:()=>import('../views/student/report.vue')
+      },
+      {
+        path:"secondreport",
+        component:()=>import('../views/student/secondreport.vue')
+      },
+      {
+        path:"submit",
+        component:()=>import('../views/student/submit.vue')
+      },
+      {
+        path:"changepsw",
+        component:()=>import('../views/student/changepsw.vue')
+      },
+      {
+        path:"binding",
+        component:()=>import('../views/student/binding.vue')
+      },
     ]
   },
   {
+    //老师相关路由
     path:'/teacher',
     component:()=>import('../views/teacher/index.vue'),
     children:[

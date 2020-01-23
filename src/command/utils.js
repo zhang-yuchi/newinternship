@@ -5,7 +5,7 @@ module.exports = {
             that.$router.replace(url)
         }else{
             //刷新页面
-            that.$router.go(0)
+            // that.$router.go(0)
         }
     }
 }

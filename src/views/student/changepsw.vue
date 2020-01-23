@@ -1,9 +1,6 @@
-<!--  -->
+<!-- 修改密码页面 -->
 <template>
-<div class=''>
-    this is submit
-
-</div>
+<div class=''></div>
 </template>
 
 <script>
@@ -33,7 +30,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-     document.title = "鉴定表填写"
+
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前

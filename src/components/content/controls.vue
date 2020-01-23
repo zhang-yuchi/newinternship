@@ -1,8 +1,11 @@
 <!--  -->
 <template>
-<div class=''>
-    this is submit
-
+<div class='controls'>
+    <div class="logo"></div>
+    <div class="btn">
+        <slot></slot>
+        <div class="logout">退出</div>
+    </div>
 </div>
 </template>
 
@@ -33,7 +36,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-     document.title = "鉴定表填写"
+
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前
@@ -46,5 +49,7 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-
+    .controls{
+        width: 100%;
+    }
 </style>

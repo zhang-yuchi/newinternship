@@ -1,22 +1,50 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    redirect:'/index',
+    meta:{
+      title:"欢迎来到毕业生实习管理系统"
+    }
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path:'/index',
+    meta:{
+      title:"主页"
+    },
+    component:()=>import('../views/index/index.vue')
+  },
+  {
+    path: '/student',
+    component: () => import('../views/student/index.vue'),
+    children:[
+      {
+        path:"",
+        redirect:"/student/msg"
+      },
+      {
+        path:"msg",
+        component:()=>import('../views/student/msg.vue')
+      }
+    ]
+  },
+  {
+    path:'/teacher',
+    component:()=>import('../views/teacher/index.vue'),
+    children:[
+      {
+        path:"",
+        redirect:"/teacher/index"
+      },
+      {
+        path:"index",
+        component:()=>import('../views/teacher/index.vue')
+      }
+    ]
   }
 ]
 
@@ -26,4 +54,11 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
+})
 export default router

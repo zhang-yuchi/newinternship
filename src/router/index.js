@@ -57,6 +57,14 @@ const routes = [
         path:"binding",
         component:()=>import('../views/student/binding.vue')
       },
+      {
+        path:"checkReport",
+        component:()=>import('../views/student/checkReport.vue')
+      },
+      {
+        path:"checkSubmit",
+        component:()=>import('../views/student/checkSubmit.vue')
+      },
     ]
   },
   {

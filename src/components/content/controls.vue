@@ -1,11 +1,11 @@
 <!--  -->
 <template>
 <div class='controls'>
-    <div class="logo"></div>
-    <div class="btn">
+<div class="btn">
         <slot></slot>
-        <div class="logout">退出</div>
+        <el-button>注销登录</el-button>
     </div>
+        <img class="logo" src="../../assets/img/logo.jpg" alt="">
 </div>
 </template>
 
@@ -51,5 +51,13 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 <style scoped>
     .controls{
         width: 100%;
+        padding: 20px 0;
+        overflow: hidden;
+    }
+    .logo{
+        width: 700px;
+    }
+    .btn{
+        float:right;
     }
 </style>

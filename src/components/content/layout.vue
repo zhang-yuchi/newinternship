@@ -2,8 +2,10 @@
 <template>
 <div class='layout'>
     <el-container>
-      <el-header>
-          <controls/>
+      <el-header style="height:auto;border-bottom:1px solid #f1f1f1;box-shadow:0 0 2px #f1f1f1">
+          <controls>
+              <slot name="select"></slot>
+          </controls>
       </el-header>
       <el-container>
         <el-aside width="400px">

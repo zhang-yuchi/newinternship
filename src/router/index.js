@@ -63,16 +63,16 @@ const routes = [
     //老师相关路由
     path:'/teacher',
     component:()=>import('../views/teacher/index.vue'),
-    children:[
-      {
-        path:"",
-        redirect:"/teacher/index"
-      },
-      {
-        path:"index",
-        component:()=>import('../views/teacher/index.vue')
-      }
-    ]
+    // children:[
+    //   {
+    //     path:"",
+    //     redirect:"/teacher/index"
+    //   },
+    //   {
+    //     path:"index",
+    //     component:()=>import('../views/teacher/index.vue')
+    //   }
+    // ]
   }
 ]
 

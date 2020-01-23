@@ -1,57 +1,6 @@
 <!--  -->
 <template>
   <div class="main">
-    <!-- <el-container>
-      <el-header>
-          <controls/>
-      </el-header>
-      <el-container>
-        <el-aside width="400px">
-          <stunav>
-            <el-row class="tac">
-              <el-col :span="12">
-                <el-menu :default-active="activeNav" class="el-menu-vertical-demo">
-                  <el-menu-item index="1" @click="tomsg">
-                    <i class="el-icon-user"></i>
-                    <span slot="title">个人信息</span>
-                  </el-menu-item>
-                  <el-submenu index="4">
-                    <template slot="title">
-                      <i class="el-icon-user"></i>
-                      <span>修改信息</span>
-                    </template>
-                    <el-menu-item-group>
-                      <template slot="title">阶段</template>
-                      <el-menu-item index="4-1" @click="changepsw">修改密码</el-menu-item>
-                      <el-menu-item index="4-2" @click="binding">绑定企业</el-menu-item>
-                    </el-menu-item-group>
-                  </el-submenu>
-
-                  <el-submenu index="2">
-                    <template slot="title">
-                      <i class="el-icon-document"></i>
-                      <span>报告册填写</span>
-                    </template>
-                    <el-menu-item-group>
-                      <template slot="title">阶段</template>
-                      <el-menu-item index="2-1" @click="toFirstReport" disabled>第一阶段填写</el-menu-item>
-                      <el-menu-item index="2-2" @click="toSecondReport">第二阶段填写</el-menu-item>
-                    </el-menu-item-group>
-                  </el-submenu>
-                  <el-menu-item index="3" @click="toSubmit">
-                    <i class="el-icon-document"></i>
-                    <span slot="title">实习表填写</span>
-                  </el-menu-item>
-                </el-menu>
-              </el-col>
-            </el-row>
-          </stunav>
-        </el-aside>
-        <el-main>
-          <router-view />
-        </el-main>
-      </el-container>
-    </el-container> -->
     <layout>
         <stunav slot="aside">
             <el-row class="tac">

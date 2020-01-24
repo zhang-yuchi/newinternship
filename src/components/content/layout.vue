@@ -12,7 +12,7 @@
           <div class="aside"><slot name="aside"></slot></div>
         </el-aside>
         <el-main>
-          <router-view />
+          <keep-alive exclude="changepsw,binding,mdfmsg"><router-view /></keep-alive>
         </el-main>
       </el-container>
     </el-container>

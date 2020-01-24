@@ -1,22 +1,34 @@
 <!--  -->
 <template>
 <div class=''>
-    this is submit
-
+    <formt>
+        <el-form label-position="top" label-width="80px" :model="decision">
+        <el-form-item label="姓名">
+          <el-input v-model="decision.name"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </formt>
 </div>
 </template>
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import formt from "../../components/content/form"
 export default {
 //import引入的组件需要注入到对象中才能使用
-components: {},
+components: {
+    formt,
+},
 data() {
 //这里存放数据
 return {
-
+    decision:{
+        name:555
+    }
 };
 },
 //监听属性 类似于data概念

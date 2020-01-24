@@ -15,7 +15,7 @@ components: {},
 data() {
 //这里存放数据
 return {
-    
+
 };
 },
 //监听属性 类似于data概念
@@ -45,5 +45,7 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-
+    .details{
+        width: 70%;
+    }
 </style>

@@ -40,6 +40,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import layout from "../../components/content/layout.vue";
 import stunav from "../../components/content/nav";
+import utils from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -88,14 +89,28 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    tostulist() {},
-    toreportlist() {},
-    tosubmitlist() {}
+    tostulist() {
+      utils.routerCheck(this, "/teacher/studentlist");
+    },
+    toreportlist() {
+      utils.routerCheck(this, "/teacher/reportlist");
+    },
+    tosubmitlist() {
+      utils.routerCheck(this, "/teacher/submitlist");
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    if(this.$route.path.indexOf('/studentlist')!==-1){
+      this.activeNav = "1"
+    }else if(this.$route.path.indexOf('/reportlist')!==-1){
+      this.activeNav = "2"
+    }else if(this.$route.path.indexOf('/submitlist')!==-1){
+      this.activeNav = "3"
+    }
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -113,7 +128,7 @@ export default {
   vertical-align: top;
   margin-right: 30px;
 }
-.el-col{
+.el-col {
   width: 300px;
 }
 </style>

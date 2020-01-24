@@ -89,7 +89,7 @@ export default {
       } else if (this.form.identify == "教师") {
         this.$router.push("/teacher");
       } else {
-        this.$alert("您还没有选择身份", "注意", {
+        this.$alert("您还没有选择身份", "提示", {
           confirmButtonText: "确定"
         });
       }

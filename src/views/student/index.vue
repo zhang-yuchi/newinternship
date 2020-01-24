@@ -35,7 +35,7 @@
               </el-submenu>
               <el-menu-item index="3" @click="toSubmit">
                 <i class="el-icon-document"></i>
-                <span slot="title">实习表填写</span>
+                <span slot="title">鉴定表填写</span>
               </el-menu-item>
               <el-submenu index="5">
                 <template slot="title">

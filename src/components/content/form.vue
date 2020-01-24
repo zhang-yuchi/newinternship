@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-<div class='nav'>
+<div class='form'>
     <slot></slot>
 </div>
 </template>
@@ -24,7 +24,7 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-    
+
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -45,7 +45,7 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-    .nav{
-        user-select: none;
+    .form{
+        width: 70%;
     }
 </style>

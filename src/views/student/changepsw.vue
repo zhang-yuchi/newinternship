@@ -69,7 +69,7 @@ export default {
         age: ""
       },
       rules: {
-        oldpass:[{ validator: checkoldpass, trigger: "blur" }],
+        oldpass:[{require:true, validator: checkoldpass, trigger: "blur" }],
         pass: [{ validator: validatePass, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
       }

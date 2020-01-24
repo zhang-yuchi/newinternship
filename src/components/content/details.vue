@@ -1,6 +1,6 @@
-<!--  -->
+<!-- 表格详情页 -->
 <template>
-<div class='nav'>
+<div class='details'>
     <slot></slot>
 </div>
 </template>
@@ -15,7 +15,7 @@ components: {},
 data() {
 //这里存放数据
 return {
-
+    
 };
 },
 //监听属性 类似于data概念
@@ -24,7 +24,7 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-    
+
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -45,7 +45,5 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-    .nav{
-        user-select: none;
-    }
+
 </style>

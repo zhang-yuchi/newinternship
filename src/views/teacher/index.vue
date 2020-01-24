@@ -1,8 +1,8 @@
 <!--  -->
 <template>
   <div class>
-    <layout>
-      <el-select slot="select" v-model="value" placeholder="请选择查看学生" class="select-menu">
+    <layout >
+      <el-select slot="select" @change="changelist" v-model="value" placeholder="请选择查看学生" class="select-menu">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -22,7 +22,6 @@
                 <i class="el-icon-document"></i>
                 <span slot="title">报告册查看</span>
               </el-menu-item>
-
               <el-menu-item index="3" @click="tosubmitlist">
                 <i class="el-icon-document"></i>
                 <span slot="title">鉴定表查看</span>
@@ -77,7 +76,8 @@ export default {
           label: "已全部填写"
         }
       ],
-      value: ""
+      value: "",
+
     };
   },
   //监听属性 类似于data概念
@@ -86,9 +86,6 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
     tostulist() {
       utils.routerCheck(this, "/teacher/studentlist");
     },
@@ -97,18 +94,21 @@ export default {
     },
     tosubmitlist() {
       utils.routerCheck(this, "/teacher/submitlist");
+    },
+    changelist(){
+      console.log(this.value)
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    if(this.$route.path.indexOf('/studentlist')!==-1){
-      this.activeNav = "1"
-    }else if(this.$route.path.indexOf('/reportlist')!==-1){
-      this.activeNav = "2"
-    }else if(this.$route.path.indexOf('/submitlist')!==-1){
-      this.activeNav = "3"
+    if (this.$route.path.indexOf("/studentlist") !== -1) {
+      this.activeNav = "1";
+    } else if (this.$route.path.indexOf("/reportlist") !== -1) {
+      this.activeNav = "2";
+    } else if (this.$route.path.indexOf("/submitlist") !== -1) {
+      this.activeNav = "3";
     }
   },
   beforeCreate() {}, //生命周期 - 创建之前

@@ -2,40 +2,11 @@
 <template>
 <div class=''>
     <el-table
-    :data="tableData"
+    :data="list"
     style="width: 100%"
-    height="550">
-    <el-table-column
-      fixed
-      prop="date"
-      label="日期"
-      width="150">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="province"
-      label="省份"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="city"
-      label="市区"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      width="300">
-    </el-table-column>
-    <el-table-column
-      prop="zip"
-      label="邮编"
-      width="120">
-    </el-table-column>
+    height="570">
+    <slot name="table-content"></slot>
+    <slot name="table-button"></slot>
   </el-table>
 </div>
 </template>
@@ -47,91 +18,13 @@
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
+props:{
+    list:Array
+},
 data() {
 //这里存放数据
 return {
-     tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        },
-        {
-          date: '2016-05-07',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        },
-        {
-          date: '2016-05-07',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        },
-        {
-          date: '2016-05-07',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        },
-        {
-          date: '2016-05-07',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }]
+     
 };
 },
 //监听属性 类似于data概念

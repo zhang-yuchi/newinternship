@@ -113,11 +113,19 @@ const routes = [
       },
       {
         path:"reportlist",
-        component:()=>import('../views/teacher/reportlist.vue')
+        component:()=>import('../views/teacher/reportlist.vue'),
       },
       {
         path:"submitlist",
-        component:()=>import('../views/teacher/submitlist.vue')
+        component:()=>import('../views/teacher/submitlist.vue'),
+      },
+      {
+        path:"submitlist/details",
+        component:()=>import("../views/teacher/submitdetails.vue")
+      },
+      {
+        path:"reportlist/details",
+        component:()=>import("../views/teacher/reportdetails.vue")
       }
     ]
   }

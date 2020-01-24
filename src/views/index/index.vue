@@ -1,9 +1,30 @@
 <!--  -->
 <template>
-  <div class="">
-    <div class="title"></div>
+  <div class>
+    <img src="../../assets/img/logo.jpg" alt />
+    <div class="title">毕业生实习管理系统</div>
+    <el-row :gutter="20" class="mainpage">
+      <el-col :span="8">
+        <div class="grid-content bg-purple">
+          <el-card class="box-card" shadow="hover">
+            <div class="text item">公告</div>
+          </el-card>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="grid-content bg-purple">
+          <el-card class="box-card" shadow="hover">
+            <div class="text item">资料下载</div>
+          </el-card>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="grid-content bg-purple">
+          <login />
+        </div>
+      </el-col>
+    </el-row>
     <!-- 登录区块 -->
-    <login />
   </div>
 </template>
 
@@ -18,7 +39,9 @@ export default {
   },
   data() {
     //这里存放数据
-    return {};
+    return {
+      dates:new Date()
+    };
   },
   //监听属性 类似于data概念
   computed: {},
@@ -41,5 +64,16 @@ export default {
 };
 </script>
 <style scoped>
+.mainpage {
+  width: 90%;
+  margin: 20px auto !important;
+}
+.title{
+  margin:30px auto;
+  font-size: 30px;
+  color: #606266;
+  font-weight: bold;
+  text-align: center;
+}
 
 </style>

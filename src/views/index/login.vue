@@ -1,7 +1,7 @@
 <!--  -->
 <template>
-  <div class="login">
-    <div class="title">登录</div>
+<el-card class="box-card login" shadow="hover">
+<div class="title">登录</div>
     <el-form
       :model="ruleForm"
       status-icon
@@ -27,7 +27,11 @@
       </div>
       <!-- <el-button type="primary">主要按钮</el-button> -->
     </el-form>
-  </div>
+</el-card>
+
+
+    
+
 </template>
 
 <script>
@@ -111,9 +115,9 @@ export default {
 </script>
 <style scoped>
 .login {
-  border: 1px solid #cdc8c8;
+  /* border: 1px solid #cdc8c8; */
   float: right;
-  width: 15%;
+  width: 80%;
   padding: 20px;
   margin: 0 auto;
   /* text-align: center; */

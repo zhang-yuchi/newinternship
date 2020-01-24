@@ -4,7 +4,7 @@
     <el-row :gutter="0">
       <el-col :span="12">
         <div class="grid-content bg-purple">
-          <el-card class="box-card">
+          <el-card class="box-card" shadow="hover">
             <div class="text item title">个人信息</div>
             <div class="text item">姓名: {{Std.name}}</div>
             <div class="text item">性别: {{Std.sex}}</div>
@@ -18,7 +18,7 @@
       </el-col>
       <el-col :span="12">
         <div class="grid-content bg-purple">
-          <el-card class="box-card">
+          <el-card class="box-card" shadow="hover">
             <div class="text item title">企业信息</div>
             <div class="text item">企业名: </div>
             <div class="text item">企业号: </div>
@@ -31,7 +31,7 @@
     <el-row :gutter="20">
       <el-col :span="12" >
         <div class="grid-content bg-purple">
-          <el-card class="box-card">
+          <el-card class="box-card" shadow="hover">
             <div class="text item title">导师信息</div>
             <div class="text item">姓名: </div>
             <div class="text item">工号: </div>

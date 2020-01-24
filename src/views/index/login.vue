@@ -126,7 +126,10 @@ export default {
   text-align: center;
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 1px solid black;
+  color: #303133;
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom: 1px solid #DCDFE6;
 }
 .controls{
   text-align: center;

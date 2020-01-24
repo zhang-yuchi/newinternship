@@ -2,7 +2,7 @@
 <template>
 <div class=''>
     <formt>
-        
+        <div class="list-title">xxx的报告册</div>
     </formt>
 </div>
 </template>

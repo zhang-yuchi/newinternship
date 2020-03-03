@@ -1,102 +1,132 @@
 <!--  -->
 <template>
   <div class>
-    <el-card class="box-card">
-      <div class="card-title">个人信息</div>
-      <!-- <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div> -->
-      <el-row>
-        <el-col :span="12">
+    <el-row :gutter="20">
+      <el-col :span="10">
+        <el-card class="box-card">
+          <div class="card-title">个人信息</div>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">姓名</span>
+                <span class="item-content">张三</span>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">学号</span>
+                <span class="item-content">1234567890</span>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">微信</span>
+                <span class="item-content">ruankun521</span>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">年龄</span>
+                <span class="item-content">25</span>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">电话</span>
+                <span class="item-content">18783551223</span>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">专业</span>
+                <span class="item-content">计算机科学与技术</span>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">实习岗位</span>
+                <span class="item-content">java实习</span>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">实习企业</span>
+                <span class="item-content">腾讯</span>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">qq</span>
+                <span class="item-content">2669327287</span>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">学院</span>
+                <span class="item-content">信息工程学院</span>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">实习开始时间</span>
+                <span class="item-content">2020-02-02</span>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">实习结束时间</span>
+                <span class="item-content">2020-01-01</span>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <span class="item-title">身份证号</span>
+                <span class="item-content">510105199810211271</span>
+              </div>
+            </el-col>
+          </el-row>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="box-card">
+          <div class="card-title">导师信息</div>
+
           <div class="text item">
             <span class="item-title">姓名</span>
             <span class="item-content">张三</span>
           </div>
-        </el-col>
-        <el-col :span="12">
+
           <div class="text item">
-            <span class="item-title">学号</span>
+            <span class="item-title">工号</span>
             <span class="item-content">1234567890</span>
           </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
           <div class="text item">
-            <span class="item-title">微信</span>
-            <span class="item-content">ruankun521</span>
+            <span class="item-title">性别</span>
+            <span class="item-content">男</span>
           </div>
-        </el-col>
-        <el-col :span="12">
           <div class="text item">
             <span class="item-title">年龄</span>
-            <span class="item-content">25</span>
+            <span class="item-content">18</span>
           </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
           <div class="text item">
-            <span class="item-title">电话</span>
-            <span class="item-content">18783551223</span>
+            <span class="item-title">院校</span>
+            <span class="item-content">大话科技学院</span>
           </div>
-        </el-col>
-        <el-col :span="12">
-          <div class="text item">
-            <span class="item-title">专业</span>
-            <span class="item-content">计算机科学与技术</span>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div class="text item">
-            <span class="item-title">实习岗位</span>
-            <span class="item-content">java实习</span>
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div class="text item">
-            <span class="item-title">实习企业</span>
-            <span class="item-content">腾讯</span>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div class="text item">
-            <span class="item-title">qq</span>
-            <span class="item-content">2669327287</span>
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div class="text item">
-            <span class="item-title">学院</span>
-            <span class="item-content">信息工程学院</span>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div class="text item">
-            <span class="item-title">实习开始时间</span>
-            <span class="item-content">2020-02-02</span>
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div class="text item">
-            <span class="item-title">实习结束时间</span>
-            <span class="item-content">2020-01-01</span>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div class="text item">
-            <span class="item-title">身份证号</span>
-            <span class="item-content">510105199810211271</span>
-          </div>
-        </el-col>
-      </el-row>
-    </el-card>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -153,14 +183,14 @@ export default {
 .item-content {
   display: inline-block;
 }
-.item-content{
-    width: 150px;
-    word-break: break-word;
+.item-content {
+  width: 150px;
+  word-break: break-word;
 }
 .item-title {
-    width: 60px;
-    /* text-align: right; */
-    vertical-align: top;
+  width: 60px;
+  /* text-align: right; */
+  vertical-align: top;
   /* font-weight: bold; */
   color: rgb(97, 113, 139);
   margin-right: 10px;

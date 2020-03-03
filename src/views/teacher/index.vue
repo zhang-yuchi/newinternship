@@ -3,8 +3,20 @@
   <div class="main">
     <layout>
       <el-col slot="nav" style="height:100%;" :span="24">
-        <el-menu default-active="1-1" class="el-menu-vertical-demo">
-          <el-submenu index="1">
+        <el-menu :default-active="activeNav" :router="true" class="el-menu-vertical-demo">
+          <el-menu-item index="/teacher/stu-list">
+            <i class="el-icon-user"></i>
+            <span slot="title">学生信息</span>
+          </el-menu-item>
+          <el-menu-item index="/teacher/report-list">
+            <i class="el-icon-edit"></i>
+            <span slot="title">报告册评价</span>
+          </el-menu-item>
+          <el-menu-item index="/teacher/decision-list">
+            <i class="el-icon-edit"></i>
+            <span slot="title">鉴定表评价</span>
+          </el-menu-item>
+          <!-- <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>我的</span>
@@ -29,7 +41,7 @@
           <el-menu-item index="4">
             <i class="el-icon-edit"></i>
             <span slot="title">我的鉴定表</span>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-menu>
       </el-col>
     </layout>
@@ -48,13 +60,17 @@ components: {
 data() {
 //这里存放数据
 return {
-
+  activeNav:"stu-list"
 };
 },
 //监听属性 类似于data概念
 computed: {},
 //监控data中的数据变化
-watch: {},
+watch: {
+  $route(newc,cur){
+    this.activeNav = newc.path;
+  }
+},
 //方法集合
 methods: {
 
@@ -65,7 +81,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+  this.activeNav = this.$router.history.current.path;
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前

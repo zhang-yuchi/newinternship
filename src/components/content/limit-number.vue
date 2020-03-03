@@ -1,11 +1,7 @@
 <!--  -->
 <template>
-<div class='block-item'>
-    <div class="block-title">{{title}}</div>
-    <div class="block-content">
-        {{content}}
-    </div>
-    <div class="block-time" :style="{textAlign:timefloat}" v-if="time">时间 {{time}}</div>
+<div class='limit-number'>
+    {{stringLength}}/{{maxLength}}
 </div>
 </template>
 
@@ -17,24 +13,23 @@ export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
 props:{
-    title:String,
-    content:String,
-    time:String,
-    timefloat:{
-        type:String,
-        default:"right",
-    }
+    maxLength:Number,
+    testString:String,
 },
 data() {
 //这里存放数据
 return {
-
+    stringLength:0
 };
 },
 //监听属性 类似于data概念
 computed: {},
 //监控data中的数据变化
-watch: {},
+watch: {
+    testString(newValue){
+        this.stringLength = newValue.length
+    }
+},
 //方法集合
 methods: {
 
@@ -45,7 +40,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+    this.stringLength = this.testString.length
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前
@@ -58,26 +53,8 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-.block-title{
-    font-size: 14px;
-    color: #378f8c;
-    padding: 6px 0;
-    border-bottom: 1px solid #dddddd;
-}
-.block-content{
-    font-size: 14px;
-    line-height: 22px;
-    padding: 5px 0;
-}
-.block-time{
-    font-size: 14px;
-    color: #9a9999;
-    margin-top: 10px;
+.limit-number{
+    font-size: 12px;
     text-align: right;
-}
-.block-item{
-    
-    margin-bottom: 18px;
-    
 }
 </style>

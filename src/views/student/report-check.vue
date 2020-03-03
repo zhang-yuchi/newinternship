@@ -16,11 +16,13 @@
       <form-block title="实习总结" :content="summaryContent" :time="summaryTime"></form-block>
       <form-block title="学院实习指导教师评语" :content="summaryContent" :time="summaryTime"></form-block>
       <form-block title="实习成绩评定" :content="summaryContent" :time="summaryTime"></form-block>
-      <div class="Divider">学院实习指导教师总评及成绩评定</div>
-      <form-block title="评语" :content="summaryContent" :time="summaryTime"></form-block>
-      <div class="text item">
-        <span class="header-title">实习成绩</span>
-        <span class="header-content">暂无</span>
+      <div class="state2" v-if="state==1">
+        <div class="Divider">学院实习指导教师总评及成绩评定</div>
+        <form-block title="评语" :content="summaryContent" :time="summaryTime"></form-block>
+        <div class="text item">
+          <span class="header-title">实习成绩</span>
+          <span class="header-content">暂无</span>
+        </div>
       </div>
     </el-card>
   </div>
@@ -119,7 +121,7 @@ export default {
 }
 /* .big-report {
   width: 80%; */
-  /* transition: none; */
+/* transition: none; */
 /* } */
 /* .box-card{
   width: 80%;

@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class>
+  <div class="profile-main">
     <el-row :gutter="20">
       <el-col :span="10">
         <el-card class="box-card">
@@ -194,5 +194,9 @@ export default {
   /* font-weight: bold; */
   color: rgb(97, 113, 139);
   margin-right: 10px;
+}
+.profile-main > .el-row{
+  display: flex;
+  justify-content: center;
 }
 </style>

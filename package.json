@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "babel-polyfill": "^6.26.0",
     "core-js": "^3.4.4",
     "element-ui": "^2.13.0",
     "moment": "^2.24.0",

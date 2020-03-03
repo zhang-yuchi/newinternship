@@ -6,5 +6,10 @@
 
 <style>
   @import './assets/css/normalize.css';
-  
+  body,html{
+    height: 100%;
+  }
+  #app{
+    height: 100%;
+  }
 </style>

@@ -1,11 +1,7 @@
 <!--  -->
 <template>
 <div class='controls'>
-<div class="btn">
-        <slot></slot>
-        <el-button @click="logout">注销登录</el-button>
-    </div>
-        <img class="logo" src="../../assets/img/logo.jpg" alt="">
+
 </div>
 </template>
 

@@ -1,69 +1,92 @@
 <!-- 布局 -->
 <template>
-<div class='layout'>
+  <div class="layout">
     <el-container>
-      <el-header style="height:auto;border-bottom:1px solid #f1f1f1;box-shadow:0 0 2px #f1f1f1">
-          <controls>
-              <slot name="select"></slot>
-          </controls>
+      <el-header>
+        <img src="../../assets/img/logo.jpg" height="100%;" alt="" srcset="">
       </el-header>
       <el-container>
-        <el-aside width="">
-          <div class="aside"><slot name="aside"></slot></div>
+        <el-aside width="200px">
+          <slot class="navs" name="nav"></slot>
         </el-aside>
         <el-main>
-          <keep-alive exclude="changepsw,binding,mdfmsg"><router-view /></keep-alive>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
-</div>
+  </div>
 </template>
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import controls from "./controls"
 
 export default {
-//import引入的组件需要注入到对象中才能使用
-components: {
-    controls
-},
-props:{
-  
-},
-data() {
-//这里存放数据
-return {
-
+  //import引入的组件需要注入到对象中才能使用
+  components: {
+    
+  },
+  props: {},
+  data() {
+    //这里存放数据
+    return {};
+  },
+  //监听属性 类似于data概念
+  computed: {},
+  //监控data中的数据变化
+  watch: {},
+  //方法集合
+  methods: {},
+  //生命周期 - 创建完成（可以访问当前this实例）
+  created() {},
+  //生命周期 - 挂载完成（可以访问DOM元素）
+  mounted() {},
+  beforeCreate() {}, //生命周期 - 创建之前
+  beforeMount() {}, //生命周期 - 挂载之前
+  beforeUpdate() {}, //生命周期 - 更新之前
+  updated() {}, //生命周期 - 更新之后
+  beforeDestroy() {}, //生命周期 - 销毁之前
+  destroyed() {}, //生命周期 - 销毁完成
+  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
-},
-//监听属性 类似于data概念
-computed: {},
-//监控data中的数据变化
-watch: {},
-//方法集合
-methods: {
-
-},
-//生命周期 - 创建完成（可以访问当前this实例）
-created() {
-
-},
-//生命周期 - 挂载完成（可以访问DOM元素）
-mounted() {
-
-},
-beforeCreate() {}, //生命周期 - 创建之前
-beforeMount() {}, //生命周期 - 挂载之前
-beforeUpdate() {}, //生命周期 - 更新之前
-updated() {}, //生命周期 - 更新之后
-beforeDestroy() {}, //生命周期 - 销毁之前
-destroyed() {}, //生命周期 - 销毁完成
-activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
-}
 </script>
 <style scoped>
+.layout {
+  height: 100%;
+}
+.el-header {
+  background-color: #b3c0d1;
+  color: #333;
+  height: 100px !important;
+  background-color: white;
+}
 
+.el-aside {
+  overflow-y: auto;
+  background-color: white;
+  color: #333;
+  float: left;
+  /* height: 100%; */
+  text-align: center;
+  line-height: 200px;
+}
+
+.el-main {
+  width: 100%;
+  background-color: white;
+  color: #333;
+  /* text-align: center; */
+  /* line-height: 160px; */
+  float: left;
+}
+
+.el-container {
+  min-height: 100%;
+  overflow-y:scroll;
+
+}
+.navs{
+  height: 100%;
+}
 </style>

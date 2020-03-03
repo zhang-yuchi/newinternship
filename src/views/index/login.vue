@@ -1,37 +1,79 @@
 <!--  -->
 <template>
-<el-card class="box-card login" shadow="hover">
-<div class="title">登录</div>
-    <el-form
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      ref="ruleForm"
-      label-width="60px"
-      class="demo-ruleForm"
-    >
-      <el-form-item label="账号" prop="username">
-        <el-input v-model="ruleForm.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="身份">
-        <el-radio-group v-model="form.identify">
-          <el-radio label="学生"></el-radio>
-          <el-radio label="教师"></el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <div class="controls">
-        <el-button type="primary" @click="onSubmit">登录</el-button>
-      </div>
-      <!-- <el-button type="primary">主要按钮</el-button> -->
-    </el-form>
-</el-card>
+  <el-card class="box-card login" shadow="hover">
+    <div class="log" v-if="islog">
+      <div class="title">登录</div>
+      <el-form
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        ref="ruleForm"
+        label-width="60px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="账号" prop="username">
+          <el-input v-model="ruleForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="身份">
+          <el-radio-group v-model="form.identify">
+            <el-radio label="学生"></el-radio>
+            <el-radio label="教师"></el-radio>
+          </el-radio-group>
+          <el-link class="margin" type="primary" :underline="false" v-on:click="changePsw">忘记密码</el-link>
+        </el-form-item>
 
+        <div class="controls">
+          <el-button type="primary" @click="onSubmit">登录</el-button>
+        </div>
+        <!-- <el-button type="primary">主要按钮</el-button> -->
 
-    
+        <el-link class="email" :underline="false" type="warning">网络功能异常反馈:qkmc@outlook.com</el-link>
+      </el-form>
+    </div>
+    <div class="change" v-if="!islog">
+      <div class="title">修改密码</div>
+      <el-form
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        ref="ruleForm"
+        label-width="60px"
+        class="demo-ruleForm"
+      >
+        <el-form
+          :model="ruleForm"
+          status-icon
+          :rules="rules"
+          ref="ruleForm"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+        <el-form-item label="账号" prop="age">
+            <el-input v-model.number="ruleForm.age"></el-input>
+          </el-form-item>
+          <el-form-item label="身份证" prop="age">
+            <el-input v-model.number="ruleForm.age"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="pass">
+            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="checkPass">
+            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+          </el-form-item>
+          
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+            <el-button @click="resetForm('ruleForm')">返回</el-button>
+          </el-form-item>
+        </el-form>
 
+        <!-- <el-button type="primary">主要按钮</el-button> -->
+      </el-form>
+    </div>
+  </el-card>
 </template>
 
 <script>
@@ -42,12 +84,13 @@ export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
+    var islog = true;
     var checkAge = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("账号不能为空"));
-      }else{
+      } else {
         this.$refs.ruleForm.validateField("checkAge");
-        callback()
+        callback();
       }
     };
     var validatePass = (rule, value, callback) => {
@@ -61,7 +104,6 @@ export default {
       }
     };
 
-
     //这里存放数据
     return {
       ruleForm: {
@@ -73,6 +115,7 @@ export default {
         pass: [{ validator: validatePass, trigger: "blur" }],
         username: [{ validator: checkAge, trigger: "blur" }]
       },
+      islog,
       form: {
         username: "",
         passowrd: "",
@@ -87,7 +130,6 @@ export default {
   //方法集合
   methods: {
     onSubmit() {
-      console.log(this.ruleForm);
       if (this.form.identify == "学生") {
         this.$router.push("/student");
       } else if (this.form.identify == "教师") {
@@ -97,7 +139,8 @@ export default {
           confirmButtonText: "确定"
         });
       }
-    }
+    },
+    changePsw() {}
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
@@ -129,9 +172,18 @@ export default {
   color: #303133;
   font-weight: bold;
   font-size: 20px;
-  border-bottom: 1px solid #DCDFE6;
+  border-bottom: 1px solid #dcdfe6;
 }
-.controls{
+.controls {
   text-align: center;
+}
+.margin {
+  margin-left: 20px;
+  margin-top: -2px;
+}
+.email {
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
 }
 </style>

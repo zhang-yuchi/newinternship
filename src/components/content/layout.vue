@@ -63,7 +63,7 @@ export default {
 }
 
 .el-aside {
-  overflow-y: auto;
+  /* overflow-y: auto; */
   background-color: white;
   color: #333;
   float: left;
@@ -83,7 +83,7 @@ export default {
 
 .el-container {
   min-height: 100%;
-  overflow-y:scroll;
+  /* overflow-y:scroll; */
 
 }
 .navs{

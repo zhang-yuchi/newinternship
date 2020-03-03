@@ -1,9 +1,9 @@
 <!--  -->
 <template>
   <div class="report-check">
-    <el-card class="box-card">
+    <el-card class="box-card" :class="state==0?'big-report':''">
       <div slot="header" class="clearfix">
-        <span>{{title}}</span>
+        <span style="color:rgb(64,158,255);">{{title}}</span>
       </div>
       <div class="text item">
         <span class="header-title">指导时间</span>
@@ -16,6 +16,12 @@
       <form-block title="实习总结" :content="summaryContent" :time="summaryTime"></form-block>
       <form-block title="学院实习指导教师评语" :content="summaryContent" :time="summaryTime"></form-block>
       <form-block title="实习成绩评定" :content="summaryContent" :time="summaryTime"></form-block>
+      <div class="Divider">学院实习指导教师总评及成绩评定</div>
+      <form-block title="评语" :content="summaryContent" :time="summaryTime"></form-block>
+      <div class="text item">
+        <span class="header-title">实习成绩</span>
+        <span class="header-content">暂无</span>
+      </div>
     </el-card>
   </div>
 </template>
@@ -33,9 +39,10 @@ export default {
     //这里存放数据
     return {
       title: "",
-      state:"",
-      summaryContent:"学到了很多",
-      summaryTime:"2020/3/3"
+      state: "",
+      summaryContent:
+        "学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多",
+      summaryTime: "2020/3/3"
     };
   },
   //监听属性 类似于data概念
@@ -52,10 +59,10 @@ export default {
       switch (this.$route.params.state) {
         case "first-stage":
           this.title = "第一阶段报告册";
-          this.state = "0"
+          this.state = "0";
           break;
         case "second-stage":
-            this.state = "1"
+          this.state = "1";
           this.title = "第二阶段报告册";
           break;
         default:
@@ -68,7 +75,7 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    console.log(this.$route.params.state);
+    // console.log(this.$route.params.state);
     this.changeState();
   },
   beforeCreate() {}, //生命周期 - 创建之前
@@ -91,7 +98,9 @@ export default {
 }
 
 .box-card {
-  width: 480px;
+  /* width: 480px; */
+  width: 80%;
+  transition: none;
 }
 .header-title,
 .header-content {
@@ -104,8 +113,24 @@ export default {
 .header-content {
   width: 350px;
 }
-.report-check{
-    display: flex;
-    justify-content: center;
+.report-check {
+  display: flex;
+  justify-content: center;
+}
+/* .big-report {
+  width: 80%; */
+  /* transition: none; */
+/* } */
+/* .box-card{
+  width: 80%;
+} */
+.summary {
+  margin-left: 20px;
+  width: 456px;
+}
+.Divider {
+  padding: 10px 0;
+  color: rgb(64, 158, 255);
+  /* border-bottom: 1px solid #ddd; */
 }
 </style>

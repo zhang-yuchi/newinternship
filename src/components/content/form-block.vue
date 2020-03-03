@@ -68,8 +68,12 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 .block-time{
     font-size: 14px;
     color: #9a9999;
+    margin-top: 10px;
+    text-align: right;
 }
 .block-item{
+    
     margin-bottom: 18px;
+    
 }
 </style>

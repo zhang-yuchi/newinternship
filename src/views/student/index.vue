@@ -3,33 +3,54 @@
   <div class="main">
     <layout>
       <el-col slot="nav" style="height:100%;" :span="24">
-        <el-menu default-active="1-1" class="el-menu-vertical-demo">
+        <el-menu :default-active="activeNav" :router="true" class="el-menu-vertical-demo">
           <el-submenu index="1">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              <i class="el-icon-user"></i>
               <span>我的</span>
             </template>
             <el-menu-item-group>
               <template slot="title">个人信息</template>
-              <el-menu-item index="1-1">我的信息</el-menu-item>
-              <el-menu-item index="1-2">修改信息</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
+              <el-menu-item index="/student/profile">我的信息</el-menu-item>
+              <el-menu-item index="/student/modify-profile">修改信息</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">我的企业</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-edit"></i>
-            <span slot="title">我的报告册</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-edit"></i>
-            <span slot="title">我的鉴定表</span>
-          </el-menu-item>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-s-cooperation"></i>
+              <span>我的企业</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/student/enterprise">查看企业</el-menu-item>
+              <el-menu-item index="/student/enterprise-modify">修改企业信息</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-edit"></i>
+              <span>我的报告册</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title">第一阶段</template>
+              <el-menu-item index="/student/report-check/first-stage">查看报告册</el-menu-item>
+              <el-menu-item index="/student/report/first-stage">填写报告册</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group>
+              <template slot="title">第二阶段</template>
+              <el-menu-item index="/student/report-check/second-stage">查看报告册</el-menu-item>
+              <el-menu-item index="/student/report/second-stage">填写报告册</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-edit"></i>
+              <span>我的鉴定表</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/student/decision-check">查看鉴定表</el-menu-item>
+              <el-menu-item index="/student/decision">填写鉴定表</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
         </el-menu>
       </el-col>
     </layout>
@@ -49,19 +70,25 @@ export default {
   data() {
     //这里存放数据
     return {
-      activeNav: "1"
+      activeNav: "profile"
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    $route(newc, cur) {
+      this.activeNav = newc.path;
+    }
+  },
   //方法集合
   methods: {},
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.activeNav = this.$router.history.current.path;
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -73,7 +100,7 @@ export default {
 };
 </script>
 <style scoped>
-.main{
+.main {
   height: 100%;
 }
 .el-menu {

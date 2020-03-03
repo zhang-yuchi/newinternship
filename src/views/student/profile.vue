@@ -171,7 +171,7 @@ export default {
 }
 
 .box-card {
-  width: 480px;
+  width: 95%;
 }
 .card-title {
   font-weight: bold;

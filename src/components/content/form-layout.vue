@@ -1,19 +1,10 @@
-<!-- 布局 -->
+<!--  -->
 <template>
-  <div class="layout">
-    <el-container>
-      <el-header>
-        <img src="../../assets/img/logo.jpg" height="100%;" alt="" srcset="">
-      </el-header>
-      <el-container>
-        <el-aside width="200px">
-          <slot class="navs" name="nav"></slot>
-        </el-aside>
-        <el-main>
-          <router-view></router-view>
-        </el-main>
-      </el-container>
-    </el-container>
+  <div class>
+    <el-card class="box-card">
+      <slot name="header"></slot>
+      <slot></slot>
+    </el-card>
   </div>
 </template>
 
@@ -23,10 +14,7 @@
 
 export default {
   //import引入的组件需要注入到对象中才能使用
-  components: {
-    
-  },
-  props: {},
+  components: {},
   data() {
     //这里存放数据
     return {};
@@ -52,42 +40,25 @@ export default {
 };
 </script>
 <style scoped>
-.layout {
-  height: 100%;
-}
-.el-header {
-  background-color: #b3c0d1;
-  color: #333;
-  height: 100px !important;
-  background-color: white;
-  border-bottom: 1px solid #ddd;
+.text {
+  font-size: 14px;
 }
 
-.el-aside {
-  /* overflow-y: auto; */
-  background-color: white;
-  color: #333;
-  float: left;
-  /* height: 100%; */
-  text-align: center;
-  line-height: 200px;
+.item {
+  margin-bottom: 18px;
 }
 
-.el-main {
-  width: 100%;
-  background-color: white;
-  color: #333;
-  /* text-align: center; */
-  /* line-height: 160px; */
-  float: left;
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
 }
 
-.el-container {
-  min-height: 100%;
-  /* overflow-y:scroll; */
-
-}
-.navs{
-  height: 100%;
+.box-card {
+  width: 80%;
+  margin: 0 auto;
 }
 </style>

@@ -1,0 +1,229 @@
+<!-- 查看企业 -->
+<template>
+  <div class>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span style="font-weight:bold;">我的企业</span>
+        <el-button
+          style="float: right; padding: 3px 0"
+          @click="dialogVisible = true"
+          type="text"
+        >绑定实习岗位</el-button>
+      </div>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">企业名称</span>
+            <span class="header-content">腾讯</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">类型</span>
+            <span class="header-content">国企</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">法人</span>
+            <span class="header-content">哈哈哈</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">注册资本</span>
+            <span class="header-content">国企</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">企业注册号</span>
+            <span class="header-content">腾讯</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">创建日期</span>
+            <span class="header-content">国企</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">开始营业日期</span>
+            <span class="header-content">腾讯</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">营业期限截止日期</span>
+            <span class="header-content">国企</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">工商信息登记机关</span>
+            <span class="header-content">腾讯</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">核准日期</span>
+            <span class="header-content">国企</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">登记状态</span>
+            <span class="header-content">腾讯</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">住所地址</span>
+            <span class="header-content">国企</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">营业范围</span>
+            <span class="header-content">腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">
+            <span class="header-title">统一社会信用代码</span>
+            <span class="header-content">国企</span>
+          </div>
+        </el-col>
+      </el-row>
+    </el-card>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" >
+      <el-form
+        :model="Form"
+        status-icon
+        :rules="rules"
+        ref="Form"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="实习岗位" prop="position">
+          <el-input type="text" v-model="Form.position" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('Form')">提交</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
+//例如：import 《组件名称》 from '《组件路径》';
+
+export default {
+  //import引入的组件需要注入到对象中才能使用
+  components: {},
+  data() {
+    var checkNull = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("岗位不能为空"));
+      }
+    };
+    //这里存放数据
+    return {
+      dialogVisible: false,
+      Form: {
+        position: ""
+      },
+      rules: {
+        position: [
+          {
+            validator: checkNull,
+            trigger: "blur"
+          }
+        ]
+      }
+    };
+  },
+  //监听属性 类似于data概念
+  computed: {},
+  //监控data中的数据变化
+  watch: {},
+  //方法集合
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    }
+  },
+  //生命周期 - 创建完成（可以访问当前this实例）
+  created() {},
+  //生命周期 - 挂载完成（可以访问DOM元素）
+  mounted() {},
+  beforeCreate() {}, //生命周期 - 创建之前
+  beforeMount() {}, //生命周期 - 挂载之前
+  beforeUpdate() {}, //生命周期 - 更新之前
+  updated() {}, //生命周期 - 更新之后
+  beforeDestroy() {}, //生命周期 - 销毁之前
+  destroyed() {}, //生命周期 - 销毁完成
+  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
+};
+</script>
+<style scoped>
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
+
+.box-card {
+  margin: 0 auto;
+  width: 70%;
+}
+.header-title {
+  /* margin-right: 8px; */
+  width: 80px;
+  color: rgb(97, 113, 139);
+}
+.header-title,
+.header-content {
+  line-height: 20px;
+  vertical-align: top;
+  display: inline-block;
+}
+.header-content {
+  width: 300px;
+}
+</style>

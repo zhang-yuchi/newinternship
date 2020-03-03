@@ -11,11 +11,15 @@
         label-width="60px"
         class="demo-ruleForm"
       >
-        <el-form-item label="账号" prop="username">
-          <el-input v-model="ruleForm.username"></el-input>
+        <el-form-item label="账号" prop="account">
+          <el-input v-model="ruleForm.account"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="pass">
-          <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="验证码" prop="code">
+          <el-input type="text" v-model="ruleForm.code" autocomplete="off"></el-input>
+          <img class="checkimg" @click="repeatImg" :src="checkUrl" alt />
         </el-form-item>
         <el-form-item label="身份">
           <el-radio-group v-model="form.identify">
@@ -26,7 +30,7 @@
         </el-form-item>
 
         <div class="controls">
-          <el-button type="primary" @click="onSubmit">登录</el-button>
+          <el-button type="primary" @click="onSubmit('ruleForm')">登录</el-button>
         </div>
         <!-- <el-button type="primary">主要按钮</el-button> -->
 
@@ -40,35 +44,26 @@
         status-icon
         :rules="rules"
         ref="ruleForm"
-        label-width="60px"
+        label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form
-          :model="ruleForm"
-          status-icon
-          :rules="rules"
-          ref="ruleForm"
-          label-width="100px"
-          class="demo-ruleForm"
-        >
         <el-form-item label="账号" prop="age">
-            <el-input v-model.number="ruleForm.age"></el-input>
-          </el-form-item>
-          <el-form-item label="身份证" prop="age">
-            <el-input v-model.number="ruleForm.age"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="确认密码" prop="checkPass">
-            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-          </el-form-item>
-          
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-            <el-button @click="resetForm('ruleForm')">返回</el-button>
-          </el-form-item>
-        </el-form>
+          <el-input v-model.number="ruleForm.age"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证" prop="age">
+          <el-input v-model.number="ruleForm.age"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button @click="resetForm('ruleForm')">返回</el-button>
+        </el-form-item>
 
         <!-- <el-button type="primary">主要按钮</el-button> -->
       </el-form>
@@ -79,12 +74,11 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { getVerify, login } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
-    var islog = true;
     var checkAge = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("账号不能为空"));
@@ -103,21 +97,33 @@ export default {
         callback();
       }
     };
-
+    var checkVerify = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("验证码不能为空"));
+      } else if (value.length !== 4) {
+        return callback(new Error("请输入正确的验证码"));
+      } else {
+        this.$refs.ruleForm.validateField("checkVerify");
+        callback();
+      }
+    };
     //这里存放数据
     return {
       ruleForm: {
-        pass: "",
+        password: "",
         checkPass: "",
-        username: ""
+        account: "",
+        code: ""
       },
+      checkUrl: "",
       rules: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        username: [{ validator: checkAge, trigger: "blur" }]
+        password: [{ validator: validatePass, trigger: "blur" }],
+        account: [{ validator: checkAge, trigger: "blur" }],
+        code: [{ validator: checkVerify, trigger: "blur" }]
       },
-      islog,
+      islog: true,
       form: {
-        username: "",
+        account: "",
         passowrd: "",
         identify: ""
       }
@@ -129,23 +135,75 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    onSubmit() {
-      if (this.form.identify == "学生") {
-        this.$router.push("/student");
-      } else if (this.form.identify == "教师") {
-        this.$router.push("/teacher");
-      } else {
-        this.$alert("您还没有选择身份", "提示", {
-          confirmButtonText: "确定"
-        });
+    getLogin(type, callback) {
+      let loginType = "";
+      switch (type) {
+        case "学生":
+          loginType = "Student";
+          break;
+        case "教师":
+          loginType = "Teacher";
+          break;
+        default:
+          break;
       }
+      if (!loginType) {
+        this.$message.error("身份错误");
+      }
+      // console.log(this.ruleForm.code)
+      login({
+        account: this.ruleForm.account,
+        code: this.ruleForm.code,
+        password: this.ruleForm.password,
+        loginType
+      }).then(res => {
+        // console.log(res)
+        if (res.data.message === "respose success") {
+          sessionStorage.setItem("Authorization", res.data.data.Authorization);
+          callback();
+        }
+      });
     },
-    changePsw() {}
+    onSubmit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // console.log(this.form.identify);
+          if (!this.form.identify) {
+            this.$message.error("您还没有选择身份");
+            return;
+          }
+          this.getLogin(this.form.identify, () => {
+            if (this.form.identify == "学生") {
+              this.$router.push("/student");
+            } else if (this.form.identify == "教师") {
+              this.$router.push("/teacher");
+            }
+          });
+        } else {
+          // console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    changePsw() {},
+    getVerifyImg() {
+      getVerify().then(res => {
+        // console.log(res);
+        let blob = res.data;
+        let src = window.URL.createObjectURL(blob);
+        this.checkUrl = src;
+      });
+    },
+    repeatImg() {
+      this.getVerifyImg();
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.getVerifyImg();
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -185,5 +243,12 @@ export default {
   text-align: center;
   width: 100%;
   margin-top: 20px;
+}
+.checkimg {
+  position: absolute;
+  right: 25px;
+  top: 5px;
+  width: 100px;
+  cursor: pointer;
 }
 </style>

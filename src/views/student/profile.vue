@@ -9,13 +9,13 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">姓名</span>
-                <span class="item-content">张三</span>
+                <span class="item-content">{{studentInfo.name}}</span>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">学号</span>
-                <span class="item-content">1234567890</span>
+                <span class="item-content">{{studentInfo.stuNo}}</span>
               </div>
             </el-col>
           </el-row>
@@ -23,13 +23,13 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">微信</span>
-                <span class="item-content">ruankun521</span>
+                <span class="item-content">{{studentInfo.wechat}}</span>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">年龄</span>
-                <span class="item-content">25</span>
+                <span class="item-content">{{studentInfo.age}}</span>
               </div>
             </el-col>
           </el-row>
@@ -37,13 +37,13 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">电话</span>
-                <span class="item-content">18783551223</span>
+                <span class="item-content">{{studentInfo.phone}}</span>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">专业</span>
-                <span class="item-content">计算机科学与技术</span>
+                <span class="item-content">{{studentInfo.major}}</span>
               </div>
             </el-col>
           </el-row>
@@ -51,13 +51,13 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">实习岗位</span>
-                <span class="item-content">java实习</span>
+                <span class="item-content">{{studentInfo.corpPosition}}</span>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">实习企业</span>
-                <span class="item-content">腾讯</span>
+                <span class="item-content">{{studentInfo.corpName}}</span>
               </div>
             </el-col>
           </el-row>
@@ -65,13 +65,13 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">qq</span>
-                <span class="item-content">2669327287</span>
+                <span class="item-content">{{studentInfo.qq}}</span>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">学院</span>
-                <span class="item-content">信息工程学院</span>
+                <span class="item-content">{{studentInfo.college}}</span>
               </div>
             </el-col>
           </el-row>
@@ -79,13 +79,13 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">实习开始时间</span>
-                <span class="item-content">2020-02-02</span>
+                <span class="item-content">{{studentInfo.gmtStart}}</span>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">实习结束时间</span>
-                <span class="item-content">2020-01-01</span>
+                <span class="item-content">{{studentInfo.gmtEnd}}</span>
               </div>
             </el-col>
           </el-row>
@@ -93,7 +93,7 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">身份证号</span>
-                <span class="item-content">510105199810211271</span>
+                <span class="item-content">{{studentInfo.idCard}}</span>
               </div>
             </el-col>
           </el-row>
@@ -105,24 +105,24 @@
 
           <div class="text item">
             <span class="item-title">姓名</span>
-            <span class="item-content">张三</span>
+            <span class="item-content">{{teacherInfo.name}}</span>
           </div>
 
           <div class="text item">
             <span class="item-title">工号</span>
-            <span class="item-content">1234567890</span>
+            <span class="item-content">{{teacherInfo.teacherNo}}</span>
           </div>
           <div class="text item">
             <span class="item-title">性别</span>
-            <span class="item-content">男</span>
+            <span class="item-content">{{teacherInfo.sex}}</span>
           </div>
           <div class="text item">
             <span class="item-title">年龄</span>
-            <span class="item-content">18</span>
+            <span class="item-content">{{teacherInfo.age}}</span>
           </div>
           <div class="text item">
             <span class="item-title">院校</span>
-            <span class="item-content">大话科技学院</span>
+            <span class="item-content">{{teacherInfo.college}}</span>
           </div>
         </el-card>
       </el-col>
@@ -133,13 +133,19 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { getStudentInfo , getTeacherInfo} from '../../network'
+import { replaceNull } from '../../command/utils'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
     //这里存放数据
-    return {};
+    return {
+      studentInfo:{},
+      teacherInfo:{},
+      teacherLoading:false,
+      studentLoading:false,
+    };
   },
   //监听属性 类似于data概念
   computed: {},
@@ -150,7 +156,39 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.studentLoading = true
+    this.teacherLoading = true
+    getStudentInfo()
+    .then(res=>{
+      // console.log(res)
+      this.studentInfo = Object.assign({},res.data.data,{})
+      this.studentInfo = replaceNull(this.studentInfo)
+      // console.log(this.studentInfo)
+    })
+    .catch(()=>{
+      this.$message.error("获取信息失败!请重试")
+    })
+    .finally(()=>{
+      this.studentLoading = false
+    })
+    .then(()=>{
+      // console.log("道我了!")
+      getTeacherInfo()
+      .then(res=>{
+        // console.log(res)
+        this.teacherInfo = Object.assign({},res.data.data,{})
+        this.teacherInfo = replaceNull(this.teacherInfo)
+        // console.log(this.teacherInfo)
+      })
+    })
+    .catch(()=>{
+      this.$message.error("获取教师信息失败!请重试")
+    })
+    .finally(()=>{
+      this.teacherLoading = false
+    })
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

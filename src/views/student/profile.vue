@@ -3,7 +3,7 @@
   <div class="profile-main">
     <el-row :gutter="20">
       <el-col :span="10">
-        <el-card class="box-card">
+        <el-card class="box-card" v-loading="studentLoading">
           <div class="card-title">个人信息</div>
           <el-row>
             <el-col :span="12">
@@ -100,7 +100,7 @@
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card class="box-card">
+        <el-card class="box-card" v-loading="teacherLoading">
           <div class="card-title">导师信息</div>
 
           <div class="text item">
@@ -133,18 +133,18 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getStudentInfo , getTeacherInfo} from '../../network'
-import { replaceNull } from '../../command/utils'
+import { getStudentInfo, getTeacherInfo } from "../../network";
+import { replaceNull } from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
     //这里存放数据
     return {
-      studentInfo:{},
-      teacherInfo:{},
-      teacherLoading:false,
-      studentLoading:false,
+      studentInfo: {},
+      teacherInfo: {},
+      teacherLoading: false,
+      studentLoading: false
     };
   },
   //监听属性 类似于data概念
@@ -152,42 +152,45 @@ export default {
   //监控data中的数据变化
   watch: {},
   //方法集合
-  methods: {},
+  methods: {
+    getInfo() {
+      this.studentLoading = true;
+      this.teacherLoading = true;
+      getStudentInfo()
+        .then(res => {
+          // console.log(res)
+          this.studentInfo = Object.assign({}, res.data.data, {});
+          this.studentInfo = replaceNull(this.studentInfo);
+          // console.log(this.studentInfo)
+        })
+        .catch(() => {
+          this.$message.error("获取信息失败!请重试");
+        })
+        .finally(() => {
+          this.studentLoading = false;
+        })
+        .then(() => {
+          // console.log("道我了!")
+          getTeacherInfo().then(res => {
+            // console.log(res)
+            this.teacherInfo = Object.assign({}, res.data.data, {});
+            this.teacherInfo = replaceNull(this.teacherInfo);
+            // console.log(this.teacherInfo)
+          });
+        })
+        .catch(() => {
+          this.$message.error("获取教师信息失败!请重试");
+        })
+        .finally(() => {
+          this.teacherLoading = false;
+        });
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.studentLoading = true
-    this.teacherLoading = true
-    getStudentInfo()
-    .then(res=>{
-      // console.log(res)
-      this.studentInfo = Object.assign({},res.data.data,{})
-      this.studentInfo = replaceNull(this.studentInfo)
-      // console.log(this.studentInfo)
-    })
-    .catch(()=>{
-      this.$message.error("获取信息失败!请重试")
-    })
-    .finally(()=>{
-      this.studentLoading = false
-    })
-    .then(()=>{
-      // console.log("道我了!")
-      getTeacherInfo()
-      .then(res=>{
-        // console.log(res)
-        this.teacherInfo = Object.assign({},res.data.data,{})
-        this.teacherInfo = replaceNull(this.teacherInfo)
-        // console.log(this.teacherInfo)
-      })
-    })
-    .catch(()=>{
-      this.$message.error("获取教师信息失败!请重试")
-    })
-    .finally(()=>{
-      this.teacherLoading = false
-    })
+    this.getInfo()
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -233,7 +236,7 @@ export default {
   color: rgb(97, 113, 139);
   margin-right: 10px;
 }
-.profile-main > .el-row{
+.profile-main > .el-row {
   display: flex;
   justify-content: center;
 }

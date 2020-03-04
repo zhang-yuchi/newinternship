@@ -11,13 +11,15 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
+        
       >
-        <el-form-item label="实习内容" prop="practiceContent">
+        <el-form-item label="实习内容"  prop="practiceContent">
           <el-input
             type="textarea"
             v-model="ruleForm.practiceContent"
             :rows="15"
             autocomplete="off"
+            :disabled="!$store.state.isIdentifyFormStage1Open"
           ></el-input>
           <limit :maxLength="1200" :testString="ruleForm.practiceContent"></limit>
         </el-form-item>
@@ -30,14 +32,14 @@
           <div class="p">4.实习总结及体会：要求条理清楚、逻辑性强；着重写出对实习内容的总结、体会和感受，特别是自己所学的专业理论与实践的差距和今后应努力的方向。</div>
         </div>
         <el-form-item label prop="selfSummary">
-          <el-input type="textarea" :rows="10" v-model="ruleForm.selfSummary" autocomplete="off"></el-input>
+          <el-input type="textarea" :disabled="!$store.state.isIdentifyFormStage1Open" :rows="10" v-model="ruleForm.selfSummary" autocomplete="off"></el-input>
         </el-form-item>
         <limit :maxLength="1200" :testString="ruleForm.selfSummary"></limit>
-        <el-form-item label="企业评价意见" prop="corpOpinion">
-          <el-input type="textarea" :rows="5" v-model="ruleForm.corpOpinion"></el-input>
+        <el-form-item label="企业评价意见" prop="corpOpinion" >
+          <el-input type="textarea" :rows="5" v-model="ruleForm.corpOpinion" :disabled="!$store.state.isIdentifyFormStage3Open"></el-input>
         </el-form-item>
         <el-form-item label="校外导师评价意见" prop="corpTeacherOpinion">
-          <el-input type="textarea" :rows="5" v-model="ruleForm.corpTeacherOpinion"></el-input>
+          <el-input type="textarea" :rows="5" v-model="ruleForm.corpTeacherOpinion" :disabled="!$store.state.isIdentifyFormStage3Open"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>

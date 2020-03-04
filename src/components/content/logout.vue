@@ -1,33 +1,20 @@
-<!-- 布局 -->
+<!--  -->
 <template>
-  <div class="layout">
-    <el-container>
-      <el-header>
-        <img src="../../assets/img/logo.jpg" height="100%;" alt="" srcset="">
-        <logout></logout>
-      </el-header>
-      <el-container>
-        <el-aside width="200px">
-          <slot class="navs" name="nav"></slot>
-        </el-aside>
-        <el-main>
-          <router-view></router-view>
-        </el-main>
-      </el-container>
-    </el-container>
+  <div class="logout">
+    <el-button @click="logout">
+      <i class="el-icon-switch-button"></i>
+      <span>注销账号</span>
+    </el-button>
   </div>
 </template>
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import logout from './logout'
+
 export default {
   //import引入的组件需要注入到对象中才能使用
-  components: {
-    logout,
-  },
-  props: {},
+  components: {},
   data() {
     //这里存放数据
     return {};
@@ -37,7 +24,29 @@ export default {
   //监控data中的数据变化
   watch: {},
   //方法集合
-  methods: {},
+  methods: {
+    logout() {
+      this.$confirm("是否注销账号?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+        sessionStorage.setItem('Authorization',null)
+        this.$router.push('/')
+          this.$message({
+            type: "success",
+            message: "注销成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"
+          });
+        });
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
@@ -53,43 +62,11 @@ export default {
 };
 </script>
 <style scoped>
-.layout {
-  height: 100%;
-}
-.el-header {
-  background-color: #b3c0d1;
-  color: #333;
-  height: 100px !important;
-  background-color: white;
-  border-bottom: 1px solid #ddd;
-  position: relative;
-}
-
-.el-aside {
-  /* overflow-y: auto; */
-  background-color: white;
-  color: #333;
-  float: left;
-  /* height: 100%; */
-  text-align: center;
-  line-height: 200px;
-}
-
-.el-main {
-  width: 100%;
-  background-color: white;
-  color: #333;
-  /* text-align: center; */
-  /* line-height: 160px; */
-  float: left;
-}
-
-.el-container {
-  min-height: 100%;
-  /* overflow-y:scroll; */
-
-}
-.navs{
-  height: 100%;
+.logout {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
 </style>

@@ -2,8 +2,12 @@
 <template>
   <div class="report-check" v-loading="pageLoading">
     <el-card class="box-card" :class="state==0?'big-report':''">
-      <div slot="header" class="clearfix">
+      <div slot="header" class="clearfix" style="overflow:hidden">
         <span style="color:rgb(64,158,255);">{{title}}</span>
+        <el-tooltip class="item" effect="dark" content="一二阶段此按钮没有区别" style="float:right;width:90px;height:40px;" placement="top-start">
+      <el-button type="primary" style="padding:0;" >下载pdf</el-button>
+    </el-tooltip>
+        
       </div>
       <div class="text item">
         <span class="header-title">指导时间</span>

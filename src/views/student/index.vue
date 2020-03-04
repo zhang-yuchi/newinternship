@@ -34,7 +34,6 @@
               <template slot="title">第一阶段</template>
               <el-menu-item
                 index="/student/report-check/first-stage"
-                :disabled="!$store.state.isReportStage1Open"
               >查看报告册</el-menu-item>
               <el-menu-item
                 index="/student/report/first-stage"
@@ -45,11 +44,10 @@
               <template slot="title">第二阶段</template>
               <el-menu-item
                 index="/student/report-check/second-stage"
-                :disabled="!$store.state.isReportStage2Open||!$store.state.isReportStage3Open"
               >查看报告册</el-menu-item>
               <el-menu-item
                 index="/student/report/second-stage"
-                :disabled="!$store.state.isReportStage2Open||!$store.state.isReportStage3Open"
+                :disabled="!$store.state.isReportStage2Open"
               >填写报告册</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -59,8 +57,8 @@
               <span>我的鉴定表</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/student/decision-check" disabled>查看鉴定表</el-menu-item>
-              <el-menu-item index="/student/decision" disabled>填写鉴定表</el-menu-item>
+              <el-menu-item index="/student/decision-check">查看鉴定表</el-menu-item>
+              <el-menu-item index="/student/decision">填写鉴定表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -107,9 +105,18 @@ export default {
         this.$store.commit("changeReportStage1", states.isReportStage1Open);
         this.$store.commit("changeReportStage2", states.isReportStage2Open);
         this.$store.commit("changeReportStage3", states.isReportStage3Open);
-        this.$store.commit("changeIdentifyStage1", states.isIdentifyFormStage1Open);
-        this.$store.commit("changeIdentifyStage2", states.isIdentifyFormStage2Open);
-        this.$store.commit("changeIdentifyStage3", states.isIdentifyFormStage3Open);
+        this.$store.commit(
+          "changeIdentifyStage1",
+          states.isIdentifyFormStage1Open
+        );
+        this.$store.commit(
+          "changeIdentifyStage2",
+          states.isIdentifyFormStage2Open
+        );
+        this.$store.commit(
+          "changeIdentifyStage3",
+          states.isIdentifyFormStage3Open
+        );
       }
     });
   },

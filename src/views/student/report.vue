@@ -1,6 +1,6 @@
 <!-- 写报告册 -->
 <template>
-  <div class>
+  <div class v-loading="pageLoading">
     <el-card v-if="state==0">
       <div class="report-title">第一阶段填写报告册</div>
       <el-form
@@ -34,20 +34,24 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <limit-number style="margin-top:-20px;" :testString="stage1Form.stage1Summary" :maxLength="1050"></limit-number>
+          <limit-number
+            style="margin-top:-20px;"
+            :testString="stage1Form.stage1Summary"
+            :maxLength="1050"
+          ></limit-number>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('stage1Form')">提交</el-button>
+          <el-button type="primary" @click="submit1Form('stage1Form')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
     <el-card v-if="state==1">
       <div class="report-title">第二阶段填写报告册</div>
       <el-form
-        :model="stage1Form"
+        :model="stage2Form"
         status-icon
         :rules="rules"
-        ref="stage1Form"
+        ref="stage2Form"
         label-position="top"
         label-width="100px"
         class="demo-ruleForm"
@@ -75,11 +79,15 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <limit-number style="margin-top:-20px;" :testString="stage2Form.stage2Summary" :maxLength="1050"></limit-number>
+          <limit-number
+            style="margin-top:-20px;"
+            :testString="stage2Form.stage2Summary"
+            :maxLength="1050"
+          ></limit-number>
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitForm('stage1Form')">提交</el-button>
+          <el-button type="primary" @click="submit2Form('stage2Form')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -90,6 +98,13 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import limitNumber from "../../components/content/limit-number";
+import { text2html } from "../../command/utils";
+import {
+  getReportInfo,
+  submitReportStage1,
+  submitReportStage2
+} from "../../network";
+import moment from "moment";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -128,7 +143,8 @@ export default {
       endTime: "",
       startTime: "",
       value1: "",
-      rules: {}
+      rules: {},
+      pageLoading: false
     };
   },
   //监听属性 类似于data概念
@@ -137,6 +153,7 @@ export default {
   watch: {
     $route() {
       this.changeState();
+      this.getContent();
     }
   },
   //方法集合
@@ -156,15 +173,83 @@ export default {
           break;
       }
     },
-    submitForm(formName) {
+    submit1Form(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          // alert("submit!");
+          if (this.startTime) {
+            this.stage1Form.stage1GuideDate =
+              moment(this.startTime).format("YYYY-MM-DD") +
+              " - " +
+              moment(this.endTime).format("YYYY-MM-DD");
+          }
+
+          submitReportStage1(this.stage1Form).then(res => {
+            // console.log(res)
+            if (res.data.status == 1) {
+              this.$message.success("提交成功!");
+              this.getContent();
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    submit2Form(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.startTime) {
+            this.stage2Form.stage2GuideDate =
+              moment(this.startTime).format("YYYY-MM-DD") +
+              " - " +
+              moment(this.endTime).format("YYYY-MM-DD");
+            submitReportStage2(this.stage2Form).then(res => {
+              // console.log(res)
+              this.$message.success("提交成功!");
+              this.getContent();
+            });
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    getContent() {
+      this.pageLoading = true;
+      getReportInfo()
+        .then(res => {
+          this.stage1Form = {
+            stage1GuideDate: res.data.data.stage1GuideDate,
+            stage1GuideWay: res.data.data.stage1GuideWay,
+            stage1Summary: res.data.data.stage1Summary
+          };
+          this.stage2Form = {
+            stage2GuideDate: res.data.data.stage2GuideDate,
+            stage2GuideWay: res.data.data.stage2GuideWay,
+            stage2Summary: res.data.data.stage2Summary
+          };
+          if (this.state == 0) {
+            if (this.stage1Form.stage1GuideDate) {
+              var arr = this.stage1Form.stage1GuideDate.split(" - ");
+              // console.log(arr)
+              this.startTime = arr[0];
+              this.endTime = arr[1];
+            }
+          } else if (this.state == 1) {
+            if (this.stage2Form.stage2GuideDate) {
+              var arr = this.stage2Form.stage2GuideDate.split(" - ");
+              this.startTime = arr[0];
+              this.endTime = arr[1];
+            }
+          }
+        })
+        .finally(() => {
+          // this.getContent()
+          this.pageLoading = false;
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -172,6 +257,7 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.changeState();
+    this.getContent();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

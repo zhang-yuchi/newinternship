@@ -1,27 +1,39 @@
 <!--  -->
 <template>
-  <div class="report-check">
+  <div class="report-check" v-loading="pageLoading">
     <el-card class="box-card" :class="state==0?'big-report':''">
       <div slot="header" class="clearfix">
         <span style="color:rgb(64,158,255);">{{title}}</span>
       </div>
       <div class="text item">
         <span class="header-title">指导时间</span>
-        <span class="header-content">暂无</span>
+        <span class="header-content">{{showContent.stageGuideDate}}</span>
       </div>
       <div class="text item">
         <span class="header-title">指导方式</span>
-        <span class="header-content">暂无</span>
+        <span class="header-content">{{showContent.stageGuideWay}}</span>
       </div>
-      <form-block title="实习总结" :content="summaryContent" :time="summaryTime"></form-block>
-      <form-block title="学院实习指导教师评语" :content="summaryContent" :time="summaryTime"></form-block>
-      <form-block title="实习成绩评定" :content="summaryContent" :time="summaryTime"></form-block>
+      <form-block
+        title="实习总结"
+        :content="showContent.stageSummary"
+        :time="showContent.stageGradeDate"
+      ></form-block>
+      <form-block
+        title="学院实习指导教师评语"
+        :content="showContent.stageComment"
+        :time="showContent.stageGradeDate"
+      ></form-block>
+      <form-block
+        title="实习成绩评定"
+        :content="showContent.stageGrade"
+        :time="showContent.stageGradeDate"
+      ></form-block>
       <div class="state2" v-if="state==1">
         <div class="Divider">学院实习指导教师总评及成绩评定</div>
-        <form-block title="评语" :content="summaryContent" :time="summaryTime"></form-block>
+        <form-block title="评语" :content="showContent.totalGrade"></form-block>
         <div class="text item">
           <span class="header-title">实习成绩</span>
-          <span class="header-content">暂无</span>
+          <span class="header-content">{{showContent.totalScore}}</span>
         </div>
       </div>
     </el-card>
@@ -32,6 +44,8 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import formBlock from "../../components/content/form-block";
+import { getReportInfo } from "../../network";
+import { Obj2html } from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -42,9 +56,17 @@ export default {
     return {
       title: "",
       state: "",
-      summaryContent:
-        "学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多学到了很多",
-      summaryTime: "2020/3/3"
+      showContent: {
+        stageGuideDate: "",
+        stageGuideWay: "",
+        stageSummary: "",
+        stageGradeDate: "",
+        stageGrade: "",
+        stageComment: "",
+        totalGrade: "",
+        totalScore: ""
+      },
+      pageLoading: false
     };
   },
   //监听属性 类似于data概念
@@ -53,6 +75,7 @@ export default {
   watch: {
     $route(newValue) {
       this.changeState();
+      this.getContent();
     }
   },
   //方法集合
@@ -71,6 +94,39 @@ export default {
           console.log(404);
           break;
       }
+    },
+    getContent() {
+      this.pageLoading = true;
+      getReportInfo()
+        .then(res => {
+          // console.log(res);
+          let data = res.data.data;
+          data = Obj2html(data)
+          if (this.state == 0) {
+            this.showContent = {
+              stageGuideDate: data.stage1GuideDate,
+              stageGuideWay: data.stage1GuideWay,
+              stageSummary: data.stage1Summary,
+              stageGradeDate: data.stage1GradeDate,
+              stageGrade: data.stage1Grade,
+              stageComment: data.stage1Comment
+            };
+          } else if (this.state == 1) {
+            this.showContent = {
+              stageGuideDate: data.stage2GuideDate,
+              stageGuideWay: data.stage2GuideWay,
+              stageSummary: data.stage2Summary,
+              stageGradeDate: data.stage2GradeDate,
+              stageGrade: data.stage2Grade,
+              stageComment: data.stage2Comment,
+              totalGrade: data.totalGrade,
+              totalScore: data.totalScore
+            };
+          }
+        })
+        .finally(() => {
+          this.pageLoading = false;
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -79,6 +135,7 @@ export default {
   mounted() {
     // console.log(this.$route.params.state);
     this.changeState();
+    this.getContent();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -98,7 +155,6 @@ export default {
 .item {
   padding: 18px 0;
 }
-
 .box-card {
   /* width: 480px; */
   width: 80%;
@@ -114,6 +170,7 @@ export default {
 }
 .header-content {
   width: 350px;
+  vertical-align: top;
 }
 .report-check {
   display: flex;

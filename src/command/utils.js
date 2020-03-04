@@ -7,3 +7,24 @@ export const replaceNull = (obj)=>{
     })
     return obj
 }
+export const text2html = (str)=>{
+    if (str == null) {
+        return "";
+    }else if (str.length == 0) {
+        return "";
+    }
+   return str.replace(/\n/g,'<br />');
+
+}
+
+//用于展示换行  会把\n换位<br>
+export const Obj2html = (obj)=>{
+    let arr = Object.keys(obj)
+    arr.map(item=>{
+        if(typeof obj[item] == 'string'){
+            obj[item] = text2html(obj[item])
+            // console.log(obj[item])
+        }
+    })
+    return obj
+}

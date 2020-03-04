@@ -36,11 +36,11 @@
         <el-form-item label="企业评价意见" prop="corpOpinion">
           <el-input type="textarea" :rows="5" v-model="ruleForm.corpOpinion"></el-input>
         </el-form-item>
-        <el-form-item label="校外导师评价意见" prop="corpOpinion">
-          <el-input type="textarea" :rows="5" v-model="ruleForm.corpOpinion"></el-input>
+        <el-form-item label="校外导师评价意见" prop="corpTeacherOpinion">
+          <el-input type="textarea" :rows="5" v-model="ruleForm.corpTeacherOpinion"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary"  @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -51,6 +51,8 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import limit from "../../components/content/limit-number";
+import { getDecisionTable, submitDecision } from "../../network";
+import {  Obj2html } from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -65,7 +67,7 @@ export default {
         corpOpinion: "",
         corpTeacherOpinion: ""
       },
-      rules:{}
+      rules: {}
     };
   },
   //监听属性 类似于data概念
@@ -73,11 +75,51 @@ export default {
   //监控data中的数据变化
   watch: {},
   //方法集合
-  methods: {},
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // alert("submit!");
+          let temp = this.ruleForm
+          submitDecision(temp).then(res => {
+            console.log(res);
+            if (res.data.status == 1) {
+              this.$message.success("提交成功!");
+              this.getTable();
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    getTable() {
+      getDecisionTable().then(res => {
+        console.log(res);
+        if (res.data.status == 1) {
+          let temp = res.data.data;
+          // temp = Obj2text(temp);
+          const practiceContent = temp.sxContent;
+          const selfSummary = temp.selfSummary;
+          const corpOpinion = temp.corpOpinion;
+          const corpTeacherOpinion = temp.corpTeacherOpinion;
+          this.ruleForm = {
+            practiceContent: temp.sxContent,
+            selfSummary: temp.selfSummary,
+            corpOpinion: temp.corpOpinion,
+            corpTeacherOpinion: temp.corpTeacherOpinion
+          };
+        }
+      });
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.getTable()
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

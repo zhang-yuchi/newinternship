@@ -62,3 +62,23 @@ export const modifyPosition = (params)=>{
 export const modifyCorp = (params) => {
     return service.post('/student/student/corp',params)
 }
+//获取学生报告册信息
+export const getReportInfo = () => {
+    return service.get(getRandom('/student/reportForm'))
+}
+//填写第一阶段报告册
+export const submitReportStage1 = (params)=>{
+    return service.post('/student/report/stage1',params)
+}
+//填写第二阶段报告册
+export const submitReportStage2 = (params)=>{
+    return service.post('/student/report/stage2',params)
+}
+//查看鉴定表
+export const getDecisionTable = ()=>{
+    return service.get('/student/identifyForm')
+}
+//提交鉴定表
+export const submitDecision = (params) =>{
+    return service.post('/student/identify',params)
+}

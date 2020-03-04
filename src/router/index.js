@@ -74,7 +74,35 @@ const routes = [
     //老师相关路由
     path:'/teacher',
     component:()=>import('../views/teacher/index.vue'),
-    
+    meta:{
+      title:'学生信息'
+    },
+    children:[
+      {
+        path:"",
+        redirect:"/teacher/stu-list"
+      },
+      {
+        path:"stu-list",
+        component:()=>import('../views/teacher/stu-list')
+      },
+      {
+        path:"report-list",
+        component:()=>import('../views/teacher/report-list')
+      },
+      {
+        path:"decision-list",
+        component:()=>import('../views/teacher/decision-list')
+      },
+      {
+        path:"report-check",
+        component:()=>import('../views/teacher/report-check')
+      },
+      {
+        path:"decision-check",
+        component:()=>import('../views/teacher/decision-check')
+      }
+    ]
     
   }
 ]

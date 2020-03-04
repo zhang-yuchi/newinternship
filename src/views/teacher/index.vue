@@ -16,32 +16,6 @@
             <i class="el-icon-edit"></i>
             <span slot="title">鉴定表评价</span>
           </el-menu-item>
-          <!-- <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>我的</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title">个人信息</template>
-              <el-menu-item index="1-1">我的信息</el-menu-item>
-              <el-menu-item index="1-2">修改信息</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">我的企业</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-edit"></i>
-            <span slot="title">我的报告册</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-edit"></i>
-            <span slot="title">我的鉴定表</span>
-          </el-menu-item> -->
         </el-menu>
       </el-col>
     </layout>

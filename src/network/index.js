@@ -26,12 +26,59 @@ export const getVerify = () => {
         responseType: "blob"
     })
 }
+//登录
 export const login = (params)=>{
     return service.post('/user/login',params)
 }
+//获取学生本人信息
 export const getStudentInfo = ()=>{
-    return service.get('/student/selfInfo')
+    return service.get(getRandom('/student/selfInfo'))
 }
+//学生获取老师信息
 export const getTeacherInfo = () => {
-    return service.get('/student/teacherInfo')
+    return service.get(getRandom('/student/teacherInfo'))
+}
+//修改学生信息
+export const modifySelfInfo = (params)=> {
+    return service.post('/student/selfInfo',params)
+}
+//修改实习开始和结束
+export const modifyReportDate = (params)=>{
+    return service.post('/student2/report/date',params)
+}
+//学生内部修改密码
+export const modifyPswInner = (params) => {
+    return service.post('/student/student/password',params)
+}
+//学生查看企业信息
+export const checkCorp = ()=>{
+    return service.get(getRandom('/student/student/corp'))
+}
+//学生修改职位
+export const modifyPosition = (params)=>{
+    return service.post('/student/student/position',params)
+}
+//企业信息更改
+export const modifyCorp = (params) => {
+    return service.post('/student/student/corp',params)
+}
+//获取学生报告册信息
+export const getReportInfo = () => {
+    return service.get(getRandom('/student/reportForm'))
+}
+//填写第一阶段报告册
+export const submitReportStage1 = (params)=>{
+    return service.post('/student/report/stage1',params)
+}
+//填写第二阶段报告册
+export const submitReportStage2 = (params)=>{
+    return service.post('/student/report/stage2',params)
+}
+//查看鉴定表
+export const getDecisionTable = ()=>{
+    return service.get('/student/identifyForm')
+}
+//提交鉴定表
+export const submitDecision = (params) =>{
+    return service.post('/student/identify',params)
 }

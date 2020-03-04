@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class>
-    <layout>
+    <layout v-loading="formLoading">
       <div slot="header" class="clearfix">
         <span class="header-title">信息修改</span>
         <el-button style="float: right; padding: 3px 0" @click="showTime" type="text">修改实习时间</el-button>
@@ -13,7 +13,7 @@
         status-icon
         :rules="rules"
         ref="ruleForm"
-        label-width="100px"
+        label-width="120px"
         class="demo-ruleForm"
         label-position="left"
       >
@@ -23,17 +23,17 @@
         <el-form-item label="微信" prop="wechat">
           <el-input type="text" v-model="ruleForm.wechat" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="QQ" prop="qq">
+        <el-form-item label="QQ" prop="age">
           <el-input v-model.number="ruleForm.qq"></el-input>
         </el-form-item>
         <el-form-item label="年龄" prop="age">
           <el-input v-model.number="ruleForm.age"></el-input>
         </el-form-item>
-        <el-form-item label="校外导师工号" prop="corpTeacherNo">
+        <el-form-item label="校外导师工号" prop="age">
           <el-input v-model.number="ruleForm.corpTeacherNo"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm(ruleForm)">修改</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
         </el-form-item>
       </el-form>
     </layout>
@@ -53,7 +53,10 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="密码" prop="pass">
+        <el-form-item label="旧密码" :show-message="true" :error="originError" prop="oldPsw">
+          <el-input type="password"  v-model="pswForm.oldPsw" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" :show-message="true" :error="newError" prop="pass">
           <el-input type="password" v-model="pswForm.pass" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
@@ -78,7 +81,7 @@
         status-icon
         :rules="rules"
         ref="timeForm"
-        label-width="100px"
+        label-width="120px"
         class="demo-ruleForm"
       >
         <el-form-item label="实习开始时间" placeholder="选择日期" prop="gmtStart">
@@ -90,7 +93,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="timeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitTime('timeForm')">确 定</el-button>
+        <el-button type="primary" v-loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -100,6 +103,13 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import layout from "../../components/content/form-layout";
+import moment from "moment";
+import {
+  getStudentInfo,
+  modifySelfInfo,
+  modifyReportDate,
+  modifyPswInner
+} from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -113,9 +123,10 @@ export default {
         } else {
           callback();
         }
-      }, 1000);
+      });
     };
     var checkNull = (rule, value, callback) => {
+      // console.log(value)
       if (!value) {
         callback(new Error("必传项不能为空!"));
       } else {
@@ -129,7 +140,7 @@ export default {
         } else {
           callback();
         }
-      }, 1000);
+      });
     };
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -144,7 +155,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm.pass) {
+      } else if (value !== this.pswForm.pass) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -159,6 +170,7 @@ export default {
         wechat: ""
       },
       pswForm: {
+        oldPsw: "",
         pass: "",
         checkPass: ""
       },
@@ -166,18 +178,28 @@ export default {
         gmtEnd: "",
         gmtStart: ""
       },
+      timeBtnLoading: false,
+      formLoading: false,
       rules: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        phone: [{ validator: checkPhone, trigger: "blur" }],
-        age: [{ validator: checkNumber, trigger: ["blur"] }],
-        qq: [{ validator: checkNumber, trigger: ["blur"] }],
-        corpTeacherNo: [{ validator: checkNumber, trigger: ["blur"] }],
-        gmtStart: [{ validator: checkNull, trigger: ["blur"] }],
-        gmtEnd: [{ validator: checkNull, trigger: ["blur"] }]
+        pass: [{ required: true, validator: validatePass, trigger: "blur" }],
+        checkPass: [
+          { required: true, validator: validatePass2, trigger: "blur" }
+        ],
+        oldPsw:[{required:true,validator:checkNull,trigger:"blur"}],
+        phone: [{ required: true, validator: checkPhone, trigger: "blur" }],
+        age: [{ required: true, validator: checkNumber, trigger: ["blur"] }],
+        qq: [{ required: true, validator: checkNumber, trigger: ["blur"] }],
+        corpTeacherNo: [
+          { required: true, validator: checkNumber, trigger: ["blur"] }
+        ],
+        gmtStart: [{ required: true, validator: checkNull, trigger: ["blur"] }],
+        gmtEnd: [{ required: true, validator: checkNull, trigger: ["blur"] }],
+        wechat: [{ required: true, trigger: ["blur"] }]
       },
       pswBoxVisible: false,
-      timeVisible: false
+      timeVisible: false,
+      originError: "",
+      newError: ""
     };
   },
   //监听属性 类似于data概念
@@ -189,48 +211,118 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          // alert("submit!");
+          modifySelfInfo(this.ruleForm).then(res => {
+            // console.log(res);
+            if (res.data.status == 1) {
+              this.$message.success("修改成功!");
+              this.getInfo();
+            }
+          });
         } else {
-          console.log("error submit!!");
+          // console.log("error submit!!");
+
           return false;
         }
       });
     },
+
     handleClose(done) {},
     changePsw() {
       this.pswBoxVisible = true;
     },
     submitPsw(formName) {
+      this.originError = ""
+      this.newError = ""
       this.$refs[formName].validate(valid => {
         if (valid) {
-        //   alert("submit!");
-          this.pswBoxVisible = false;
+          //   alert("submit!");
+          modifyPswInner({
+            newPassword: this.pswForm.pass,
+            oldPassword: this.pswForm.oldPsw
+          }).then(res => {
+            // console.log(res);
+            if (res.data.status == 1) {
+              // this.originError = "";
+              // this.newError = "";
+              this.$message.success("密码修改成功!");
+              this.pswBoxVisible = false;
+            } else {
+              // console.log(111)
+              const origin = /^原密码/;
+              const newErr = /^密码/;
+              if (origin.test(res.data.message)) {
+                this.originError = res.data.message;
+                // console.log(this.originError)
+                // this.newError = "";
+              } else {
+                // this.originError = "";
+                this.newError = res.data.message;
+                // console.log(this.newError)
+              }
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
-      
     },
     showTime() {
       this.timeVisible = true;
     },
     submitTime(formName) {
+      this.timeBtnLoading = true;
       this.$refs[formName].validate(valid => {
         if (valid) {
-        //   alert("submit!");
-          this.timeVisible = false
+          //   alert("submit!");
+          this.timeForm.gmtStart = moment(this.timeForm.gmtStart).format(
+            "YYYY-MM-DD"
+          );
+          this.timeForm.gmtEnd = moment(this.timeForm.gmtEnd).format(
+            "YYYY-MM-DD"
+          );
+          modifyReportDate(this.timeForm)
+            .then(res => {
+              console.log(res);
+              if (res.data.status == 1) {
+                this.$message.success("更新成功!");
+                this.timeVisible = false;
+                this.getInfo();
+              } else {
+                this.$message.error(res.data.message);
+              }
+            })
+            .catch(() => {})
+            .finally(() => {
+              this.timeBtnLoading = false;
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    getInfo() {
+      this.formLoading = true;
+      getStudentInfo()
+        .then(res => {
+          console.log(res);
+          this.ruleForm = res.data.data;
+          this.timeForm.gmtStart = res.data.data.gmtStart;
+          this.timeForm.gmtEnd = res.data.data.gmtEnd;
+        })
+        .finally(() => {
+          this.formLoading = false;
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.getInfo();
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

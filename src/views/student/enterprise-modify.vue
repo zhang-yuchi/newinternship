@@ -1,10 +1,8 @@
 <!-- 修改企业信息 -->
 <template>
   <div class>
-    <form-layout>
-        <div slot="header" class="form-header">
-            企业信息填写
-        </div>
+    <form-layout v-loading="formLoading">
+      <div slot="header" class="form-header">企业信息填写</div>
       <el-form
         :model="ruleForm"
         status-icon
@@ -94,7 +92,12 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="企业注册号" prop="regCode">
-              <el-input type="text" v-model="ruleForm.regCode" placeholder="若企业有注册号则必填" autocomplete="off"></el-input>
+              <el-input
+                type="text"
+                v-model="ruleForm.regCode"
+                placeholder="若企业有注册号则必填"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -111,6 +114,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import formLayout from "../../components/content/form-layout";
+import { checkCorp ,modifyCorp } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -120,7 +124,10 @@ export default {
     var checkNull = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("必填不能为空"));
+      }else{
+        callback()
       }
+
     };
     //这里存放数据
     return {
@@ -158,7 +165,8 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      formLoading: false
     };
   },
   //监听属性 类似于data概念
@@ -170,18 +178,42 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          // alert("submit!");
+          modifyCorp(this.ruleForm)
+          .then(res=>{
+            console.log(res)
+            if(res.data.status==1){
+              this.$message.success('修改成功!')
+              this.getCorp()
+              
+            }
+          })
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    getCorp() {
+      this.formLoading = true;
+      checkCorp()
+        .then(res => {
+          console.log(res);
+          if (res.data.status == 1) {
+            this.ruleForm = Object.assign({}, res.data.data, {});
+          }
+        })
+        .finally(() => {
+          this.formLoading = false;
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.getCorp();
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -196,8 +228,8 @@ export default {
 .el-form-item {
   line-height: 18px !important;
 }
-.form-header{
-    font-weight: bold;
-    margin-bottom: 16px;
+.form-header {
+  font-weight: bold;
+  margin-bottom: 16px;
 }
 </style>

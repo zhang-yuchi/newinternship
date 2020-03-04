@@ -1,7 +1,7 @@
 <!-- 查看企业 -->
 <template>
   <div class>
-    <el-card class="box-card">
+    <el-card class="box-card" v-loading="cardLoading">
       <div slot="header" class="clearfix">
         <span style="font-weight:bold;">我的企业</span>
         <el-button
@@ -14,13 +14,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">企业名称</span>
-            <span class="header-content">腾讯</span>
+            <span class="header-content">{{corp.corpName}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">类型</span>
-            <span class="header-content">国企</span>
+            <span class="header-content">{{corp.type}}</span>
           </div>
         </el-col>
       </el-row>
@@ -28,13 +28,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">法人</span>
-            <span class="header-content">哈哈哈</span>
+            <span class="header-content">{{corp.legalPerson}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">注册资本</span>
-            <span class="header-content">国企</span>
+            <span class="header-content">{{corp.registerCapita}}万元</span>
           </div>
         </el-col>
       </el-row>
@@ -42,13 +42,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">企业注册号</span>
-            <span class="header-content">腾讯</span>
+            <span class="header-content">{{corp.regCode}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">创建日期</span>
-            <span class="header-content">国企</span>
+            <span class="header-content">{{corp.createDate}}</span>
           </div>
         </el-col>
       </el-row>
@@ -56,13 +56,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">开始营业日期</span>
-            <span class="header-content">腾讯</span>
+            <span class="header-content">{{corp.startBusiness}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">营业期限截止日期</span>
-            <span class="header-content">国企</span>
+            <span class="header-content">{{corp.endBusiness}}</span>
           </div>
         </el-col>
       </el-row>
@@ -70,13 +70,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">工商信息登记机关</span>
-            <span class="header-content">腾讯</span>
+            <span class="header-content">{{corp.regAuthority}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">核准日期</span>
-            <span class="header-content">国企</span>
+            <span class="header-content">{{corp.approvalDate}}</span>
           </div>
         </el-col>
       </el-row>
@@ -84,13 +84,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">登记状态</span>
-            <span class="header-content">腾讯</span>
+            <span class="header-content">{{corp.regStatus}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">住所地址</span>
-            <span class="header-content">国企</span>
+            <span class="header-content">{{corp.address}}</span>
           </div>
         </el-col>
       </el-row>
@@ -98,18 +98,18 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">营业范围</span>
-            <span class="header-content">腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯腾讯</span>
+            <span class="header-content">{{corp.businessScope}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">统一社会信用代码</span>
-            <span class="header-content">国企</span>
+            <span class="header-content">{{corp.creditCode}}</span>
           </div>
         </el-col>
       </el-row>
     </el-card>
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" >
+    <el-dialog title="修改实习岗位" :visible.sync="dialogVisible" width="30%">
       <el-form
         :model="Form"
         status-icon
@@ -133,7 +133,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { checkCorp, getStudentInfo, modifyPosition } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -141,6 +141,8 @@ export default {
     var checkNull = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("岗位不能为空"));
+      }else{
+        callback()
       }
     };
     //这里存放数据
@@ -156,7 +158,9 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      corp: {},
+      cardLoading: false
     };
   },
   //监听属性 类似于data概念
@@ -166,20 +170,57 @@ export default {
   //方法集合
   methods: {
     submitForm(formName) {
+      // console.log(1)
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          // alert("submit!");
+          modifyPosition(this.Form)
+          .then(res=>{
+            // console.log(res)
+            if(res.data.status==1){
+              //修改成功
+              this.$message.success("修改成功!")
+              this.dialogVisible = false
+              this.getCorp()
+            }else{
+              this.$message.error(res.data.message)
+            }
+          })
         } else {
-          console.log("error submit!!");
+          
+          // console.log("error submit!!");
           return false;
         }
       });
+    },
+    getCorp() {
+      this.cardLoading = true;
+      checkCorp()
+        .then(res => {
+          // console.log(res);
+          if (res.data.status == 1) {
+            this.corp = res.data.data;
+          }
+        })
+        .then(() => {
+          getStudentInfo().then(res => {
+            // console.log(res);
+            if (res.data.status == 1) {
+              this.Form.position = res.data.data.corpPosition;
+            }
+          });
+        })
+        .finally(() => {
+          this.cardLoading = false;
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.getCorp();
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

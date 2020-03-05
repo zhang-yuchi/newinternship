@@ -69,4 +69,7 @@ export default {
   transform: translateY(-50%);
   cursor: pointer;
 }
+.el-message-box{
+  width: auto;
+}
 </style>

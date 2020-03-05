@@ -44,6 +44,7 @@
       :show-close="false"
       width="30%"
       :before-close="handleClose"
+      class="hidden-sm-and-down"
     >
       <el-form
         :model="pswForm"
@@ -54,7 +55,41 @@
         class="demo-ruleForm"
       >
         <el-form-item label="旧密码" :show-message="true" :error="originError" prop="oldPsw">
-          <el-input type="password"  v-model="pswForm.oldPsw" autocomplete="off"></el-input>
+          <el-input type="password" v-model="pswForm.oldPsw" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" :show-message="true" :error="newError" prop="pass">
+          <el-input type="password" v-model="pswForm.pass" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="pswForm.checkPass" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="pswBoxVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitPsw('pswForm')">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 手机版 -->
+    <el-dialog
+      title
+      :visible.sync="pswBoxVisible"
+      :show-close="false"
+      width="300px"
+      height="400px"
+      :before-close="handleClose"
+      :modal="false"
+      class="hidden-sm-and-up"
+    >
+      <el-form
+        :model="pswForm"
+        status-icon
+        :rules="rules"
+        ref="pswForm"
+        label-position="top"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="旧密码" :show-message="true" :error="originError" prop="oldPsw">
+          <el-input type="password" v-model="pswForm.oldPsw" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="新密码" :show-message="true" :error="newError" prop="pass">
           <el-input type="password" v-model="pswForm.pass" autocomplete="off"></el-input>
@@ -74,6 +109,37 @@
       :visible.sync="timeVisible"
       width="30%"
       :before-close="handleClose"
+      :show-close="false"
+      class="hidden-sm-and-down"
+    >
+      <el-form
+        :model="timeForm"
+        status-icon
+        :rules="rules"
+        ref="timeForm"
+        label-width="120px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="实习开始时间" placeholder="选择日期" prop="gmtStart">
+          <el-date-picker type="date" v-model="timeForm.gmtStart" autocomplete="off"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="实习结束时间" placeholder="选择日期" prop="gmtEnd">
+          <el-date-picker type="date" v-model="timeForm.gmtEnd" autocomplete="off"></el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="timeVisible = false">取 消</el-button>
+        <el-button type="primary" v-loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 修改实习时间手机版 -->
+        <el-dialog
+      title=""
+      :visible.sync="timeVisible"
+      width="300px"
+      class="hidden-sm-and-up"
+      :before-close="handleClose"
+      :modal="false"
       :show-close="false"
     >
       <el-form
@@ -185,7 +251,7 @@ export default {
         checkPass: [
           { required: true, validator: validatePass2, trigger: "blur" }
         ],
-        oldPsw:[{required:true,validator:checkNull,trigger:"blur"}],
+        oldPsw: [{ required: true, validator: checkNull, trigger: "blur" }],
         phone: [{ required: true, validator: checkPhone, trigger: "blur" }],
         age: [{ required: true, validator: checkNumber, trigger: ["blur"] }],
         qq: [{ required: true, validator: checkNumber, trigger: ["blur"] }],
@@ -232,8 +298,8 @@ export default {
       this.pswBoxVisible = true;
     },
     submitPsw(formName) {
-      this.originError = ""
-      this.newError = ""
+      this.originError = "";
+      this.newError = "";
       this.$refs[formName].validate(valid => {
         if (valid) {
           //   alert("submit!");
@@ -334,7 +400,7 @@ export default {
 };
 </script>
 <style scoped>
-.el-date-editor.el-input{
+.el-date-editor.el-input {
   width: 100%;
 }
 .clearfix {

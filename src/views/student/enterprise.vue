@@ -109,7 +109,33 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-dialog title="修改实习岗位" :visible.sync="dialogVisible" width="30%">
+    <!-- 修改实习岗位 -->
+    <el-dialog title="修改实习岗位" :visible.sync="dialogVisible" width="30%" class="hidden-sm-and-down">
+      <el-form
+        :model="Form"
+        status-icon
+        :rules="rules"
+        ref="Form"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="实习岗位" prop="position">
+          <el-input type="text" v-model="Form.position" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('Form')">提交</el-button>
+      </span>
+    </el-dialog>
+    <!-- 修改实习岗位手机版 -->
+    <el-dialog
+      title
+      :visible.sync="dialogVisible"
+      width="300px"
+      class="hidden-sm-and-up"
+      :modal="false"
+    >
       <el-form
         :model="Form"
         status-icon
@@ -141,8 +167,8 @@ export default {
     var checkNull = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("岗位不能为空"));
-      }else{
-        callback()
+      } else {
+        callback();
       }
     };
     //这里存放数据
@@ -174,20 +200,18 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
-          modifyPosition(this.Form)
-          .then(res=>{
+          modifyPosition(this.Form).then(res => {
             // console.log(res)
-            if(res.data.status==1){
+            if (res.data.status == 1) {
               //修改成功
-              this.$message.success("修改成功!")
-              this.dialogVisible = false
-              this.getCorp()
-            }else{
-              this.$message.error(res.data.message)
+              this.$message.success("修改成功!");
+              this.dialogVisible = false;
+              this.getCorp();
+            } else {
+              this.$message.error(res.data.message);
             }
-          })
+          });
         } else {
-          
           // console.log("error submit!!");
           return false;
         }

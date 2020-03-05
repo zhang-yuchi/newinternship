@@ -1,0 +1,18 @@
+/* 针对大于768的情况 */
+.sm-hidden{
+    display: none;
+}
+/* 针对在768到996之间的情况 */
+.md-hidden{
+    display: none;;
+}
+@media screen and (min-width:768px){
+    .sm-hidden{
+        display: block;
+    }
+}
+@media screen and (min-width:768px) and (max-width:996px){
+    .md-hidden{
+        display: block;
+    }
+}

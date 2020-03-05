@@ -1,9 +1,14 @@
 <!--  -->
 <template>
   <div class>
-    <img src="../../assets/img/logo.jpg" alt />
+    <el-image
+      style="width:70%;height:100%;display:block;margin:0 auto;"
+      fit="scale-down"
+      class="sm-hidden"
+      :src="img"
+    ></el-image>
     <div class="title">毕业生实习管理系统</div>
-    <el-row :gutter="20" class="mainpage">
+    <el-row :gutter="20" class="mainpage hidden-sm-and-down">
       <el-col :span="8">
         <div class="grid-content bg-purple">
           <el-card class="box-card" shadow="hover">
@@ -24,7 +29,29 @@
         </div>
       </el-col>
     </el-row>
-    <!-- 登录区块 -->
+    <!-- 针对平板 -->
+    <el-row :gutter="20" class="mainpage md-hidden">
+      <el-col :span="12">
+        <div class="grid-content bg-purple">
+          <el-card class="box-card" shadow="hover">
+            <div class="text item">公告</div>
+          </el-card>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="grid-content bg-purple">
+          <login />
+        </div>
+      </el-col>
+    </el-row>
+    <!-- 手机端 只保留登录功能 -->
+    <el-row class="mainpage hidden-sm-and-up">
+      <el-col :span="20">
+        <div class="grid-content bg-purple">
+          <login />
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -40,7 +67,8 @@ export default {
   data() {
     //这里存放数据
     return {
-      dates:new Date()
+      dates: new Date(),
+      img: require("../../assets/img/logo.jpg")
     };
   },
   //监听属性 类似于data概念
@@ -68,12 +96,11 @@ export default {
   width: 90%;
   margin: 20px auto !important;
 }
-.title{
-  margin:30px auto;
+.title {
+  margin: 30px auto;
   font-size: 30px;
   color: #606266;
   font-weight: bold;
   text-align: center;
 }
-
 </style>

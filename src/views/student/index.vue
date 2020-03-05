@@ -6,7 +6,6 @@
         <el-button @click.prevent="toastPhone">
           <i class="el-icon-menu"></i>
         </el-button>
-
         <el-menu
           v-if="isphone"
           :default-active="activeNav"
@@ -148,7 +147,7 @@ export default {
   mounted() {
     this.activeNav = this.$router.history.current.path;
     getStage().then(res => {
-      console.log(res);
+      // console.log(res);
       if (res.data.status == 1) {
         const states = res.data.data;
         this.$store.commit("changeReportStage1", states.isReportStage1Open);
@@ -210,9 +209,10 @@ export default {
   position: absolute;
   /* top: 10px; */
   /* z-index: 1000; */
+
   background-color: white !important;
 }
-.el-submenu {
+.phone-menu .el-submenu {
   width: 150px;
   max-width: 150px;
   background-color: white;

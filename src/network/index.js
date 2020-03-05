@@ -131,7 +131,7 @@ export const getStudentList = ()=>{
     return service.get(getRandom('/teacher/students'))
 }
 //获取某个学生的信息
-export const getStudentIdentify = (stuId) => {
+export const getStudentInfo = (stuId) => {
     return service.get(getRandom('/teacher/student/'+stuId))
 }
 //获取某个学生鉴定表

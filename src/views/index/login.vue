@@ -1,6 +1,7 @@
 <!--  -->
 <template>
-  <el-card class="box-card login" shadow="hover">
+<div>
+<el-card class="box-card login sm-hidden" shadow="hover">
     <div class="log" v-if="islog">
       <div class="title">登录</div>
       <el-form
@@ -62,13 +63,93 @@
 
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          <el-button @click="resetForm('ruleForm')">返回</el-button>
+          <el-button @click="resetForm">返回</el-button>
         </el-form-item>
 
         <!-- <el-button type="primary">主要按钮</el-button> -->
       </el-form>
     </div>
   </el-card>
+
+
+
+<!-- 手机版 -->
+  <el-card class="box-card login hidden-sm-and-up" shadow="hover">
+    <div class="log" v-if="islog">
+      <div class="title">登录</div>
+      <el-form
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        ref="ruleForm"
+        label-position="top"
+        label-width="60px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="账号" prop="account">
+          <el-input v-model="ruleForm.account"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="验证码" prop="code">
+          <el-input type="text" v-model="ruleForm.code" autocomplete="off"></el-input>
+          <img class="checkimg" @click="repeatImg" :src="checkUrl" alt />
+        </el-form-item>
+        <el-form-item label="身份">
+          <el-radio-group v-model="form.identify">
+            <el-radio label="学生"></el-radio>
+            <el-radio label="教师"></el-radio>
+          </el-radio-group>
+          <el-link class="margin" type="primary" :underline="false" v-on:click="changePsw">忘记密码</el-link>
+        </el-form-item>
+
+        <div class="controls">
+          <el-button type="primary" @click="onSubmit('ruleForm')">登录</el-button>
+        </div>
+        <!-- <el-button type="primary">主要按钮</el-button> -->
+
+        <el-link class="email" :underline="false" type="warning">网络功能异常反馈:qkmc@outlook.com</el-link>
+      </el-form>
+    </div>
+    <div class="change" v-if="!islog">
+      <div class="title">修改密码</div>
+      <el-form
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        ref="ruleForm"
+        label-width="100px"
+        label-position="top"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="账号" prop="age">
+          <el-input v-model.number="ruleForm.age"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证" prop="age">
+          <el-input v-model.number="ruleForm.age"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button @click="resetForm">返回</el-button>
+        </el-form-item>
+
+        <!-- <el-button type="primary">主要按钮</el-button> -->
+      </el-form>
+    </div>
+  </el-card>
+</div>
+  
+
+
+  
 </template>
 
 <script>
@@ -185,7 +266,9 @@ export default {
         }
       });
     },
-    changePsw() {},
+    changePsw() {
+      this.islog = false
+    },
     getVerifyImg() {
       getVerify().then(res => {
         // console.log(res);
@@ -196,7 +279,11 @@ export default {
     },
     repeatImg() {
       this.getVerifyImg();
+    },
+    resetForm(){
+      this.islog = true
     }
+
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},

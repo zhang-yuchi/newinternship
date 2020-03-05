@@ -99,7 +99,54 @@
           </el-row>
         </el-card>
       </el-col>
-      <el-col class="hidden-sm-and-down" :sm="24" :md="9" :lg="9" :offset="1" :xl="9">
+      <el-col class="hidden-sm-and-down" :xs="24" :sm="24" :md="9" :lg="9" :offset="1" :xl="9">
+        <el-card class="box-card" v-if="hasTeacher" v-loading="teacherLoading">
+          <div class="card-title">导师信息</div>
+          <div class="text item">
+            <span class="item-title">姓名</span>
+            <span class="item-content">{{teacherInfo.name}}</span>
+          </div>
+
+          <div class="text item">
+            <span class="item-title">工号</span>
+            <span class="item-content">{{teacherInfo.teacherNo}}</span>
+          </div>
+          <div class="text item">
+            <span class="item-title">性别</span>
+            <span class="item-content">{{teacherInfo.sex}}</span>
+          </div>
+          <div class="text item">
+            <span class="item-title">年龄</span>
+            <span class="item-content">{{teacherInfo.age}}</span>
+          </div>
+          <div class="text item">
+            <span class="item-title">院校</span>
+            <span class="item-content">{{teacherInfo.college}}</span>
+          </div>
+        </el-card>
+
+        <el-card class="box-card" v-if="!hasTeacher" v-loading="teacherLoading">
+          <div class="card-title" style="margin-bottom:18px;">选择导师</div>
+          <el-select v-model="teacherNo" placeholder="请选择导师">
+            <el-option
+              v-for="item in teachers"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+              <span style="float: left">{{ item.label }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+            </el-option>
+          </el-select>
+          <div style="margin-top:18px;">
+            <el-button type="primary" @click="selectTeacher">提交</el-button>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <el-row class="hidden-sm-and-up">
+      <el-col class :xs="24" :sm="24" :md="9" :lg="9"  :xl="9">
         <el-card class="box-card" v-if="hasTeacher" v-loading="teacherLoading">
           <div class="card-title">导师信息</div>
           <div class="text item">
@@ -283,8 +330,6 @@ export default {
 .item {
   padding: 18px 0;
 }
-
-
 
 .card-title {
   font-weight: bold;

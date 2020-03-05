@@ -1,10 +1,10 @@
 <!--  -->
 <template>
   <div class>
-    <el-card v-loading="cardLoading">
+    <el-card class="box-card" v-loading="cardLoading">
       <div  class="decision-title">
         <div style="display:inline-block;">我的鉴定表</div>
-        <el-button type="primary" style="float:right;">下载pdf</el-button>
+        <el-button type="primary" style="float:right;" :loading="btnLoading" @click="downloadPdf">下载pdf</el-button>
       </div>
 
       <div class="Divider">个人实习</div>
@@ -38,6 +38,7 @@
         :content="decision.collegePrincipalOpinion"
         :time="decision.cPODate"
       ></form-item>
+      <el-backtop target=".box-card"></el-backtop>
     </el-card>
   </div>
 </template>
@@ -46,7 +47,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import formItem from "../../components/content/form-block";
-import { getDecisionTable } from "../../network";
+import { getDecisionTable , baseUrl,downloadIdentify} from "../../network";
 import { replaceNull, Obj2html } from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -72,7 +73,8 @@ export default {
         collegePrincipalOpinion: "", //学校领导小组意见
         cPODate: ""
       },
-      cardLoading: false
+      cardLoading: false,
+      btnLoading:false,
     };
   },
   //监听属性 类似于data概念
@@ -88,16 +90,29 @@ export default {
           console.log(res);
           if (res.data.status == 1) {
             let temp = Object.assign({}, res.data.data);
-            console.log(temp.sxContent.indexOf("\n"));
+            // console.log(temp.sxContent.indexOf("\n"));
             temp = Obj2html(temp); //将对象中的换行替换为<br /> 方便展示
-            console.log(temp.sxContent);
+            // console.log(temp.sxContent);
             temp = replaceNull(temp); //将所有空对象转换为 暂无
+            // console.log(temp)
             this.decision = temp;
           }
         })
         .finally(() => {
           this.cardLoading = false;
         });
+    },
+    downloadPdf(){
+      this.btnLoading = true
+      downloadIdentify()
+      .then(res=>{
+        if(res.data.status==1){
+          window.open(baseUrl+res.data.data)
+        }
+      })
+      .finally(()=>{
+        this.btnLoading = false
+      })
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -134,5 +149,10 @@ export default {
 .sub-divider {
   color: #e4ad84;
   margin-bottom: 16px;
+}
+.box-card{
+  height: 580px;
+  overflow-y: scroll;
+
 }
 </style>

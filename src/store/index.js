@@ -12,6 +12,8 @@ export default new Vuex.Store({
     isIdentifyFormStage1Open: false,
     isIdentifyFormStage2Open: false,
     isIdentifyFormStage3Open: false,
+    screenHeight:620,
+    bannerHeight:100,
   },
   mutations,
   actions,

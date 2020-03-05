@@ -104,5 +104,8 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 .el-submenu {
   text-align: left !important;
 }
+.el-submenu .el-menu-item{
+  min-width: 0;
+}
 
 </style>

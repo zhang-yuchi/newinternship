@@ -27,7 +27,7 @@ computed: {},
 //监控data中的数据变化
 watch: {
     testString(newValue){
-        this.stringLength = newValue.length
+        this.stringLength =newValue? newValue.length :0
     }
 },
 //方法集合
@@ -40,7 +40,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    this.stringLength = this.testString.length
+    this.stringLength =this.testString? this.testString.length : 0
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前

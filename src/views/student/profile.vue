@@ -1,8 +1,8 @@
 <!--  -->
 <template>
   <div class="profile-main">
-    <el-row :gutter="20">
-      <el-col :span="10">
+    <el-row>
+      <el-col :xs="24" :sm="24" :md="15" :lg="14" :xl="14">
         <el-card class="box-card" v-loading="studentLoading">
           <div class="card-title">个人信息</div>
           <el-row>
@@ -99,10 +99,9 @@
           </el-row>
         </el-card>
       </el-col>
-      <el-col :span="8">
-        <el-card class="box-card" v-loading="teacherLoading">
+      <el-col class="hidden-sm-and-down" :sm="24" :md="9" :lg="9" :offset="1" :xl="9">
+        <el-card class="box-card" v-if="hasTeacher" v-loading="teacherLoading">
           <div class="card-title">导师信息</div>
-
           <div class="text item">
             <span class="item-title">姓名</span>
             <span class="item-content">{{teacherInfo.name}}</span>
@@ -125,6 +124,24 @@
             <span class="item-content">{{teacherInfo.college}}</span>
           </div>
         </el-card>
+
+        <el-card class="box-card" v-if="!hasTeacher" v-loading="teacherLoading">
+          <div class="card-title" style="margin-bottom:18px;">选择导师</div>
+          <el-select v-model="teacherNo" placeholder="请选择导师">
+            <el-option
+              v-for="item in teachers"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+              <span style="float: left">{{ item.label }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+            </el-option>
+          </el-select>
+          <div style="margin-top:18px;">
+            <el-button type="primary" @click="selectTeacher">提交</el-button>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
   </div>
@@ -133,7 +150,12 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getStudentInfo, getTeacherInfo } from "../../network";
+import {
+  getStudentInfo,
+  getTeacherInfo,
+  selectTeacher,
+  selectTeacherByNo
+} from "../../network";
 import { replaceNull } from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -144,7 +166,10 @@ export default {
       studentInfo: {},
       teacherInfo: {},
       teacherLoading: false,
-      studentLoading: false
+      studentLoading: false,
+      hasTeacher: true,
+      teachers: [],
+      teacherNo: ""
     };
   },
   //监听属性 类似于data概念
@@ -158,7 +183,7 @@ export default {
       this.teacherLoading = true;
       getStudentInfo()
         .then(res => {
-          // console.log(res)
+          console.log(res);
           this.studentInfo = Object.assign({}, res.data.data, {});
           this.studentInfo = replaceNull(this.studentInfo);
           // console.log(this.studentInfo)
@@ -170,13 +195,31 @@ export default {
           this.studentLoading = false;
         })
         .then(() => {
-          // console.log("道我了!")
-          getTeacherInfo().then(res => {
-            // console.log(res)
-            this.teacherInfo = Object.assign({}, res.data.data, {});
-            this.teacherInfo = replaceNull(this.teacherInfo);
-            // console.log(this.teacherInfo)
-          });
+          console.log(this.studentInfo.teacherNo);
+          if (this.studentInfo.teacherNo !== "暂无") {
+            getTeacherInfo().then(res => {
+              console.log(res);
+              this.hasTeacher = true;
+              this.teacherInfo = Object.assign({}, res.data.data, {});
+              this.teacherInfo = replaceNull(this.teacherInfo);
+              // console.log(this.teacherInfo)
+            });
+          } else {
+            // console.log(111)
+            selectTeacher().then(res => {
+              // console.log(res)
+              this.hasTeacher = false;
+              if (res.data.status == 1) {
+                this.teachers = [];
+                res.data.data.map(item => {
+                  this.teachers.push({
+                    value: item.teacherNo,
+                    label: item.name
+                  });
+                });
+              }
+            });
+          }
         })
         .catch(() => {
           this.$message.error("获取教师信息失败!请重试");
@@ -184,13 +227,43 @@ export default {
         .finally(() => {
           this.teacherLoading = false;
         });
+    },
+    selectTeacher() {
+      // console.log(11)
+      if (!this.teacherNo) {
+        this.$message.error("请先选择导师!");
+        return;
+      }
+      this.$confirm("确定你的选择", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          selectTeacherByNo({ tNo: this.teacherNo }).then(res => {
+            // console.log(res)
+            if (res.data.status == 1) {
+              this.$message.success("提交成功!");
+              this.getInfo();
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"
+          });
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.getInfo()
+    this.getInfo();
+    selectTeacher().then(res => {
+      // console.log(res);
+    });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -211,9 +284,8 @@ export default {
   padding: 18px 0;
 }
 
-.box-card {
-  width: 95%;
-}
+
+
 .card-title {
   font-weight: bold;
   color: #333;

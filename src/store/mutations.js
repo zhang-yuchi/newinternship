@@ -16,6 +16,9 @@ module.exports = {
     },
     changeIdentifyStage3(state,stage){
         state.isIdentifyFormStage3Open = stage
+    },
+    changeScreenHeight(state,height){
+        state.screenHeight = height
     }
 
 }

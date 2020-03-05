@@ -251,7 +251,7 @@ export default {
 
 .box-card {
   margin: 0 auto;
-  width: 70%;
+  /* width: 70%; */
 }
 .header-title {
   /* margin-right: 8px; */

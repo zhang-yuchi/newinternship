@@ -1,55 +1,68 @@
 <!--  -->
 <template>
   <div class="report-check" v-loading="pageLoading">
-    <el-card class="box-card" :class="state==0?'big-report':''">
-      <div slot="header" class="clearfix" style="overflow:hidden">
-        <span style="color:rgb(64,158,255);">{{title}}</span>
-        <el-tooltip class="item" effect="dark" content="一二阶段此按钮没有区别" style="float:right;width:90px;height:40px;" placement="top-start">
-      <el-button type="primary" style="padding:0;" >下载pdf</el-button>
-    </el-tooltip>
-        
-      </div>
-      <div class="text item">
-        <span class="header-title">指导时间</span>
-        <span class="header-content">{{showContent.stageGuideDate}}</span>
-      </div>
-      <div class="text item">
-        <span class="header-title">指导方式</span>
-        <span class="header-content">{{showContent.stageGuideWay}}</span>
-      </div>
-      <form-block
-        title="实习总结"
-        :content="showContent.stageSummary"
-        :time="showContent.stageGradeDate"
-      ></form-block>
-      <form-block
-        title="学院实习指导教师评语"
-        :content="showContent.stageComment"
-        :time="showContent.stageGradeDate"
-      ></form-block>
-      <form-block
-        title="实习成绩评定"
-        :content="showContent.stageGrade"
-        :time="showContent.stageGradeDate"
-      ></form-block>
-      <div class="state2" v-if="state==1">
-        <div class="Divider">学院实习指导教师总评及成绩评定</div>
-        <form-block title="评语" :content="showContent.totalGrade"></form-block>
-        <div class="text item">
-          <span class="header-title">实习成绩</span>
-          <span class="header-content">{{showContent.totalScore}}</span>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix" style="overflow:hidden">
+          <span style="color:rgb(64,158,255);">{{title}}</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="一二阶段此按钮没有区别"
+            style="float:right;width:90px;height:40px;"
+            placement="top-start"
+          >
+            <el-button
+              :loading="btnLoading"
+              type="primary"
+              style="padding:0;"
+              @click="downloadPdf"
+            >下载pdf</el-button>
+          </el-tooltip>
         </div>
-      </div>
-    </el-card>
+        <div class="text item">
+          <span class="header-title">指导时间</span>
+          <span class="header-content">{{showContent.stageGuideDate}}</span>
+        </div>
+        <div class="text item">
+          <span class="header-title">指导方式</span>
+          <span class="header-content">{{showContent.stageGuideWay}}</span>
+        </div>
+        <form-block
+          title="实习总结"
+          :content="showContent.stageSummary"
+          :time="showContent.stageGradeDate"
+        ></form-block>
+        <form-block
+          title="学院实习指导教师评语"
+          :content="showContent.stageComment"
+          :time="showContent.stageGradeDate"
+        ></form-block>
+        <form-block
+          title="实习成绩评定"
+          :content="showContent.stageGrade"
+          :time="showContent.stageGradeDate"
+        ></form-block>
+        <div class="state2" v-if="state==1">
+          <div class="Divider">学院实习指导教师总评及成绩评定</div>
+          <form-block title="评语" :content="showContent.totalGrade"></form-block>
+          <div class="text item">
+            <span class="header-title">实习成绩</span>
+            <span class="header-content">{{showContent.totalScore}}</span>
+          </div>
+        </div>
+      </el-card>
+
+    <el-backtop target=".box-card"></el-backtop>
   </div>
 </template>
+
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import formBlock from "../../components/content/form-block";
-import { getReportInfo } from "../../network";
-import { Obj2html } from "../../command/utils";
+import { getReportInfo, downloadReport, baseUrl } from "../../network";
+import { Obj2html, replaceNull } from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -60,6 +73,7 @@ export default {
     return {
       title: "",
       state: "",
+      btnLoading: false,
       showContent: {
         stageGuideDate: "",
         stageGuideWay: "",
@@ -99,13 +113,28 @@ export default {
           break;
       }
     },
+    downloadPdf() {
+      this.btnLoading = true;
+      downloadReport()
+        .then(res => {
+          // console.log(res)
+          if (res.data.status == 1) {
+            window.open(baseUrl + res.data.data);
+          }
+        })
+        .finally(() => {
+          this.btnLoading = false;
+        });
+    },
     getContent() {
       this.pageLoading = true;
       getReportInfo()
         .then(res => {
-          // console.log(res);
+          console.log(res);
           let data = res.data.data;
-          data = Obj2html(data)
+          data = Obj2html(data);
+          data = replaceNull(data);
+
           if (this.state == 0) {
             this.showContent = {
               stageGuideDate: data.stage1GuideDate,
@@ -162,7 +191,10 @@ export default {
 .box-card {
   /* width: 480px; */
   width: 80%;
+  overflow-y: scroll;
+  height: 580px;
   transition: none;
+  margin: 0 auto;
 }
 .header-title,
 .header-content {
@@ -178,6 +210,8 @@ export default {
 }
 .report-check {
   display: flex;
+  /* overflow-y: scroll; */
+  /* height: 300px; */
   justify-content: center;
 }
 /* .big-report {

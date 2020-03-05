@@ -334,8 +334,8 @@ export default {
 };
 </script>
 <style scoped>
-.el-card .el-input {
-  width: 50%;
+.el-date-editor.el-input{
+  width: 100%;
 }
 .clearfix {
   border-bottom: #dddddd;

@@ -134,7 +134,7 @@ export default {
 </script>
 <style scoped>
 .el-card {
-  width: 80%;
+  /* width: 80%; */
   margin: 0 auto;
 }
 .main-header {

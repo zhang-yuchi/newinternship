@@ -2,6 +2,51 @@
 <template>
   <div class="main">
     <layout>
+      <div slot="add-nav" class="xs-hidden">
+        <el-button @click.prevent="toastPhone">
+          <i class="el-icon-menu"></i>
+        </el-button>
+
+        <el-menu
+          v-if="isphone"
+          :default-active="activeNav"
+          class="el-menu-vertical-demo phone-menu"
+          mode="horizontal"
+          :collapse="true"
+          :router="true"
+          style="z-index:1000"
+          menu-trigger="click"
+          :unique-opened="true"
+          @select="hiddenMenu"
+          :collapse-transition="false"
+          background-color="#545c64"
+          active-text-color="#ffd04b"
+          text-color="#fff"
+        >
+          <el-submenu index="1">
+            <template slot="title">我的</template>
+            <el-menu-item index="/student/profile">我的信息</el-menu-item>
+            <el-menu-item index="/student/modify-profile">修改信息</el-menu-item>
+          </el-submenu>
+          <el-submenu index="2">
+            <template slot="title">我的企业</template>
+            <el-menu-item index="/student/enterprise">查看企业</el-menu-item>
+            <el-menu-item index="/student/enterprise-modify">修改企业信息</el-menu-item>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">我的报告册</template>
+            <el-menu-item index="/student/report-check/first-stage">第一阶段查看</el-menu-item>
+            <el-menu-item index="/student/report/first-stage">第一阶段填写</el-menu-item>
+            <el-menu-item index="/student/report-check/second-stage">第二阶段查看</el-menu-item>
+            <el-menu-item index="/student/report/second-stage">第二阶段填写</el-menu-item>
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">我的鉴定表</template>
+            <el-menu-item index="/student/decision-check">第一阶段查看</el-menu-item>
+            <el-menu-item index="/student/decision">第一阶段填写</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </div>
       <el-col slot="nav" style="height:100%;" :span="24">
         <el-menu :default-active="activeNav" :router="true" class="el-menu-vertical-demo">
           <el-submenu index="1">
@@ -32,9 +77,7 @@
             </template>
             <el-menu-item-group>
               <template slot="title">第一阶段</template>
-              <el-menu-item
-                index="/student/report-check/first-stage"
-              >查看报告册</el-menu-item>
+              <el-menu-item index="/student/report-check/first-stage">查看报告册</el-menu-item>
               <el-menu-item
                 index="/student/report/first-stage"
                 :disabled="!$store.state.isReportStage1Open"
@@ -42,9 +85,7 @@
             </el-menu-item-group>
             <el-menu-item-group>
               <template slot="title">第二阶段</template>
-              <el-menu-item
-                index="/student/report-check/second-stage"
-              >查看报告册</el-menu-item>
+              <el-menu-item index="/student/report-check/second-stage">查看报告册</el-menu-item>
               <el-menu-item
                 index="/student/report/second-stage"
                 :disabled="!$store.state.isReportStage2Open"
@@ -80,7 +121,8 @@ export default {
   data() {
     //这里存放数据
     return {
-      activeNav: "profile"
+      activeNav: "profile",
+      isphone: false
     };
   },
   //监听属性 类似于data概念
@@ -92,7 +134,14 @@ export default {
     }
   },
   //方法集合
-  methods: {},
+  methods: {
+    toastPhone() {
+      this.isphone = !this.isphone;
+    },
+    hiddenMenu() {
+      this.isphone = false;
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
@@ -140,5 +189,33 @@ export default {
 }
 .el-submenu {
   text-align: left !important;
+}
+.el-submenu .el-menu-item {
+  min-width: 0;
+}
+.xs-hidden {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+}
+@media screen and (max-width: 768px) {
+  .xs-hidden {
+    display: block !important;
+  }
+}
+.phone-menu {
+  /* transition: none; */
+  position: absolute;
+  /* top: 10px; */
+  /* z-index: 1000; */
+  background-color: white !important;
+}
+.el-submenu {
+  width: 150px;
+  max-width: 150px;
+  background-color: white;
+  /* border: 1px solid black; */
 }
 </style>

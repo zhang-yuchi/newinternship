@@ -1,9 +1,11 @@
 import axios from 'axios'
 import qs from 'qs'
-const baseURL = "http://sx.cdcas.edu.cn:8890/"
+const isDev = true
+const baseURL = isDev?"http://ali.nadev.xyz:8890": "http://sx.cdcas.edu.cn:8890/"
 const service = axios.create({
     baseURL
 })
+export const  baseUrl = baseURL
 service.interceptors.request.use((config) => {
     config.headers = Object.assign({}, config.headers, {
         Authorization: sessionStorage.getItem('Authorization')
@@ -14,10 +16,20 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use((res) => {
     //做全局处理
     // console.log(res)
-    return res
+    const SUCCESS_STATUS = 200
+    if(res.status==SUCCESS_STATUS){
+        return res
+    }else{
+        errorHandle()
+    }
+    
 })
 function getRandom(url) {
     return url + "?t=" + Math.random()
+}
+export const errorHandle = ()=>{
+    //当catch到错误时触发
+    this.$message.error('网络不佳或服务器异常!')
 }
 export const getVerify = () => {
     return axios({
@@ -26,10 +38,12 @@ export const getVerify = () => {
         responseType: "blob"
     })
 }
+//-------------------主页------------------------------
 //登录
 export const login = (params)=>{
     return service.post('/user/login',params)
 }
+//------------------学生接口----------------------------
 //获取学生本人信息
 export const getStudentInfo = ()=>{
     return service.get(getRandom('/student/selfInfo'))
@@ -37,6 +51,13 @@ export const getStudentInfo = ()=>{
 //学生获取老师信息
 export const getTeacherInfo = () => {
     return service.get(getRandom('/student/teacherInfo'))
+}
+//获取老师列表
+export const selectTeacher = ()=>{
+    return service.get(getRandom('/student/teacher'))
+}
+export const selectTeacherByNo = (params)=>{
+    return service.post('/student/teacher',params)
 }
 //修改学生信息
 export const modifySelfInfo = (params)=> {
@@ -84,5 +105,15 @@ export const submitDecision = (params) =>{
 }
 //获取当前阶段
 export const getStage = ()=>{
-    return service.get('/user/reportStage')
+    return service.get(getRandom('/user/reportStage'))
 }
+//下载报告册
+export const downloadReport = ()=>{
+    return service.get(getRandom('/student/report/form'))
+}
+//下载鉴定表
+export const downloadIdentify = ()=>{
+    return service.get(getRandom('/student/identify/form'))
+}
+
+//------------------教师接口----------------------------

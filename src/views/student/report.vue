@@ -233,16 +233,17 @@ export default {
           };
           if (this.state == 0) {
             if (this.stage1Form.stage1GuideDate) {
+              console.log(this.stage1Form)
               var arr = this.stage1Form.stage1GuideDate.split(" - ");
               // console.log(arr)
-              this.startTime = arr[0];
-              this.endTime = arr[1];
+              this.startTime = arr[0]=='Invalid date'?"":arr[0];
+              this.endTime = arr[1]=='Invalid date'?"":arr[1];
             }
           } else if (this.state == 1) {
             if (this.stage2Form.stage2GuideDate) {
               var arr = this.stage2Form.stage2GuideDate.split(" - ");
-              this.startTime = arr[0];
-              this.endTime = arr[1];
+              this.startTime = arr[0]=='Invalid date'?"":arr[0];
+              this.endTime = arr[1]=='Invalid date'?"":arr[1];
             }
           }
         })
@@ -272,7 +273,7 @@ export default {
 <style scoped>
 .el-card {
   margin: 0 auto;
-  width: 80%;
+  /* width: 80%; */
 }
 .report-title {
   font-weight: bold;

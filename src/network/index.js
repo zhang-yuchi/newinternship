@@ -82,3 +82,7 @@ export const getDecisionTable = ()=>{
 export const submitDecision = (params) =>{
     return service.post('/student/identify',params)
 }
+//获取当前阶段
+export const getStage = ()=>{
+    return service.get('/user/reportStage')
+}

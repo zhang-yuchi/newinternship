@@ -2,7 +2,11 @@
 <template>
   <div class>
     <el-card v-loading="cardLoading">
-      <div class="decision-title">我的鉴定表</div>
+      <div  class="decision-title">
+        <div style="display:inline-block;">我的鉴定表</div>
+        <el-button type="primary" style="float:right;">下载pdf</el-button>
+      </div>
+
       <div class="Divider">个人实习</div>
       <form-item title="实习内容" :content="decision.sxContent"></form-item>
       <form-item title="实习生自我总结" :content="decision.selfSummary"></form-item>
@@ -84,9 +88,9 @@ export default {
           console.log(res);
           if (res.data.status == 1) {
             let temp = Object.assign({}, res.data.data);
-            console.log((temp.sxContent).indexOf('\n'))
+            console.log(temp.sxContent.indexOf("\n"));
             temp = Obj2html(temp); //将对象中的换行替换为<br /> 方便展示
-            console.log(temp.sxContent)
+            console.log(temp.sxContent);
             temp = replaceNull(temp); //将所有空对象转换为 暂无
             this.decision = temp;
           }
@@ -100,7 +104,7 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.getDecision()
+    this.getDecision();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -118,6 +122,7 @@ export default {
   margin: 0 auto;
 }
 .decision-title {
+  overflow: hidden;
   font-weight: bold;
   padding: 16px 0;
   border-bottom: 1px solid #ddd;

@@ -131,10 +131,22 @@ export const getStudentList = ()=>{
     return service.get(getRandom('/teacher/students'))
 }
 //获取某个学生的信息
-export const getStudentInfoById = (stuId) => {
-    return service.get(getRandom('/teacher/student/'+stuId))
+export const getStudentInfoById = (stuNo) => {
+    return service.get(getRandom('/teacher/student/'+stuNo))
 }
 //获取某个学生鉴定表
 export const getStudentIdentify = (stuNo) => {
     return service.get(getRandom('/teacher/student/identify/'+stuNo))
+}
+//获取某个学生报告册
+export const getStudentReport = (stuNo) => {
+  return service.get(getRandom('/teacher/student/report/'+stuNo))
+}
+//教师填写鉴定表
+export const completeDecision = (params) => {
+  return service.post('/teacher/student/identifyForm', params)
+}
+//教师填写报告册
+export const completeReport = (params) => {
+  return service.post('/teacher/student/reportForm', params)
 }

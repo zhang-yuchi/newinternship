@@ -12,7 +12,7 @@
     </el-table-column>
     <el-table-column prop="corpPosition" label="实习岗位" width="200">
     </el-table-column>
-    <el-table-column prop="corpTeaNo" label="校外指导老师工号" width="200">
+    <el-table-column prop="corpTeacherNo" label="校外指导老师工号" width="200">
     </el-table-column>
     <el-table-column prop="phone" label="联系电话" width="200">
     </el-table-column>

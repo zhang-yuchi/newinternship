@@ -55,6 +55,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
+        :disabled='disabled'
       >
         <el-form-item label="教师评语" prop="res">
           <el-input
@@ -73,7 +74,7 @@
           </el-date-picker>
         </div>
         <div class="item-title">成绩评定</div>
-        <el-select v-model="res.stage1Grade" placeholder="请选择">
+        <el-select v-model="res.stage1Grade" placeholder="请选择" :disabled='disabled'>
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -101,6 +102,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
+        :disabled='disabled'
       >
         <el-form-item label="教师评语" prop="res">
           <el-input
@@ -118,12 +120,24 @@
           >
           </el-date-picker>
         </div>
-        <el-form-item label="成绩评定" prop="res">
+        <!-- <el-form-item label="成绩评定" prop="res">
           <el-input
             type="textarea"
             :rows="5"
             v-model="res.stage2Grade"
           ></el-input>
+        </el-form-item> -->
+        <div class="item-title">成绩评定</div>
+        <el-form-item>
+          <el-select v-model="res.stage2Grade" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <div class="block">
           <el-date-picker
@@ -143,6 +157,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
+        :disabled='disabled'
       >
         <el-form-item label="评语" prop="res">
           <el-input
@@ -189,6 +204,7 @@ export default {
   },
   data() {
     return {
+      disabled:true,
       info: {
         name: "加载中",
         college: "加载中",
@@ -297,25 +313,32 @@ export default {
           }
           
           if (this.res.stage1Date) {
-            obj.stage1Date =
+            if(typeof(this.res.stage1Date) == 'string'){
+              obj.stage1Date = this.res.stage1Date
+            }else{
+              obj.stage1Date =
               this.res.stage1Date.getFullYear() +
               "-" +
               (this.res.stage1Date.getMonth() + 1) +
               "-" +
               this.res.stage1Date.getDate();
+            }
             obj.stage1GradeDate = obj.stage1Date;
           }
           if (this.res.stage2Date) {
-            obj.stage2Date =
+            if(typeof(this.res.stage2Date) == 'string'){
+              obj.stage2Date = this.res.stage2Date
+            }else{
+              obj.stage2Date = 
               this.res.stage2Date.getFullYear() +
               "-" +
-              (this.res.stage1Date.getMonth() + 1) +
+              (this.res.stage2Date.getMonth() + 1) +
               "-" +
-              this.res.stage1Date.getDate();
+              this.res.stage2Date.getDate();
+            }
             obj.stage2GradeDate = obj.stage2Date;
           }
           console.log(obj);
-
           completeReport(obj).then(res => {
             console.log(res);
             if (res.data.status == 1) {
@@ -323,8 +346,7 @@ export default {
                 type: "success",
                 message: "提交成功!"
               });
-              console.log(11111);
-              // this.$route.back()
+              this.$router.back()
             } else {
               this.$message({
                 type: "error",
@@ -343,7 +365,6 @@ export default {
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    console.log("学号:" + stuNo);
     getStudentInfoById(stuNo).then(res => {
       console.log(res);
       if (res.data.status == 1) {
@@ -358,6 +379,7 @@ export default {
             if (this.res.stage2Comment == null) {
               this.res.stage2Comment = "";
             }
+            this.disabled = !this.$store.state.isReportStage3Open
           }
         });
       }

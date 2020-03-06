@@ -10,7 +10,12 @@ service.interceptors.request.use((config) => {
     config.headers = Object.assign({}, config.headers, {
         Authorization: sessionStorage.getItem('Authorization')
     })
-    config.data = qs.stringify(config.data)
+    if (config.url === '/teacher/student/reportForm' && config.url === 'post') {
+        config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+    } else {
+        config.data = qs.stringify(config.data)
+    }
+
     return config
 })
 service.interceptors.response.use((res) => {
@@ -127,14 +132,14 @@ export const downloadIdentify = () => {
 
 //------------------教师接口----------------------------
 //获取所有学生
-export const getStudentList = ()=>{
+export const getStudentList = () => {
     return service.get(getRandom('/teacher/students'))
 }
 //获取某个学生的信息
 export const getStudentInfoById = (stuId) => {
-    return service.get(getRandom('/teacher/student/'+stuId))
+    return service.get(getRandom('/teacher/student/' + stuId))
 }
 //获取某个学生鉴定表
 export const getStudentIdentify = (stuNo) => {
-    return service.get(getRandom('/teacher/student/identify/'+stuNo))
+    return service.get(getRandom('/teacher/student/identify/' + stuNo))
 }

@@ -51,12 +51,12 @@ import {getStudentList} from '../../network/index'
 export default {
   methods: {
     reportCheck(item) {
-      this.$router.push("/teacher/report-check");
+      this.$router.push("/teacher/report-check/"+item.stuNo);
     },
     tableRowClassName({ row, rowIndex }) {
       if (this.tableData[rowIndex].reportFlag === 2) {
         return "success-row";
-      } else if (rowIndex === 1) {
+      } else if (this.tableData[rowIndex].reportFlag === 1) {
         return "warning-row";
       }
       return "";
@@ -72,12 +72,21 @@ export default {
       if (res.data.status == 1) {
         console.log(res);
         this.tableData = res.data.data
-        if(tableData.length){
-          for(let item of tableData){
+        if(this.tableData.length){
+          for(let item of this.tableData){
             if(item.reportFlag ==2){
               item.teaWrite = "已评价完"
-            }else if(item.reportFlag == 1 && item.reportFileFlag != 1){
-              item.teaWrite = '未评价'
+            }else if(item.reportFlag == 1){
+              item.teaWrite = '未评价完'
+            }
+            console.log(item.reportFilledFlag);
+            
+            if(item.reportFilledFlag == 1){
+              item.stuWrite = "未填写"
+            }else if(item.reportFilledFlag == 2){
+              item.stuWrite = "一阶段已填"
+            }else if(item.reportFilledFlag == 3){
+              item.stuWrite = "已填完"
             }
           }
         }

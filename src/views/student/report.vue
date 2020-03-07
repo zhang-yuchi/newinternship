@@ -41,7 +41,7 @@
           ></limit-number>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submit1Form('stage1Form')">提交</el-button>
+          <el-button type="primary" :loading="btnloading" @click="submit1Form('stage1Form')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -87,7 +87,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submit2Form('stage2Form')">提交</el-button>
+          <el-button type="primary" :loading="btnloading" @click="submit2Form('stage2Form')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -102,7 +102,7 @@ import { text2html } from "../../command/utils";
 import {
   getReportInfo,
   submitReportStage1,
-  submitReportStage2,
+  submitReportStage2
 } from "../../network";
 import moment from "moment";
 export default {
@@ -145,7 +145,7 @@ export default {
       value1: "",
       rules: {},
       pageLoading: false,
-      btnLoading:false,
+      btnLoading: false
     };
   },
   //监听属性 类似于data概念
@@ -171,33 +171,37 @@ export default {
           break;
         default:
           // console.log(404);
-          this.$message.error('阶段错误!')
+          this.$message.error("阶段错误!");
           break;
       }
     },
     submit1Form(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          // alert("submit!");
-          if (this.startTime) {
-            this.stage1Form.stage1GuideDate =
-              moment(this.startTime).format("YYYY-MM-DD") +
-              " - " +
-              moment(this.endTime).format("YYYY-MM-DD");
-          }
-
-          submitReportStage1(this.stage1Form).then(res => {
-            // console.log(res)
-            if (res.data.status == 1) {
-              this.$message.success("提交成功!");
-              this.getContent();
+      this.$refs[formName]
+        .validate(valid => {
+          if (valid) {
+            // alert("submit!");
+            if (this.startTime) {
+              this.stage1Form.stage1GuideDate =
+                moment(this.startTime).format("YYYY-MM-DD") +
+                " - " +
+                moment(this.endTime).format("YYYY-MM-DD");
             }
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+            this.btnLoading = true;
+            submitReportStage1(this.stage1Form).then(res => {
+              // console.log(res)
+              if (res.data.status == 1) {
+                this.$message.success("提交成功!");
+                this.getContent();
+              }
+            });
+          } else {
+            console.log("error submit!!");
+            return false;
+          }
+        })
+        .finally(() => {
+          this.btnLoading = false;
+        });
     },
     submit2Form(formName) {
       this.$refs[formName].validate(valid => {
@@ -207,11 +211,16 @@ export default {
               moment(this.startTime).format("YYYY-MM-DD") +
               " - " +
               moment(this.endTime).format("YYYY-MM-DD");
-            submitReportStage2(this.stage2Form).then(res => {
-              // console.log(res)
-              this.$message.success("提交成功!");
-              this.getContent();
-            });
+            this.btnLoading = true;
+            submitReportStage2(this.stage2Form)
+              .then(res => {
+                // console.log(res)
+                this.$message.success("提交成功!");
+                this.getContent();
+              })
+              .finally(() => {
+                this.btnLoading = false;
+              });
           }
         } else {
           console.log("error submit!!");
@@ -235,17 +244,17 @@ export default {
           };
           if (this.state == 0) {
             if (this.stage1Form.stage1GuideDate) {
-              console.log(this.stage1Form)
+              console.log(this.stage1Form);
               var arr = this.stage1Form.stage1GuideDate.split(" - ");
               // console.log(arr)
-              this.startTime = arr[0]=='Invalid date'?"":arr[0];
-              this.endTime = arr[1]=='Invalid date'?"":arr[1];
+              this.startTime = arr[0] == "Invalid date" ? "" : arr[0];
+              this.endTime = arr[1] == "Invalid date" ? "" : arr[1];
             }
           } else if (this.state == 1) {
             if (this.stage2Form.stage2GuideDate) {
               var arr = this.stage2Form.stage2GuideDate.split(" - ");
-              this.startTime = arr[0]=='Invalid date'?"":arr[0];
-              this.endTime = arr[1]=='Invalid date'?"":arr[1];
+              this.startTime = arr[0] == "Invalid date" ? "" : arr[0];
+              this.endTime = arr[1] == "Invalid date" ? "" : arr[1];
             }
           }
         })

@@ -42,31 +42,52 @@ const routes = [
       },
       {
         path:"modify-profile",
-        component:()=>import('../views/student/modify-profile.vue')
+        component:()=>import('../views/student/modify-profile.vue'),
+        meta:{
+          title:"修改信息"
+        }
       },
       {
         path:"enterprise",
-        component:()=>import('../views/student/enterprise.vue')
+        component:()=>import('../views/student/enterprise.vue'),
+        meta:{
+          title:"我的企业"
+        }
       },
       {
         path:"enterprise-modify",
-        component:()=>import('../views/student/enterprise-modify.vue')
+        component:()=>import('../views/student/enterprise-modify.vue'),
+        meta:{
+          title:"修改企业信息"
+        }
       },
       {
         path:"report-check/:state",
-        component:()=>import('../views/student/report-check')
+        component:()=>import('../views/student/report-check'),
+        meta:{
+          title:"查看报告册"
+        }
       },
       {
         path:"report/:state",
-        component:()=>import('../views/student/report')
+        component:()=>import('../views/student/report'),
+        meta:{
+          title:"填写报告册"
+        }
       },
       {
         path:"decision-check",
-        component:()=>import('../views/student/decision-check')
+        component:()=>import('../views/student/decision-check'),
+        meta:{
+          title:"查看鉴定表"
+        }
       },
       {
         path:"decision",
-        component:()=>import('../views/student/decision-table')
+        component:()=>import('../views/student/decision-table'),
+        meta:{
+          title:"填写鉴定表"
+        }
       }
     ]
   },

@@ -120,7 +120,7 @@
             <span class="item-content">{{teacherInfo.age}}</span>
           </div>
           <div class="text item">
-            <span class="item-title">院校</span>
+            <span class="item-title">学院</span>
             <span class="item-content">{{teacherInfo.college}}</span>
           </div>
         </el-card>

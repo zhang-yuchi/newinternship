@@ -129,7 +129,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="timeVisible = false">取 消</el-button>
-        <el-button type="primary" loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
+        <el-button type="primary" :loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
       </span>
     </el-dialog>
     <!-- 修改实习时间手机版 -->
@@ -159,7 +159,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="timeVisible = false">取 消</el-button>
-        <el-button type="primary" loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
+        <el-button type="primary" :loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>

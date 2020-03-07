@@ -74,33 +74,48 @@ const routes = [
     //老师相关路由
     path:'/teacher',
     component:()=>import('../views/teacher/index.vue'),
-    meta:{
-      title:'学生信息'
-    },
     children:[
       {
         path:"",
-        redirect:"/teacher/stu-list"
+        redirect:"/teacher/stu-list",
+        meta:{
+          title:'学生信息'
+        },
       },
       {
         path:"stu-list",
-        component:()=>import('../views/teacher/stu-list')
+        component:()=>import('../views/teacher/stu-list'),
+        meta:{
+          title:'学生信息'
+        },
       },
       {
         path:"report-list",
-        component:()=>import('../views/teacher/report-list')
+        component:()=>import('../views/teacher/report-list'),
+        meta:{
+          title:'报告册填写情况'
+        },
       },
       {
         path:"decision-list",
-        component:()=>import('../views/teacher/decision-list')
+        component:()=>import('../views/teacher/decision-list'),
+        meta:{
+          title:'鉴定表填写情况'
+        },
       },
       {
-        path:"report-check",
-        component:()=>import('../views/teacher/report-check')
+        path:"report-check/:stuNo",
+        component:()=>import('../views/teacher/report-check'),
+        meta:{
+          title:'报告册评价'
+        },
       },
       {
-        path:"decision-check",
-        component:()=>import('../views/teacher/decision-check')
+        path:"decision-check/:stuNo",
+        component:()=>import('../views/teacher/decision-check'),
+        meta:{
+          title:'鉴定表评价'
+        },
       }
     ]
     

@@ -82,7 +82,7 @@
       label="鉴定表"
       width="100">
       <template slot-scope="scope">
-        <el-button @click="reportCheck(scope.row)" type="text" size="small">评价</el-button>
+        <el-button @click="decisionCheck(scope.row)" type="text" size="small">评价</el-button>
         <!-- <el-button type="text" size="small">编辑</el-button> -->
       </template>
     </el-table-column>
@@ -110,6 +110,9 @@
           return 'success-row';
         }
         return '';
+      },
+      decisionCheck(item){
+        this.$router.push('/teacher/decision-check')
       }
     },
     data() {

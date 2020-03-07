@@ -273,8 +273,7 @@ export default {
         type: "info"
       })
         .then(() => {
-          console.log(this.res);
-          
+          // console.log(this.res);]
           if (this.res.stage1Comment.length < 60) {
             this.$alert("一阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
@@ -289,6 +288,11 @@ export default {
               confirmButtonText: "确定"
             });
             return false;
+          }
+          if(this.res.totalGrade.length !=0 && this.res.totalGrade.length < 60){
+            this.$alert("总评不能低于60字","提交失败",{
+              confirmButtonText:"确定"
+            })
           }
           let obj = {};
           obj.id = this.res.id;
@@ -338,7 +342,7 @@ export default {
             }
             obj.stage2GradeDate = obj.stage2Date;
           }
-          console.log(obj);
+          // console.log(obj);
           completeReport(obj).then(res => {
             console.log(res);
             if (res.data.status == 1) {
@@ -366,11 +370,11 @@ export default {
   mounted() {
     let stuNo = this.$route.params.stuNo;
     getStudentInfoById(stuNo).then(res => {
-      console.log(res);
+      // console.log(res);
       if (res.data.status == 1) {
         this.info = res.data.data;
         getStudentReport(stuNo).then(resp => {
-          console.log(resp);
+          // console.log(resp);
           if (resp.data.status == 1) {
             this.res = Obj2html(resp.data.data);
             if (this.res.stage1Comment == null) {

@@ -16,7 +16,7 @@
       fixed>
     </el-table-column>
     <el-table-column
-      prop="gender"
+      prop="sex"
       label="性别"
       width="200">
     </el-table-column>
@@ -36,7 +36,7 @@
       width="200">
     </el-table-column>
     <el-table-column
-      prop="corp"
+      prop="corpName"
       label="实习企业"
       width="200">
     </el-table-column>
@@ -46,7 +46,7 @@
       width="200">
     </el-table-column>
     <el-table-column
-      prop="corpTeaNo"
+      prop="corpTeacherNo"
       label="校外指导老师工号"
       width="200">
     </el-table-column>
@@ -61,7 +61,7 @@
       width="200">
     </el-table-column>
     <el-table-column
-      prop="wx"
+      prop="wechat"
       label="联系微信"
       width="200">
     </el-table-column>
@@ -101,234 +101,51 @@
 </style>
 
 <script>
+import {getStudentList} from '../../network/index'
   export default {
     methods: {
       tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
+        if (this.tableData[rowIndex].identifyFlag === 2) {
           return 'success-row';
+        } else if (this.tableData[rowIndex].identifyFlag === 1) {
+          return 'warning-row';
         }
         return '';
       },
       decisionCheck(item){
-        this.$router.push('/teacher/decision-check')
+        this.$router.push('/teacher/decision-check/'+item.stuNo)
       }
     },
     data() {
       return {
-        tableData: [{
-          stuNo: '20160502',
-          name: '王二',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王二',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'已填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'已填写',
-          teaWrite:'已评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },{
-          stuNo: '20160502',
-          name: '王大',
-          gender:'男',
-          age:'23',
-          college:'大华科技学院',
-          major:"唱歌",
-          corp:"WhyStudio76号",
-          corpPosition:'java全栈',
-          corpTeaNo:"888",
-          wx:'ruankun521',
-          qq:'1234567890',
-          phone:'18783551223',
-          stuWrite:'未填写',
-          teaWrite:'未评价'
-        },]
+        tableData: []
       }
+    },
+    mounted(){
+      getStudentList().then(res => {
+      if (res.data.status == 1) {
+        console.log(res);
+        this.tableData = res.data.data
+        if(this.tableData.length){
+          for(let item of this.tableData){
+            if(item.identifyFlag === 2){
+              item.teaWrite = "已评价完"
+            }else if(item.identifyFlag === 1){
+              item.teaWrite = '未评价完'
+            }else{
+              item.teaWrite = '未评价'
+            }
+            if(item.identifyFilledFlag === 2){
+              item.stuWrite = "填写中"
+            }else if(item.identifyFilledFlag === 3){
+              item.stuWrite = "已填完"
+            }else{
+              item.stuWrite = "未填写"
+            }
+          }
+        }
+      }
+    });
     }
   }
 </script>

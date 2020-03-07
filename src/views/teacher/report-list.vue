@@ -70,7 +70,7 @@ export default {
   mounted() {
      getStudentList().then(res => {
       if (res.data.status == 1) {
-        console.log(res);
+        // console.log(res);
         this.tableData = res.data.data
         if(this.tableData.length){
           for(let item of this.tableData){
@@ -78,10 +78,10 @@ export default {
               item.teaWrite = "已评价完"
             }else if(item.reportFlag == 1){
               item.teaWrite = '未评价完'
+            }else if(item.reportFlag == 0){
+              item.teaWrite = "未评价"
             }
-            console.log(item.reportFilledFlag);
-            
-            if(item.reportFilledFlag == 1){
+            if(item.reportFilledFlag == 1|| item.reportFilledFlag == 0){
               item.stuWrite = "未填写"
             }else if(item.reportFilledFlag == 2){
               item.stuWrite = "一阶段已填"

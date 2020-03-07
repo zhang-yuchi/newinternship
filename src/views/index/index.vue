@@ -13,7 +13,7 @@
         <div class="grid-content bg-purple">
           <el-card class="box-card" shadow="hover">
             <div class="text item">公告</div>
-            <div class="news-content">
+            <div class="news-content" v-loading=newsLoading>
               <div class="news" v-for="(item,index) in news" :key="index">
                 <el-link
                   type="warning"
@@ -70,7 +70,8 @@ export default {
       img: require("../../assets/img/logo.jpg"),
       news: [],
       showDetail: false,
-      detail: {}
+      detail: {},
+      newsLoading:false,
     };
   },
   //监听属性 类似于data概念
@@ -89,17 +90,22 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    getNewsList().then(res => {
-      console.log(res);
-      let arr = [];
-      for (let i = res.data.data.length - 1; i >= 0; i--) {
-        let item = res.data.data[i];
-        item.gmtModified = moment(item.gmtModified).format("YYYY-MM-DD");
-        arr.push(item);
-      }
-      console.log(arr);
-      this.news = arr;
-    });
+    this.newsLoading = true
+    getNewsList()
+      .then(res => {
+        // console.log(res);
+        let arr = [];
+        for (let i = res.data.data.length - 1; i >= 0; i--) {
+          let item = res.data.data[i];
+          item.gmtModified = moment(item.gmtModified).format("YYYY-MM-DD");
+          arr.push(item);
+        }
+        // console.log(arr);
+        this.news = arr;
+      })
+      .finally(()=>{
+        this.newsLoading = false
+      })
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -137,10 +143,11 @@ export default {
 .news {
   margin: 10px 0;
 }
-.publisher{
+.publisher {
   margin-top: 10px;
 }
-.publisher,.time{
+.publisher,
+.time {
   font-size: 14px;
   color: #606266;
   text-align: right;

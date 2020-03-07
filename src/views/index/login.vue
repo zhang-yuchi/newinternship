@@ -22,7 +22,7 @@
           <el-input type="text" v-model="ruleForm.code" autocomplete="off"></el-input>
           <img class="checkimg" @click="repeatImg" :src="checkUrl" alt />
         </el-form-item>
-        <el-form-item label="身份">
+        <el-form-item label="身份" prop="identify">
           <el-radio-group v-model="form.identify">
             <el-radio label="学生"></el-radio>
             <el-radio label="教师"></el-radio>
@@ -31,7 +31,7 @@
         </el-form-item>
 
         <div class="controls">
-          <el-button type="primary" @click="onSubmit('ruleForm')">登录</el-button>
+          <el-button type="primary" @click="onSubmit('ruleForm')" :loading="loginLoading">登录</el-button>
         </div>
         <!-- <el-button type="primary">主要按钮</el-button> -->
 
@@ -196,11 +196,12 @@ export default {
         account: "",
         code: ""
       },
+      loginLoading:false,
       checkUrl: "",
       rules: {
         password: [{ validator: validatePass, trigger: "blur" }],
         account: [{ validator: checkAge, trigger: "blur" }],
-        code: [{ validator: checkVerify, trigger: "blur" }]
+        code: [{ validator: checkVerify, trigger: "blur" }],
       },
       islog: true,
       form: {
@@ -230,24 +231,35 @@ export default {
       }
       if (!loginType) {
         this.$message.error("身份错误");
+        return
       }
-      // console.log(this.ruleForm.code)
+      this.loginLoading = true
       login({
         account: this.ruleForm.account,
         code: this.ruleForm.code,
         password: this.ruleForm.password,
         loginType
       }).then(res => {
-        // console.log(res)
+        console.log(res)
         if (res.data.message === "respose success") {
           sessionStorage.setItem("Authorization", res.data.data.Authorization);
           callback();
+        }else{
+          var reg = /username/
+          let errorMsg = reg.test(res.data.message)?"用户名或密码错误!":res.data.message
+
+          this.$message.error(errorMsg)
         }
-      });
+      })
+      .finally(()=>{
+        this.getVerifyImg()
+        this.loginLoading = false
+      })
     },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          console.log(111)
           // console.log(this.form.identify);
           if (!this.form.identify) {
             this.$message.error("您还没有选择身份");
@@ -275,7 +287,7 @@ export default {
         let blob = res.data;
         let src = window.URL.createObjectURL(blob);
         this.checkUrl = src;
-      });
+      })
     },
     repeatImg() {
       this.getVerifyImg();

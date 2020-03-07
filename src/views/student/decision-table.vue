@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class>
-    <el-card>
+    <el-card v-loading=formLoading>
       <div class="main-header">实习鉴定表填写</div>
       <el-form
         :model="ruleForm"
@@ -42,7 +42,7 @@
           <el-input type="textarea" :rows="5" v-model="ruleForm.corpTeacherOpinion" :disabled="!$store.state.isIdentifyFormStage3Open"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="primary" :loading="btnLoading" @click="submitForm('ruleForm')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -69,7 +69,9 @@ export default {
         corpOpinion: "",
         corpTeacherOpinion: ""
       },
-      rules: {}
+      rules: {},
+      btnLoading:false,
+      formLoading:false,
     };
   },
   //监听属性 类似于data概念
@@ -83,13 +85,17 @@ export default {
         if (valid) {
           // alert("submit!");
           let temp = this.ruleForm
+          this.btnLoading = true
           submitDecision(temp).then(res => {
-            console.log(res);
+            // console.log(res);
             if (res.data.status == 1) {
               this.$message.success("提交成功!");
               this.getTable();
             }
-          });
+          })
+          .finally(()=>{
+            this.btnLoading = false
+          })
         } else {
           console.log("error submit!!");
           return false;
@@ -97,6 +103,7 @@ export default {
       });
     },
     getTable() {
+      this.formLoading = true
       getDecisionTable().then(res => {
         console.log(res);
         if (res.data.status == 1) {
@@ -113,7 +120,10 @@ export default {
             corpTeacherOpinion: temp.corpTeacherOpinion
           };
         }
-      });
+      })
+      .finally(()=>{
+        this.formLoading = false
+      })
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

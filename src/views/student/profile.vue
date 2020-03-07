@@ -146,7 +146,7 @@
     </el-row>
 
     <el-row class="hidden-sm-and-up">
-      <el-col class :xs="24" :sm="24" :md="9" :lg="9"  :xl="9">
+      <el-col class :xs="24" :sm="24" :md="9" :lg="9" :xl="9">
         <el-card class="box-card" v-if="hasTeacher" v-loading="teacherLoading">
           <div class="card-title">导师信息</div>
           <div class="text item">
@@ -235,9 +235,6 @@ export default {
           this.studentInfo = replaceNull(this.studentInfo);
           // console.log(this.studentInfo)
         })
-        .catch(() => {
-          this.$message.error("获取信息失败!请重试");
-        })
         .finally(() => {
           this.studentLoading = false;
         })
@@ -267,9 +264,6 @@ export default {
               }
             });
           }
-        })
-        .catch(() => {
-          this.$message.error("获取教师信息失败!请重试");
         })
         .finally(() => {
           this.teacherLoading = false;
@@ -308,9 +302,9 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.getInfo();
-    selectTeacher().then(res => {
-      // console.log(res);
-    });
+    // selectTeacher().then(res => {
+    //   // console.log(res);
+    // });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

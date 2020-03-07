@@ -102,7 +102,7 @@ import { text2html } from "../../command/utils";
 import {
   getReportInfo,
   submitReportStage1,
-  submitReportStage2
+  submitReportStage2,
 } from "../../network";
 import moment from "moment";
 export default {
@@ -144,7 +144,8 @@ export default {
       startTime: "",
       value1: "",
       rules: {},
-      pageLoading: false
+      pageLoading: false,
+      btnLoading:false,
     };
   },
   //监听属性 类似于data概念
@@ -169,7 +170,8 @@ export default {
           this.title = "第二阶段报告册";
           break;
         default:
-          console.log(404);
+          // console.log(404);
+          this.$message.error('阶段错误!')
           break;
       }
     },

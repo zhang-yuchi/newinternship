@@ -33,7 +33,7 @@
           <el-input v-model.number="ruleForm.corpTeacherNo"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
+          <el-button type="primary" :loading="btnLoading" @click="submitForm('ruleForm')">修改</el-button>
         </el-form-item>
       </el-form>
     </layout>
@@ -66,7 +66,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="pswBoxVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitPsw('pswForm')">确 定</el-button>
+        <el-button type="primary" :loading="pswLoading" @click="submitPsw('pswForm')">确 定</el-button>
       </span>
     </el-dialog>
     <!-- 手机版 -->
@@ -100,7 +100,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="pswBoxVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitPsw('pswForm')">确 定</el-button>
+        <el-button type="primary" :loading="pswLoading" @click="submitPsw('pswForm')">确 定</el-button>
       </span>
     </el-dialog>
     <!-- 修改实习时间弹窗 -->
@@ -129,7 +129,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="timeVisible = false">取 消</el-button>
-        <el-button type="primary" v-loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
+        <el-button type="primary" loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
       </span>
     </el-dialog>
     <!-- 修改实习时间手机版 -->
@@ -159,7 +159,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="timeVisible = false">取 消</el-button>
-        <el-button type="primary" v-loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
+        <el-button type="primary" loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -265,7 +265,9 @@ export default {
       pswBoxVisible: false,
       timeVisible: false,
       originError: "",
-      newError: ""
+      newError: "",
+      btnLoading:false,
+      pswLoading:false,
     };
   },
   //监听属性 类似于data概念
@@ -278,13 +280,17 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
+          this.btnLoading = true
           modifySelfInfo(this.ruleForm).then(res => {
             // console.log(res);
             if (res.data.status == 1) {
               this.$message.success("修改成功!");
               this.getInfo();
             }
-          });
+          })
+          .finally(()=>{
+            this.btnLoading = false
+          })
         } else {
           // console.log("error submit!!");
 
@@ -303,6 +309,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //   alert("submit!");
+          this.pswLoading = true
           modifyPswInner({
             newPassword: this.pswForm.pass,
             oldPassword: this.pswForm.oldPsw
@@ -327,7 +334,10 @@ export default {
                 // console.log(this.newError)
               }
             }
-          });
+          })
+          .finally(()=>{
+            this.pswLoading = false
+          })
         } else {
           console.log("error submit!!");
           return false;
@@ -359,7 +369,6 @@ export default {
                 this.$message.error(res.data.message);
               }
             })
-            .catch(() => {})
             .finally(() => {
               this.timeBtnLoading = false;
             });

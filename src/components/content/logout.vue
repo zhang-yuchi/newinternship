@@ -32,8 +32,8 @@ export default {
         type: "warning"
       })
         .then(() => {
-        sessionStorage.setItem('Authorization',null)
-        this.$router.push('/')
+          sessionStorage.setItem("Authorization", null);
+          this.$router.push("/");
           this.$message({
             type: "success",
             message: "注销成功!"
@@ -69,7 +69,7 @@ export default {
   transform: translateY(-50%);
   cursor: pointer;
 }
-.el-message-box{
+.el-message-box {
   width: auto;
 }
 </style>

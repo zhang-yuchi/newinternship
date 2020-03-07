@@ -125,7 +125,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('Form')">提交</el-button>
+        <el-button type="primary" :loading='btnloading' @click="submitForm('Form')">提交</el-button>
       </span>
     </el-dialog>
     <!-- 修改实习岗位手机版 -->
@@ -150,7 +150,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('Form')">提交</el-button>
+        <el-button type="primary" :loading='btnloading' @click="submitForm('Form')">提交</el-button>
       </span>
     </el-dialog>
   </div>
@@ -186,7 +186,8 @@ export default {
         ]
       },
       corp: {},
-      cardLoading: false
+      cardLoading: false,
+      btnloading:false,
     };
   },
   //监听属性 类似于data概念
@@ -200,6 +201,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
+          this.btnloading = true
           modifyPosition(this.Form).then(res => {
             // console.log(res)
             if (res.data.status == 1) {
@@ -210,7 +212,10 @@ export default {
             } else {
               this.$message.error(res.data.message);
             }
-          });
+          })
+          .finally(()=>{
+            this.btnloading = false
+          })
         } else {
           // console.log("error submit!!");
           return false;

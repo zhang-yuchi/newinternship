@@ -103,7 +103,7 @@
         </el-row>
 
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="primary" :loading="btnLoading" @click="submitForm('ruleForm')">提交</el-button>
         </el-form-item>
       </el-form>
 
@@ -208,7 +208,7 @@
         </el-row>
 
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="primary" :loading="btnLoading" @click="submitForm('ruleForm')">提交</el-button>
         </el-form-item>
       </el-form>
     </form-layout>
@@ -255,6 +255,7 @@ export default {
         stuNo: "",
         type: ""
       },
+      btnLoading:false,
       rules: {
         corpName: [
           {
@@ -284,6 +285,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
+          this.btnLoading = true
           modifyCorp(this.ruleForm)
           .then(res=>{
             console.log(res)
@@ -292,6 +294,9 @@ export default {
               this.getCorp()
               
             }
+          })
+          .finally(()=>{
+            this.btnLoading = false
           })
         } else {
           console.log("error submit!!");
@@ -303,7 +308,7 @@ export default {
       this.formLoading = true;
       checkCorp()
         .then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.data.status == 1) {
             this.ruleForm = Object.assign({}, res.data.data, {});
           }

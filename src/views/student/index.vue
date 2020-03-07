@@ -166,7 +166,10 @@ export default {
           states.isIdentifyFormStage3Open
         );
       }
-    });
+    }).
+    catch(()=>{
+      this.$message.error("阶段控制接口出错!请检测网络或告知管理员!!")
+    })
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

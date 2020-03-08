@@ -14,11 +14,11 @@
           </el-menu-item>
           <el-menu-item index="/teacher/report-list">
             <i class="el-icon-edit"></i>
-            <span slot="title">报告册评价</span>
+            <span slot="title">报告册</span>
           </el-menu-item>
           <el-menu-item index="/teacher/decision-list">
             <i class="el-icon-edit"></i>
-            <span slot="title">鉴定表评价</span>
+            <span slot="title">鉴定表</span>
           </el-menu-item>
         </el-menu>
       </el-col>

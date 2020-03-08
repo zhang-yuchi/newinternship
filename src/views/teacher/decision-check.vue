@@ -30,12 +30,18 @@
       </div>
 
       <div class="state-title">鉴定表</div>
-      <form-item title="实习内容" :content="res.sxContent"></form-item>
-      <form-item title="自我总结" :content="res.selfSummary"></form-item>
+      <form-item
+        title="实习内容"
+        :content="res.sxContent ? res.sxContent : '暂无'"
+      ></form-item>
+      <form-item
+        title="自我总结"
+        :content="res.selfSummary ? res.selfSummary : '暂无'"
+      ></form-item>
       <form-item
         title="实习单位指导教师评语"
-        :content="res.corpTeacherOpinion"
-        time="暂无"
+        :content="res.corpTeacherOpinion ? res.corpTeacherOpinion : '暂无'"
+        :time="res.ctodate ? res.ctodate : '暂无'"
       ></form-item>
       <div class="item-title">成绩评定</div>
       <el-select
@@ -53,8 +59,8 @@
       </el-select>
       <form-item
         title="实习单位指审核意见"
-        :content="res.corpOpinion"
-        time="暂无"
+        :content="res.corpOpinion ? res.corpOpinion : '暂无'"
+        :time="res.codate"
       ></form-item>
       <div class="item-title">所在学院指导老师成绩评定</div>
       <el-select
@@ -81,8 +87,8 @@
       </div>
       <form-item
         title="综合实习成绩评定"
-        :content="res.comprehsvGrade"
-        time="暂无"
+        :content="res.comprehsvGrade ? res.comprehsvGrade : '暂无成绩'"
+        :time="res.cgdate ? res.cgdate : '暂无'"
       ></form-item>
       <el-form
         :model="res"
@@ -143,17 +149,17 @@ export default {
         corpPosition: "加载中"
       },
       res: {
-        sxContent: "暂无",
-        selfSummary: "暂无",
-        corpTeacherOpinion: "暂无",
+        sxContent: "加载中",
+        selfSummary: "加载中",
+        corpTeacherOpinion: "加载中",
         corpTeacherGrade: "",
-        corpOpinion: "暂无",
+        corpOpinion: "加载中",
         teacherGrade: "",
-        TGDate: "",
-        tGDate: "",
-        comprehsvGrade: "暂无",
+        comprehsvGrade: "加载中",
         collegePrincipalOpinion: "",
-        CPODate: ""
+        ctodate: "",
+        codate: "",
+        cgdate: ""
       },
       options: [
         {
@@ -219,17 +225,22 @@ export default {
   mounted() {
     let stuNo = this.$route.params.stuNo;
     getStudentInfoById(stuNo).then(res => {
-      console.log(res);
+      // console.log(res);
       if (res.data.status == 1) {
         this.info = res.data.data;
         getStudentIdentify(stuNo).then(resp => {
-          console.log(resp);
+          // console.log(resp);
           if (resp.data.status == 1) {
             this.res = Obj2html(resp.data.data);
             if (this.res.collegePrincipalOpinion == null) {
               this.res.collegePrincipalOpinion = "";
             }
-            this.disabled = !this.$store.state.isReportStage3Open;
+            this.disabled = !this.$store.state.isIdentifyFormStage2Open;
+            if (this.disabled) {
+              this.$alert("未到评价时间", "提示", {
+                confirmButtonText: "确定"
+              });
+            }
           }
         });
       }
@@ -239,6 +250,11 @@ export default {
 </script>
 
 <style scoped>
+.box-card {
+  /* width: 480px; */
+  width: 80%;
+  transition: none;
+}
 .report-check {
   display: flex;
   justify-content: center;

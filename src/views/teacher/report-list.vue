@@ -78,15 +78,15 @@ export default {
               item.teaWrite = "已评价完"
             }else if(item.reportFlag == 1){
               item.teaWrite = '未评价完'
-            }else if(item.reportFlag == 0){
+            }else{
               item.teaWrite = "未评价"
             }
-            if(item.reportFilledFlag == 1|| item.reportFilledFlag == 0){
-              item.stuWrite = "未填写"
-            }else if(item.reportFilledFlag == 2){
+            if(item.reportFilledFlag == 2){
               item.stuWrite = "一阶段已填"
             }else if(item.reportFilledFlag == 3){
               item.stuWrite = "已填完"
+            }else{
+              item.stuWrite = "未填写"
             }
           }
         }

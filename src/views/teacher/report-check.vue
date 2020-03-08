@@ -55,7 +55,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
-        :disabled='disabled'
+        :disabled="disabled"
       >
         <el-form-item label="教师评语" prop="res">
           <el-input
@@ -74,7 +74,11 @@
           </el-date-picker>
         </div>
         <div class="item-title">成绩评定</div>
-        <el-select v-model="res.stage1Grade" placeholder="请选择" :disabled='disabled'>
+        <el-select
+          v-model="res.stage1Grade"
+          placeholder="请选择"
+          :disabled="disabled"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -102,7 +106,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
-        :disabled='disabled'
+        :disabled="disabled"
       >
         <el-form-item label="教师评语" prop="res">
           <el-input
@@ -157,7 +161,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
-        :disabled='disabled'
+        :disabled="disabled"
       >
         <el-form-item label="评语" prop="res">
           <el-input
@@ -204,7 +208,7 @@ export default {
   },
   data() {
     return {
-      disabled:true,
+      disabled: true,
       info: {
         name: "加载中",
         college: "加载中",
@@ -289,56 +293,59 @@ export default {
             });
             return false;
           }
-          if(this.res.totalGrade.length !=0 && this.res.totalGrade.length < 60){
-            this.$alert("总评不能低于60字","提交失败",{
-              confirmButtonText:"确定"
-            })
+          if (
+            this.res.totalGrade.length != 0 &&
+            this.res.totalGrade.length < 60
+          ) {
+            this.$alert("总评不能低于60字", "提交失败", {
+              confirmButtonText: "确定"
+            });
           }
           let obj = {};
           obj.id = this.res.id;
           obj.stuNo = this.res.stuNo;
-          if(this.res.stage1Comment){
+          if (this.res.stage1Comment) {
             obj.stage1Comment = this.res.stage1Comment;
           }
-          if(this.res.stage1Grade){
+          if (this.res.stage1Grade) {
             obj.stage1Grade = this.res.stage1Grade;
           }
-          if(this.res.stage2Comment){
+          if (this.res.stage2Comment) {
             obj.stage2Comment = this.res.stage2Comment;
           }
-          if(this.res.stage2Grade){
+          if (this.res.stage2Grade) {
             obj.stage2Grade = this.res.stage2Grade;
           }
-          if(this.res.totalGrade){
+          if (this.res.totalGrade) {
             obj.totalGrade = this.res.totalGrade;
           }
-          if(this.res.totalScore){
+          if (this.res.totalScore) {
             obj.totalScore = this.res.totalScore;
           }
-          
+
           if (this.res.stage1Date) {
-            if(typeof(this.res.stage1Date) == 'string'){
-              obj.stage1Date = this.res.stage1Date
-            }else{
+            if (typeof this.res.stage1Date == "string") {
+              obj.stage1Date = this.res.stage1Date;
+            } else {
               obj.stage1Date =
-              this.res.stage1Date.getFullYear() +
-              "-" +
-              (this.res.stage1Date.getMonth() + 1) +
-              "-" +
-              this.res.stage1Date.getDate();
+                this.res.stage1Date.getFullYear() +
+                "-" +
+                (this.res.stage1Date.getMonth() + 1) +
+                "-" +
+                this.res.stage1Date.getDate();
             }
             obj.stage1GradeDate = obj.stage1Date;
           }
           if (this.res.stage2Date) {
-            if(typeof(this.res.stage2Date) == 'string'){
-              obj.stage2Date = this.res.stage2Date
-            }else{
-              obj.stage2Date = 
-              this.res.stage2Date.getFullYear() +
-              "-" +
-              (this.res.stage2Date.getMonth() + 1) +
-              "-" +
-              this.res.stage2Date.getDate();
+            if (typeof this.res.stage2Date == "string") {
+              obj.stage2Date = this.res.stage2Date;
+            } else {
+              obj.stage2Date =
+                this.res.stage2Date.getFullYear() +
+                "-" +
+                (this.res.stage2Date.getMonth() + 1) +
+                "-" +
+                this.res.stage2Date.getDate();
             }
             obj.stage2GradeDate = obj.stage2Date;
           }
@@ -350,7 +357,7 @@ export default {
                 type: "success",
                 message: "提交成功!"
               });
-              this.$router.back()
+              this.$router.back();
             } else {
               this.$message({
                 type: "error",
@@ -383,7 +390,24 @@ export default {
             if (this.res.stage2Comment == null) {
               this.res.stage2Comment = "";
             }
-            this.disabled = !this.$store.state.isReportStage3Open
+            if (!this.res.stage1Summary) {
+              this.res.stage1Summary = "暂无";
+            }
+            if (!this.res.stage1GuideWay) {
+              this.res.stage1GuideWay = "暂无";
+            }
+            if (!this.res.stage2Summary) {
+              this.res.stage2Summary = "暂无";
+            }
+            if (!this.res.stage2GuideWay) {
+              this.res.stage2GuideWay = "暂无";
+            }
+            this.disabled = !this.$store.state.isReportStage3Open;
+            if (this.disabled) {
+              this.$alert("未到评价时间", "提示", {
+                confirmButtonText: "确定"
+              });
+            }
           }
         });
       }
@@ -405,7 +429,6 @@ export default {
   float: left;
 }
 .box-card {
-  /* width: 480px; */
   width: 80%;
   transition: none;
 }

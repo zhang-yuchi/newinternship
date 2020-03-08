@@ -57,7 +57,7 @@ export default {
   mounted() {
     getStudentList().then(res => {
       if (res.data.status == 1) {
-        console.log(res);
+        // console.log(res);
         this.tableData = res.data.data;
       }
     });

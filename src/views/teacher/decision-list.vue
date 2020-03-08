@@ -83,7 +83,6 @@
       width="100">
       <template slot-scope="scope">
         <el-button @click="decisionCheck(scope.row)" type="text" size="small">评价</el-button>
-        <!-- <el-button type="text" size="small">编辑</el-button> -->
       </template>
     </el-table-column>
 
@@ -124,7 +123,7 @@ import {getStudentList} from '../../network/index'
     mounted(){
       getStudentList().then(res => {
       if (res.data.status == 1) {
-        console.log(res);
+        // console.log(res);
         this.tableData = res.data.data
         if(this.tableData.length){
           for(let item of this.tableData){

@@ -143,14 +143,14 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <div class="block">
+        <!-- <div class="block">
           <el-date-picker
-            v-model="res.tage2GradeDate"
+            v-model="res.stage2GradeDate"
             type="date"
             placeholder="选择日期"
           >
           </el-date-picker>
-        </div>
+        </div> -->
       </el-form>
 
       <div class="state-title">总评</div>
@@ -278,10 +278,11 @@ export default {
       })
         .then(() => {
           // console.log(this.res);]
-          if (this.res.stage1Comment.length < 60) {
+          if (this.res.stage1Comment.length !=0 && this.res.stage1Comment.length < 60) {
             this.$alert("一阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
+            throw 'false'
             return false;
           }
           if (
@@ -291,6 +292,7 @@ export default {
             this.$alert("二阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
+            throw 'false'
             return false;
           }
           if (
@@ -300,24 +302,36 @@ export default {
             this.$alert("总评不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
+            throw 'false'
+            return false
           }
           let obj = {};
           obj.id = this.res.id;
           obj.stuNo = this.res.stuNo;
           if (this.res.stage1Comment) {
             obj.stage1Comment = this.res.stage1Comment;
+          }else{
+            obj.stage1Comment = ''
           }
           if (this.res.stage1Grade) {
             obj.stage1Grade = this.res.stage1Grade;
+          }else{
+            obj.stage1Grade = ''
           }
           if (this.res.stage2Comment) {
             obj.stage2Comment = this.res.stage2Comment;
+          }else{
+            obj.stage2Comment = ''
           }
           if (this.res.stage2Grade) {
             obj.stage2Grade = this.res.stage2Grade;
+          }else{
+            obj.stage2Grade = ''
           }
           if (this.res.totalGrade) {
             obj.totalGrade = this.res.totalGrade;
+          }else{
+            obj.totalGrade = ''
           }
           if (this.res.totalScore) {
             obj.totalScore = this.res.totalScore;
@@ -349,7 +363,7 @@ export default {
             }
             obj.stage2GradeDate = obj.stage2Date;
           }
-          // console.log(obj);
+          console.log(obj);
           completeReport(obj).then(res => {
             console.log(res);
             if (res.data.status == 1) {
@@ -357,7 +371,7 @@ export default {
                 type: "success",
                 message: "提交成功!"
               });
-              this.$router.back();
+              // this.$router.back();
             } else {
               this.$message({
                 type: "error",

@@ -60,7 +60,7 @@
       <form-item
         title="实习单位指审核意见"
         :content="res.corpOpinion ? res.corpOpinion : '暂无'"
-        :time="res.codate"
+        :time="res.codate ? res.codate : '暂无'"
       ></form-item>
       <div class="item-title">所在学院指导老师成绩评定</div>
       <el-select
@@ -78,7 +78,7 @@
       </el-select>
       <div class="block">
         <el-date-picker
-          v-model="res.TGDate"
+          v-model="res.tgdate"
           type="date"
           placeholder="选择日期"
           :disabled="disabled"
@@ -107,7 +107,7 @@
           ></el-input>
           <div class="block">
             <el-date-picker
-              v-model="res.CPODate"
+              v-model="res.cpodate"
               type="date"
               placeholder="选择日期"
             >
@@ -159,7 +159,8 @@ export default {
         collegePrincipalOpinion: "",
         ctodate: "",
         codate: "",
-        cgdate: ""
+        tgdate: "",
+        cpodate: ""
       },
       options: [
         {
@@ -190,36 +191,67 @@ export default {
     submitDecision() {
       let obj = {
         stuNo: this.info.stuNo,
-        corpTeacherGrade: this.info.corpTeacherGrade,
-        teacherGrade: this.info.teacherGrade,
-        TGDate: this.info.TGDate,
-        tGDate: this.info.tGDate,
-        CPODate: this.info.CPODate,
-        collegePrincipalOpinion: this.info.collegePrincipalOpinion
+        corpTeacherGrade: this.res.corpTeacherGrade,
+        teacherGrade: this.res.teacherGrade,
+        collegePrincipalOpinion: this.res.collegePrincipalOpinion
       };
-      completeDecision(obj).then(res => {
-        console.log(res);
-        if (res.data.status == 1) {
-          this.$confirm("确认提交？", "提示", {
-            confirmButtonText: "提交",
-            cancelButtonText: "取消",
-            type: "info"
-          })
-            .then(() => {
+      if (this.res.tgdate) {
+        if (typeof this.res.tgdate == "string") {
+          obj.tgdate = this.res.tgdate;
+        } else {
+          obj.tgdate =
+            this.res.tgdate.getFullYear() +
+            "-" +
+            (this.res.tgdate.getMonth() + 1) +
+            "-" +
+            this.res.tgdate.getDate();
+        }
+        obj.tGDate = obj.tgdate
+      }
+      if (this.res.cpodate) {
+        if (typeof this.res.cpodate == "string") {
+          obj.cpodate = this.res.cpodate;
+        } else {
+          obj.cpodate =
+            this.res.cpodate.getFullYear() +
+            "-" +
+            (this.res.cpodate.getMonth() + 1) +
+            "-" +
+            this.res.cpodate.getDate();
+        }
+        obj.cPODate = obj.cpodate
+      }
+      console.log(obj);
+      console.log(this.res);
+
+      this.$confirm("确认提交？", "提示", {
+        confirmButtonText: "提交",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(() => {
+          completeDecision(obj).then(res => {
+            console.log(res);
+            if (res.data.status == 1) {
               this.$message({
                 type: "success",
                 message: "提交成功!"
               });
               this.$router.back();
-            })
-            .catch(() => {
+            } else {
               this.$message({
-                type: "info",
-                message: "已取消提交"
+                type: "error",
+                message: "提交失败：" + res.data.message
               });
-            });
-        }
-      });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消提交"
+          });
+        });
     }
   },
   mounted() {

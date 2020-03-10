@@ -135,9 +135,9 @@ import {getStudentList} from '../../network/index'
               item.teaWrite = '未评价'
             }
             if(item.identifyFilledFlag === 2){
-              item.stuWrite = "填写中"
-            }else if(item.identifyFilledFlag === 3){
               item.stuWrite = "已填完"
+            }else if(item.identifyFilledFlag === 1){
+              item.stuWrite = "填写中"
             }else{
               item.stuWrite = "未填写"
             }

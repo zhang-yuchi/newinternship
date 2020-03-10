@@ -82,9 +82,9 @@ export default {
               item.teaWrite = "未评价"
             }
             if(item.reportFilledFlag == 2){
-              item.stuWrite = "一阶段已填"
-            }else if(item.reportFilledFlag == 3){
               item.stuWrite = "已填完"
+            }else if(item.reportFilledFlag == 1){
+              item.stuWrite = "一阶段已填"
             }else{
               item.stuWrite = "未填写"
             }

@@ -18,6 +18,7 @@ service.interceptors.response.use((res) => {
   // console.log(res)
   const SUCCESS_STATUS = 200
   if (res.status == SUCCESS_STATUS) {
+    
     return res
   } else {
     errorHandle()

@@ -55,7 +55,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
-        :disabled='disabled'
+        :disabled="disabled"
       >
         <el-form-item label="教师评语" prop="res">
           <el-input
@@ -74,7 +74,11 @@
           </el-date-picker>
         </div>
         <div class="item-title">成绩评定</div>
-        <el-select v-model="res.stage1Grade" placeholder="请选择" :disabled='disabled'>
+        <el-select
+          v-model="res.stage1Grade"
+          placeholder="请选择"
+          :disabled="disabled"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -102,7 +106,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
-        :disabled='disabled'
+        :disabled="disabled"
       >
         <el-form-item label="教师评语" prop="res">
           <el-input
@@ -139,14 +143,14 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <div class="block">
+        <!-- <div class="block">
           <el-date-picker
-            v-model="res.tage2GradeDate"
+            v-model="res.stage2GradeDate"
             type="date"
             placeholder="选择日期"
           >
           </el-date-picker>
-        </div>
+        </div> -->
       </el-form>
 
       <div class="state-title">总评</div>
@@ -157,7 +161,7 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
-        :disabled='disabled'
+        :disabled="disabled"
       >
         <el-form-item label="评语" prop="res">
           <el-input
@@ -204,7 +208,7 @@ export default {
   },
   data() {
     return {
-      disabled:true,
+      disabled: true,
       info: {
         name: "加载中",
         college: "加载中",
@@ -273,12 +277,12 @@ export default {
         type: "info"
       })
         .then(() => {
-          console.log(this.res);
-          
-          if (this.res.stage1Comment.length < 60) {
+          // console.log(this.res);]
+          if (this.res.stage1Comment.length !=0 && this.res.stage1Comment.length < 60) {
             this.$alert("一阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
+            throw 'false'
             return false;
           }
           if (
@@ -288,53 +292,74 @@ export default {
             this.$alert("二阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
+            throw 'false'
             return false;
+          }
+          if (
+            this.res.totalGrade.length != 0 &&
+            this.res.totalGrade.length < 60
+          ) {
+            this.$alert("总评不能低于60字", "提交失败", {
+              confirmButtonText: "确定"
+            });
+            throw 'false'
+            return false
           }
           let obj = {};
           obj.id = this.res.id;
           obj.stuNo = this.res.stuNo;
-          if(this.res.stage1Comment){
+          if (this.res.stage1Comment) {
             obj.stage1Comment = this.res.stage1Comment;
+          }else{
+            obj.stage1Comment = ''
           }
-          if(this.res.stage1Grade){
+          if (this.res.stage1Grade) {
             obj.stage1Grade = this.res.stage1Grade;
+          }else{
+            obj.stage1Grade = ''
           }
-          if(this.res.stage2Comment){
+          if (this.res.stage2Comment) {
             obj.stage2Comment = this.res.stage2Comment;
+          }else{
+            obj.stage2Comment = ''
           }
-          if(this.res.stage2Grade){
+          if (this.res.stage2Grade) {
             obj.stage2Grade = this.res.stage2Grade;
+          }else{
+            obj.stage2Grade = ''
           }
-          if(this.res.totalGrade){
+          if (this.res.totalGrade) {
             obj.totalGrade = this.res.totalGrade;
+          }else{
+            obj.totalGrade = ''
           }
-          if(this.res.totalScore){
+          if (this.res.totalScore) {
             obj.totalScore = this.res.totalScore;
           }
-          
+
           if (this.res.stage1Date) {
-            if(typeof(this.res.stage1Date) == 'string'){
-              obj.stage1Date = this.res.stage1Date
-            }else{
+            if (typeof this.res.stage1Date == "string") {
+              obj.stage1Date = this.res.stage1Date;
+            } else {
               obj.stage1Date =
-              this.res.stage1Date.getFullYear() +
-              "-" +
-              (this.res.stage1Date.getMonth() + 1) +
-              "-" +
-              this.res.stage1Date.getDate();
+                this.res.stage1Date.getFullYear() +
+                "-" +
+                (this.res.stage1Date.getMonth() + 1) +
+                "-" +
+                this.res.stage1Date.getDate();
             }
             obj.stage1GradeDate = obj.stage1Date;
           }
           if (this.res.stage2Date) {
-            if(typeof(this.res.stage2Date) == 'string'){
-              obj.stage2Date = this.res.stage2Date
-            }else{
-              obj.stage2Date = 
-              this.res.stage2Date.getFullYear() +
-              "-" +
-              (this.res.stage2Date.getMonth() + 1) +
-              "-" +
-              this.res.stage2Date.getDate();
+            if (typeof this.res.stage2Date == "string") {
+              obj.stage2Date = this.res.stage2Date;
+            } else {
+              obj.stage2Date =
+                this.res.stage2Date.getFullYear() +
+                "-" +
+                (this.res.stage2Date.getMonth() + 1) +
+                "-" +
+                this.res.stage2Date.getDate();
             }
             obj.stage2GradeDate = obj.stage2Date;
           }
@@ -346,7 +371,7 @@ export default {
                 type: "success",
                 message: "提交成功!"
               });
-              this.$router.back()
+              // this.$router.back();
             } else {
               this.$message({
                 type: "error",
@@ -366,11 +391,11 @@ export default {
   mounted() {
     let stuNo = this.$route.params.stuNo;
     getStudentInfoById(stuNo).then(res => {
-      console.log(res);
+      // console.log(res);
       if (res.data.status == 1) {
         this.info = res.data.data;
         getStudentReport(stuNo).then(resp => {
-          console.log(resp);
+          // console.log(resp);
           if (resp.data.status == 1) {
             this.res = Obj2html(resp.data.data);
             if (this.res.stage1Comment == null) {
@@ -379,7 +404,24 @@ export default {
             if (this.res.stage2Comment == null) {
               this.res.stage2Comment = "";
             }
-            this.disabled = !this.$store.state.isReportStage3Open
+            if (!this.res.stage1Summary) {
+              this.res.stage1Summary = "暂无";
+            }
+            if (!this.res.stage1GuideWay) {
+              this.res.stage1GuideWay = "暂无";
+            }
+            if (!this.res.stage2Summary) {
+              this.res.stage2Summary = "暂无";
+            }
+            if (!this.res.stage2GuideWay) {
+              this.res.stage2GuideWay = "暂无";
+            }
+            this.disabled = !this.$store.state.isReportStage3Open;
+            if (this.disabled) {
+              this.$alert("未到评价时间", "提示", {
+                confirmButtonText: "确定"
+              });
+            }
           }
         });
       }
@@ -401,7 +443,6 @@ export default {
   float: left;
 }
 .box-card {
-  /* width: 480px; */
   width: 80%;
   transition: none;
 }

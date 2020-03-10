@@ -17,7 +17,8 @@
     <el-table-column prop="phone" label="联系电话" width="200">
     </el-table-column>
     <el-table-column prop="qq" label="联系QQ" width="200"> </el-table-column>
-    <el-table-column prop="wechat" label="联系微信" width="200"> </el-table-column>
+    <el-table-column prop="wechat" label="联系微信" width="200">
+    </el-table-column>
     <el-table-column fixed="right" label="报告册" width="100">
       <template slot-scope="scope">
         <el-button @click="reportCheck(scope.row)" type="text" size="small"
@@ -38,7 +39,7 @@
 </template>
 
 <script>
-import {getStudentList} from '../../network/index';
+import { getStudentList } from "../../network/index";
 export default {
   data() {
     return {
@@ -50,14 +51,14 @@ export default {
       this.$router.push("/teacher/report-check/" + item.stuNo);
     },
     decisionCheck(item) {
-      // this.$router.push("/teacher/decision-check");
+      this.$router.push("/teacher/decision-check/" + item.stuNo);
     }
   },
   mounted() {
     getStudentList().then(res => {
       if (res.data.status == 1) {
-        console.log(res);
-        this.tableData = res.data.data
+        // console.log(res);
+        this.tableData = res.data.data;
       }
     });
   }

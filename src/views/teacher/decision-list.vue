@@ -64,6 +64,7 @@
       @current-change="pageChange"
     >
     </el-pagination>
+    <fillfilter @filter-click="filterClick"></fillfilter>
   </div>
 </template>
 
@@ -84,12 +85,17 @@
 
 <script>
 import { getStudentList } from "../../network/index";
+import fillfilter from "../../components/content/Filter";
+import { one2arr } from "../../command/utils";
 export default {
+  components: {
+    fillfilter
+  },
   methods: {
     tableRowClassName({ row, rowIndex }) {
-      if (this.tableData[rowIndex].identifyFlag === 2) {
+      if (this.data[this.currentPage-1][rowIndex].identifyFlag === 2) {
         return "success-row";
-      } else if (this.tableData[rowIndex].identifyFlag === 1) {
+      } else if (this.data[this.currentPage-1][rowIndex].identifyFlag === 1) {
         return "warning-row";
       }
       return "";
@@ -106,6 +112,31 @@ export default {
     pageChange(e) {
       this.currentPage = e;
       console.log(this.currentPage);
+    },
+    filterClick(e) {
+      console.log("父组件拿到：" + e);
+      let arr = [];
+      if (e == 3) {
+        // 全部
+        for (let item of this.tableData) {
+          arr.push(item);
+        }
+      } else if (e == 2) {
+        //已填完
+        for (let item of this.tableData) {
+          if (item.identifyFilledFlag == 2) {
+            arr.push(item);
+          }
+        }
+      } else {
+        //未填完
+        for (let item of this.tableData) {
+          if (item.identifyFilledFlag !== 2) {
+            arr.push(item);
+          }
+        }
+      }
+      this.data = one2arr(arr, this.pageSize);
     }
   },
   data() {
@@ -118,38 +149,29 @@ export default {
   },
   mounted() {
     getStudentList().then(res => {
-    if (res.data.status == 1) {
-    // console.log(res);
-    this.tableData = res.data.data
-    if (this.tableData.length) {
-      for (let item of this.tableData) {
-        if (item.identifyFlag === 2) {
-          item.teaWrite = "已评价完";
-        } else if (item.identifyFlag === 1) {
-          item.teaWrite = "未评价完";
-        } else {
-          item.teaWrite = "未评价";
-        }
-        if (item.identifyFilledFlag === 2) {
-          item.stuWrite = "已填完";
-        } else if (item.identifyFilledFlag === 1) {
-          item.stuWrite = "填写中";
-        } else {
-          item.stuWrite = "未填写";
+      if (res.data.status == 1) {
+        // console.log(res);
+        this.tableData = res.data.data;
+        this.data = one2arr(this.tableData, this.pageSize);
+        if (this.tableData.length) {
+          for (let item of this.tableData) {
+            if (item.identifyFlag === 2) {
+              item.teaWrite = "已评价完";
+            } else if (item.identifyFlag === 1) {
+              item.teaWrite = "未评价完";
+            } else {
+              item.teaWrite = "未评价";
+            }
+            if (item.identifyFilledFlag === 2) {
+              item.stuWrite = "已填完";
+            } else if (item.identifyFilledFlag === 1) {
+              item.stuWrite = "填写中";
+            } else {
+              item.stuWrite = "未填写";
+            }
+          }
         }
       }
-    }
-
-    let j = 0;
-    for (let i = 0; i < this.tableData.length; i++) {
-      if (i % this.pageSize == 0) {
-        j++;
-        this.data[j - 1] = new Array();
-      }
-      this.data[j - 1][i % this.pageSize] = this.tableData[i];
-    }
-    console.log(this.data);
-    }
     });
   }
 };

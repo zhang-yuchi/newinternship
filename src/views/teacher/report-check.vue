@@ -277,7 +277,7 @@ export default {
         type: "info"
       })
         .then(() => {
-          // console.log(this.res);]
+          // console.log(this.res);
           if (this.res.stage1Comment.length !=0 && this.res.stage1Comment.length < 60) {
             this.$alert("一阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"

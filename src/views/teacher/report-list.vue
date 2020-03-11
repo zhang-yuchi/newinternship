@@ -1,39 +1,69 @@
 <template>
-  <el-table
-    :data="tableData"
-    style="width: 100%"
-    :row-class-name="tableRowClassName"
-  >
-    <el-table-column prop="stuNo" label="学号" width="200" fixed>
-    </el-table-column>
-    <el-table-column prop="name" label="姓名" width="200" fixed>
-    </el-table-column>
-    <el-table-column prop="sex" label="性别" width="200"> </el-table-column>
-    <el-table-column prop="age" label="年龄" width="200"> </el-table-column>
-    <el-table-column prop="college" label="学院" width="200"> </el-table-column>
-    <el-table-column prop="major" label="专业" width="200"> </el-table-column>
-    <el-table-column prop="corpName" label="实习企业" width="200">
-    </el-table-column>
-    <el-table-column prop="corpPosition" label="实习岗位" width="200">
-    </el-table-column>
-    <el-table-column prop="corpTeacherNo" label="校外指导老师工号" width="200">
-    </el-table-column>
-    <el-table-column prop="phone" label="联系电话" width="200">
-    </el-table-column>
-    <el-table-column prop="qq" label="联系QQ" width="200"> </el-table-column>
-    <el-table-column prop="wechat" label="联系微信" width="200"> </el-table-column>
-    <el-table-column prop="stuWrite" fixed="right" label="学生填写" width="100">
-    </el-table-column>
-    <el-table-column prop="teaWrite" fixed="right" label="教师填写" width="100">
-    </el-table-column>
-    <el-table-column fixed="right" label="报告册" width="100">
-      <template slot-scope="scope">
-        <el-button @click="reportCheck(scope.row)" type="text" size="small"
-          >评价</el-button
-        >
-      </template>
-    </el-table-column>
-  </el-table>
+  <div>
+    <el-table
+      :data="data[currentPage - 1]"
+      :row-class-name="tableRowClassName"
+      height="628"
+    >
+      <el-table-column prop="stuNo" label="学号" width="150" fixed>
+      </el-table-column>
+      <el-table-column prop="name" label="姓名" width="150" fixed>
+      </el-table-column>
+      <el-table-column prop="sex" label="性别" width="200"> </el-table-column>
+      <el-table-column prop="age" label="年龄" width="200"> </el-table-column>
+      <el-table-column prop="college" label="学院" width="200">
+      </el-table-column>
+      <el-table-column prop="major" label="专业" width="200"> </el-table-column>
+      <el-table-column prop="corpName" label="实习企业" width="200">
+      </el-table-column>
+      <el-table-column prop="corpPosition" label="实习岗位" width="200">
+      </el-table-column>
+      <el-table-column
+        prop="corpTeacherNo"
+        label="校外指导老师工号"
+        width="200"
+      >
+      </el-table-column>
+      <el-table-column prop="phone" label="联系电话" width="200">
+      </el-table-column>
+      <el-table-column prop="qq" label="联系QQ" width="200"> </el-table-column>
+      <el-table-column prop="wechat" label="联系微信" width="200">
+      </el-table-column>
+      <el-table-column
+        prop="stuWrite"
+        fixed="right"
+        label="学生填写"
+        width="100"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="teaWrite"
+        fixed="right"
+        label="教师填写"
+        width="100"
+      >
+      </el-table-column>
+      <el-table-column fixed="right" label="报告册" width="100">
+        <template slot-scope="scope">
+          <el-button @click="reportCheck(scope.row)" type="text" size="small"
+            >评价</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      id="fenye"
+      background
+      layout="prev, pager, next"
+      :total="tableData['length']"
+      :current-page="currentPage"
+      :page-size="pageSize"
+      @prev-click="prevClick()"
+      @next-click="nextClick()"
+      @current-change="pageChange"
+    >
+    </el-pagination>
+  </div>
 </template>
 
 <style>
@@ -44,14 +74,19 @@
 .el-table .success-row {
   background: #f0f9eb;
 }
+#fenye {
+  position: absolute;
+  right: 0;
+  top: 640px;
+}
 </style>
 
 <script>
-import {getStudentList} from '../../network/index'
+import { getStudentList } from "../../network/index";
 export default {
   methods: {
     reportCheck(item) {
-      this.$router.push("/teacher/report-check/"+item.stuNo);
+      this.$router.push("/teacher/report-check/" + item.stuNo);
     },
     tableRowClassName({ row, rowIndex }) {
       if (this.tableData[rowIndex].reportFlag === 2) {
@@ -60,36 +95,61 @@ export default {
         return "warning-row";
       }
       return "";
+    },
+    prevClick() {
+      this.currentPage--;
+    },
+    nextClick() {
+      this.currentPage++;
+    },
+    pageChange(e) {
+      this.currentPage = e;
+      console.log(this.currentPage);
     }
   },
   data() {
     return {
-      tableData: []
+      tableData: [],
+      data: [],
+      currentPage: 1,
+      pageSize: 10
     };
   },
   mounted() {
-     getStudentList().then(res => {
+    getStudentList().then(res => {
       if (res.data.status == 1) {
         // console.log(res);
-        this.tableData = res.data.data
-        if(this.tableData.length){
-          for(let item of this.tableData){
-            if(item.reportFlag ==2){
-              item.teaWrite = "已评价完"
-            }else if(item.reportFlag == 1){
-              item.teaWrite = '未评价完'
-            }else{
-              item.teaWrite = "未评价"
+        this.tableData = res.data.data;
+        if (this.tableData.length) {
+          for (let item of this.tableData) {
+            if (item.reportFlag == 2) {
+              item.teaWrite = "已评价完";
+            } else if (item.reportFlag == 1) {
+              item.teaWrite = "未评价完";
+            } else {
+              item.teaWrite = "未评价";
             }
-            if(item.reportFilledFlag == 2){
-              item.stuWrite = "已填完"
-            }else if(item.reportFilledFlag == 1){
-              item.stuWrite = "一阶段已填"
-            }else{
-              item.stuWrite = "未填写"
+            if (item.reportFilledFlag == 2) {
+              item.stuWrite = "已填完";
+            } else if (item.reportFilledFlag == 1) {
+              item.stuWrite = "一阶段已填";
+            } else {
+              item.stuWrite = "未填写";
             }
           }
         }
+
+        let j = 0;
+        for (let i = 0; i < this.tableData.length; i++) {
+          if (i % this.pageSize == 0) {
+            j++;
+            this.data[j - 1] = new Array();
+          }
+          this.data[j - 1][i % this.pageSize] = this.tableData[i];
+        }
+        console.log(this.tableData);
+
+        console.log(this.data);
       }
     });
   }

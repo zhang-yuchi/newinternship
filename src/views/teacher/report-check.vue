@@ -185,7 +185,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitReport">提交</el-button>
+          <el-button type="primary" @click="submitReport" :loading="loading">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -209,6 +209,7 @@ export default {
   data() {
     return {
       disabled: true,
+      loading:false,
       info: {
         name: "加载中",
         college: "加载中",
@@ -278,6 +279,7 @@ export default {
       })
         .then(() => {
           // console.log(this.res);
+          this.loading = true
           if (this.res.stage1Comment.length !=0 && this.res.stage1Comment.length < 60) {
             this.$alert("一阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
@@ -371,7 +373,7 @@ export default {
                 type: "success",
                 message: "提交成功!"
               });
-              // this.$router.back();
+              this.$router.back();
             } else {
               this.$message({
                 type: "error",

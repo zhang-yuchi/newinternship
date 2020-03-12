@@ -4,6 +4,8 @@
       :data="data[currentPage - 1]"
       :row-class-name="tableRowClassName"
       height="628"
+      v-loading="loading" element-loading-text="加 载 中"
+    element-loading-spinner="el-icon-loading"
     >
       <el-table-column prop="stuNo" label="学号" width="150" fixed>
       </el-table-column>
@@ -144,7 +146,8 @@ export default {
       tableData: [],
       data: [],
       currentPage: 1,
-      pageSize: 10
+      pageSize: 10,
+      loading:true
     };
   },
   mounted() {
@@ -172,6 +175,7 @@ export default {
           }
         }
       }
+      this.loading = false
     });
   }
 };

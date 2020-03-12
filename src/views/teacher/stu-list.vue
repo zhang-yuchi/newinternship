@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-table :data="data[currentPage - 1]" border height="628">
+    <el-table :data="data[currentPage - 1]" border height="628" v-loading="loading" element-loading-text="加 载 中"
+    element-loading-spinner="el-icon-loading">
       <el-table-column prop="stuNo" label="学号" width="150" fixed>
       </el-table-column>
       <el-table-column prop="name" label="姓名" width="150" fixed>
@@ -69,7 +70,8 @@ export default {
       tableData: [],
       data: [],
       currentPage: 1,
-      pageSize: 10
+      pageSize: 10,
+      loading:true
     };
   },
   methods: {
@@ -123,6 +125,7 @@ export default {
         this.data = one2arr(this.tableData, this.pageSize);
         console.log(this.data);
       }
+      this.loading = false
     });
   }
 };

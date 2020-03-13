@@ -114,14 +114,16 @@ const routes = [
         path:"report-list",
         component:()=>import('../views/teacher/report-list'),
         meta:{
-          title:'报告册填写情况'
+          title:'报告册填写情况',
+          keepAlive:true
         },
       },
       {
         path:"decision-list",
         component:()=>import('../views/teacher/decision-list'),
         meta:{
-          title:'鉴定表填写情况'
+          title:'鉴定表填写情况',
+          keepAlive:true
         },
       },
       {

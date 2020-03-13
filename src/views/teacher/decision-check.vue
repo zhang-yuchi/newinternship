@@ -116,7 +116,9 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitDecision">提交</el-button>
+          <el-button type="primary" @click="submitDecision" :loading="loading"
+            >提交</el-button
+          >
         </el-form-item>
       </el-form>
     </el-card>
@@ -140,6 +142,7 @@ export default {
   data() {
     return {
       disabled: true,
+      loading: false,
       info: {
         name: "加载中",
         college: "加载中",
@@ -206,7 +209,7 @@ export default {
             "-" +
             this.res.tgdate.getDate();
         }
-        obj.tGDate = obj.tgdate
+        obj.tGDate = obj.tgdate;
       }
       if (this.res.cpodate) {
         if (typeof this.res.cpodate == "string") {
@@ -219,7 +222,7 @@ export default {
             "-" +
             this.res.cpodate.getDate();
         }
-        obj.cPODate = obj.cpodate
+        obj.cPODate = obj.cpodate;
       }
       console.log(obj);
       console.log(this.res);
@@ -230,6 +233,7 @@ export default {
         type: "info"
       })
         .then(() => {
+          this.loading = true;
           completeDecision(obj).then(res => {
             console.log(res);
             if (res.data.status == 1) {
@@ -247,6 +251,7 @@ export default {
           });
         })
         .catch(() => {
+          this.loading = false;
           this.$message({
             type: "info",
             message: "已取消提交"

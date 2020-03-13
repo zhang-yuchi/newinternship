@@ -14,7 +14,7 @@
           <el-card class="box-card" shadow="hover">
             <div class="text item">公告</div>
             <div class="news-content" v-loading=newsLoading>
-              <div class="news" v-for="(item,index) in news" :key="index">
+              <div class="news" v-for="(item,index) in news" :key="item">
                 <el-link
                   type="warning"
                   style="display:inline-block;width:100%;"

@@ -284,6 +284,7 @@ export default {
             this.$alert("一阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
+            this.loading = false
             throw 'false'
             return false;
           }
@@ -294,6 +295,7 @@ export default {
             this.$alert("二阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
+            this.loading = false
             throw 'false'
             return false;
           }
@@ -304,6 +306,7 @@ export default {
             this.$alert("总评不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
+            this.loading = false
             throw 'false'
             return false
           }

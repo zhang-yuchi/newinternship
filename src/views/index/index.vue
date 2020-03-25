@@ -14,7 +14,7 @@
           <el-card class="box-card" shadow="hover">
             <div class="text item">公告</div>
             <div class="news-content" v-loading=newsLoading>
-              <div class="news" v-for="(item,index) in news" :key="item">
+              <div class="news" v-for="(item,index) in news" :key="item.id">
                 <el-link
                   type="warning"
                   style="display:inline-block;width:100%;"
@@ -81,8 +81,10 @@ export default {
   //方法集合
   methods: {
     todetails(e) {
-      const index = e.currentTarget.dataset.id;
-      this.detail = this.news[index];
+      // console.log(index);
+      const tar = e.currentTarget.dataset.id;
+      // console.log(tar);
+      this.detail = this.news[tar];
       this.showDetail = true;
     }
   },
@@ -93,11 +95,12 @@ export default {
     this.newsLoading = true
     getNewsList()
       .then(res => {
-        // console.log(res);
+        // console.log(res.data.data);
         let arr = [];
+        
         for (let i = res.data.data.length - 1; i >= 0; i--) {
           let item = res.data.data[i];
-          item.gmtModified = moment(item.gmtModified).format("YYYY-MM-DD");
+          item.gmtModified = moment(item.modified).format("YYYY-MM-DD");
           arr.push(item);
         }
         // console.log(arr);

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
-const isDev = false
-const baseURL = isDev ? "http://ali.nadev.xyz:8890" : "http://sx.cdcas.edu.cn:8890/"
+const isDev = true
+const baseURL = isDev ? "http://ruankun.xyz:8255/internship" : "http://sx.cdcas.edu.cn:8890/"
 const service = axios.create({
   baseURL
 })
@@ -18,7 +18,7 @@ service.interceptors.response.use((res) => {
   // console.log(res)
   const SUCCESS_STATUS = 200
   if (res.status == SUCCESS_STATUS) {
-    
+    console.log(res);
     return res
   } else {
     errorHandle()
@@ -35,7 +35,7 @@ export const errorHandle = () => {
 }
 export const getVerify = () => {
   return axios({
-    url: baseURL + getRandom("/user/verifycode"),
+    url: baseURL + getRandom("/auth/verifycode"),
     method: "get",
     responseType: "blob"
   })
@@ -43,15 +43,15 @@ export const getVerify = () => {
 //-------------------主页------------------------------
 //登录
 export const login = (params) => {
-  return service.post('/user/login', params)
+  return service.post('/auth/token', params)
 }
 //获取新闻
 export const getNewsList = () => {
-  return service.get('/notify')
+  return service.get('/news')
 }
 //获取新闻详情
 export const getNewsDetail = (id) => {
-  return service.get('/notify/' + id)
+  return service.get('/news/' + id)
 }
 //------------------学生接口----------------------------
 //获取学生本人信息

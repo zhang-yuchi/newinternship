@@ -146,10 +146,7 @@
     </div>
   </el-card>
 </div>
-  
 
-
-  
 </template>
 
 <script>
@@ -221,10 +218,10 @@ export default {
       let loginType = "";
       switch (type) {
         case "学生":
-          loginType = "Student";
+          loginType = "student";
           break;
         case "教师":
-          loginType = "Teacher";
+          loginType = "teacher";
           break;
         default:
           break;
@@ -235,19 +232,18 @@ export default {
       }
       this.loginLoading = true
       login({
-        account: this.ruleForm.account,
-        code: this.ruleForm.code,
+        username: this.ruleForm.account,
+        verifyCode: this.ruleForm.code,
         password: this.ruleForm.password,
-        loginType
+        type:loginType
       }).then(res => {
         console.log(res)
-        if (res.data.message === "respose success") {
+        if (res.data.status === 1001) {
           sessionStorage.setItem("Authorization", res.data.data.Authorization);
           callback();
         }else{
           var reg = /username/
           let errorMsg = reg.test(res.data.message)?"用户名或密码错误!":res.data.message
-
           this.$message.error(errorMsg)
         }
       })
@@ -266,6 +262,7 @@ export default {
             return;
           }
           this.getLogin(this.form.identify, () => {
+            // console.log(this.form.identify);
             if (this.form.identify == "学生") {
               this.$router.push("/student");
             } else if (this.form.identify == "教师") {

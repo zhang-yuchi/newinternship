@@ -8,7 +8,7 @@ const service = axios.create({
 export const baseUrl = baseURL
 service.interceptors.request.use((config) => {
   config.headers = Object.assign({}, config.headers, {
-    Authorization: sessionStorage.getItem('Authorization')
+    token: sessionStorage.getItem('token')
   })
   config.data = qs.stringify(config.data)
   return config
@@ -59,7 +59,7 @@ export const modifyPassword = (params)=>{
 //------------------学生接口----------------------------
 //获取学生本人信息
 export const getStudentInfo = () => {
-  return service.get(getRandom('/student/selfInfo'))
+  return service.get(getRandom('/student/info'))
 }
 //学生获取老师信息
 export const getTeacherInfo = () => {

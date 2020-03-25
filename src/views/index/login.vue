@@ -48,17 +48,18 @@
           label-width="100px"
           class="demo-forgetForm"
         >
-          <el-form-item label="账号" >
+          <el-form-item label="账号">
             <el-input v-model.number="forgetForm.account"></el-input>
           </el-form-item>
           <el-form-item label="身份证">
             <el-input v-model.number="forgetForm.identify"></el-input>
           </el-form-item>
-          <el-form-item label="密码" >
+          <el-form-item label="密码">
             <el-input type="password" v-model="forgetForm.pass" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" >
-            <el-input type="password" v-model="forgetForm.checkPass" autocomplete="off"></el-input>
+          <el-form-item label="验证码">
+            <el-input type="text" v-model="forgetForm.code" autocomplete="off"></el-input>
+            <img class="checkimg" @click="repeatImg" :src="checkUrl" alt />
           </el-form-item>
           <el-form-item label="身份" style="margin-top:-10px;">
             <el-radio-group v-model="forgetForm.typeField">
@@ -125,17 +126,18 @@
           label-position="top"
           class="demo-ruleForm"
         >
-          <el-form-item label="账号" >
+          <el-form-item label="账号">
             <el-input v-model.number="forgetForm.account"></el-input>
           </el-form-item>
-          <el-form-item label="身份证" >
+          <el-form-item label="身份证">
             <el-input v-model.number="forgetForm.identify"></el-input>
           </el-form-item>
-          <el-form-item label="密码" >
+          <el-form-item label="密码">
             <el-input type="password" v-model="forgetForm.password1" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" >
-            <el-input type="password" v-model="forgetForm.password2" autocomplete="off"></el-input>
+          <el-form-item label="验证码" prop="code">
+            <el-input type="text" v-model="forgetForm.code" autocomplete="off"></el-input>
+            <img class="checkimg" @click="repeatImg" :src="checkUrl" alt />
           </el-form-item>
           <el-form-item label="身份" style="margin-top:-10px;">
             <el-radio-group v-model="forgetForm.typeField">
@@ -158,7 +160,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getVerify, login , modifyPassword } from "../../network";
+import { getVerify, login, modifyPassword } from "../../network";
 
 // import validator from 'validator'
 export default {
@@ -206,7 +208,7 @@ export default {
         pass: "",
         checkPass: "",
         identify: "",
-        type:""
+        type: ""
       },
       loginLoading: false,
       checkUrl: "",
@@ -254,10 +256,7 @@ export default {
       })
         .then(res => {
           if (res.data.status === 1001) {
-            sessionStorage.setItem(
-              "Authorization",
-              res.data.data
-            );
+            sessionStorage.setItem("token", res.data.data);
             callback();
           } else {
             var reg = /username/;
@@ -283,9 +282,9 @@ export default {
           }
           this.getLogin(this.form.identify, () => {
             // console.log(this.form.identify);
-            if (this.form.identify == "学生") {
+            if (this.form.identify === "学生") {
               this.$router.push("/student");
-            } else if (this.form.identify == "教师") {
+            } else if (this.form.identify === "教师") {
               this.$router.push("/teacher");
             }
           });
@@ -313,7 +312,7 @@ export default {
       this.islog = true;
     },
     submitForm(formName) {
-      const { account, pass, typeField, checkPass, identify } = this.forgetForm;
+      const { account, pass, typeField, code, identify } = this.forgetForm;
       if (!account) {
         this.$message.warning("请输入账号");
         return;
@@ -322,34 +321,38 @@ export default {
         this.$message.warning("请输入密码");
         return;
       }
-      if (!checkPass) {
-        this.$message.warning("请再次输入密码");
-        return;
-      }
       if (!identify) {
         this.$message.warning("请输入身份证");
         return;
       }
-      if(!typeField){
+      if (!typeField) {
         this.$message.warning("请输入身份");
-        return
-      }
-      if (pass !== checkPass) {
-        this.$message.warning("两次输入密码必须相等");
         return;
       }
-      this.forgetForm.type = this.forgetForm.typeField==="学生"?"student":"teacher"
-      Object.assign({},this.forgetForm,{
-        password:"",
-        idcard:"",
-        username:"",
-
-      })
-      console.log('4');
+      if (!code || code.length !== 4) {
+        this.$message.warning("请输入正确的验证码");
+        return;
+      }
+      this.forgetForm.type =
+        this.forgetForm.typeField === "学生" ? "student" : "teacher";
+      this.forgetForm = Object.assign({}, this.forgetForm, {
+        password: pass,
+        idcard: identify,
+        username: account,
+        verifyCode: code
+      });
       console.log(this.forgetForm);
-      modifyPassword(this.forgetForm).then((res)=>{
+      modifyPassword(this.forgetForm).then(res => {
         console.log(res);
-      })
+        if (res.data.status < 0) {
+          this.$message.error(res.data.message);
+          this.getVerifyImg();
+        } else if (res.data.status == 100) {
+          this.getVerifyImg();
+          this.$message.success("修改成功!");
+          this.islog = true;
+        }
+      });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

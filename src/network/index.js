@@ -129,19 +129,19 @@ export const downloadIdentify = () => {
 //------------------教师接口----------------------------
 //获取所有学生
 export const getStudentList = () => {
-  return service.get(getRandom('/teacher/students'))
+  return service.get(getRandom('/teacher/students'),params)
 }
 //获取某个学生的信息
 export const getStudentInfoById = (stuNo) => {
-  return service.get(getRandom('/teacher/student/' + stuNo))
+  return service.get(getRandom('/teacher/student/' + stuNo),params)
 }
 //获取某个学生鉴定表
 export const getStudentIdentify = (stuNo) => {
-  return service.get(getRandom('/teacher/student/identify/' + stuNo))
+  return service.get(getRandom('/teacher/student/identify/' + stuNo),params)
 }
 //获取某个学生报告册
 export const getStudentReport = (stuNo) => {
-  return service.get(getRandom('/teacher/student/report/' + stuNo))
+  return service.get(getRandom('/teacher/student/report/' + stuNo),params)
 }
 //教师填写鉴定表
 export const completeDecision = (params) => {

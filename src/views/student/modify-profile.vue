@@ -4,8 +4,8 @@
     <layout v-loading="formLoading">
       <div slot="header" class="clearfix">
         <span class="header-title">信息修改</span>
-        <el-button style="float: right; padding: 3px 0" @click="showTime" type="text">修改实习时间</el-button>
-        <el-button style="float: right; padding: 3px 0" @click="changePsw" type="text">修改密码</el-button>
+        <!-- <el-button style="float: right; padding: 3px 0" @click="showTime" type="text">修改实习时间</el-button>
+        <el-button style="float: right; padding: 3px 0" @click="changePsw" type="text">修改密码</el-button>-->
       </div>
 
       <el-form
@@ -17,6 +17,15 @@
         class="demo-ruleForm"
         label-position="left"
       >
+        <el-form-item label="实习岗位" prop="position">
+          <el-input type="text" v-model="ruleForm.position" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="实习开始时间" placeholder="选择日期" prop="gmtStart">
+          <el-date-picker type="date" v-model="ruleForm.starttime" autocomplete="off"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="实习结束时间" placeholder="选择日期" prop="gmtEnd">
+          <el-date-picker type="date" v-model="ruleForm.endtime" autocomplete="off"></el-date-picker>
+        </el-form-item>
         <el-form-item label="电话" prop="phone">
           <el-input type="text" v-model="ruleForm.phone" autocomplete="off"></el-input>
         </el-form-item>
@@ -133,8 +142,8 @@
       </span>
     </el-dialog>
     <!-- 修改实习时间手机版 -->
-        <el-dialog
-      title=""
+    <el-dialog
+      title
       :visible.sync="timeVisible"
       width="300px"
       class="hidden-sm-and-up"
@@ -233,7 +242,10 @@ export default {
         corpTeacherNo: "",
         phone: "",
         qq: "",
-        wechat: ""
+        wechat: "",
+        position:"",
+        starttime:"",
+        endtime:"",
       },
       pswForm: {
         oldPsw: "",
@@ -251,6 +263,7 @@ export default {
         checkPass: [
           { required: true, validator: validatePass2, trigger: "blur" }
         ],
+        position:[{ required: true, validator: checkNull, trigger: "blur" }],
         oldPsw: [{ required: true, validator: checkNull, trigger: "blur" }],
         phone: [{ required: true, validator: checkPhone, trigger: "blur" }],
         age: [{ required: true, validator: checkNumber, trigger: ["blur"] }],
@@ -266,8 +279,8 @@ export default {
       timeVisible: false,
       originError: "",
       newError: "",
-      btnLoading:false,
-      pswLoading:false,
+      btnLoading: false,
+      pswLoading: false
     };
   },
   //监听属性 类似于data概念
@@ -280,17 +293,18 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
-          this.btnLoading = true
-          modifySelfInfo(this.ruleForm).then(res => {
-            // console.log(res);
-            if (res.data.status == 1) {
-              this.$message.success("修改成功!");
-              this.getInfo();
-            }
-          })
-          .finally(()=>{
-            this.btnLoading = false
-          })
+          this.btnLoading = true;
+          modifySelfInfo(this.ruleForm)
+            .then(res => {
+              // console.log(res);
+              if (res.data.status == 1) {
+                this.$message.success("修改成功!");
+                this.getInfo();
+              }
+            })
+            .finally(() => {
+              this.btnLoading = false;
+            });
         } else {
           // console.log("error submit!!");
 
@@ -309,35 +323,36 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //   alert("submit!");
-          this.pswLoading = true
+          this.pswLoading = true;
           modifyPswInner({
             newPassword: this.pswForm.pass,
             oldPassword: this.pswForm.oldPsw
-          }).then(res => {
-            // console.log(res);
-            if (res.data.status == 1) {
-              // this.originError = "";
-              // this.newError = "";
-              this.$message.success("密码修改成功!");
-              this.pswBoxVisible = false;
-            } else {
-              // console.log(111)
-              const origin = /^原密码/;
-              const newErr = /^密码/;
-              if (origin.test(res.data.message)) {
-                this.originError = res.data.message;
-                // console.log(this.originError)
-                // this.newError = "";
-              } else {
+          })
+            .then(res => {
+              // console.log(res);
+              if (res.data.status == 1) {
                 // this.originError = "";
-                this.newError = res.data.message;
-                // console.log(this.newError)
+                // this.newError = "";
+                this.$message.success("密码修改成功!");
+                this.pswBoxVisible = false;
+              } else {
+                // console.log(111)
+                const origin = /^原密码/;
+                const newErr = /^密码/;
+                if (origin.test(res.data.message)) {
+                  this.originError = res.data.message;
+                  // console.log(this.originError)
+                  // this.newError = "";
+                } else {
+                  // this.originError = "";
+                  this.newError = res.data.message;
+                  // console.log(this.newError)
+                }
               }
-            }
-          })
-          .finally(()=>{
-            this.pswLoading = false
-          })
+            })
+            .finally(() => {
+              this.pswLoading = false;
+            });
         } else {
           console.log("error submit!!");
           return false;

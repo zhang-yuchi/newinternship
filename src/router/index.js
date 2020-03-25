@@ -88,6 +88,13 @@ const routes = [
         meta:{
           title:"填写鉴定表"
         }
+      },
+      {
+        path:"download",
+        component:()=>import("../views/student/download"),
+        meta:{
+          title:"文件下载"
+        }
       }
     ]
   },

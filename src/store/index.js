@@ -6,12 +6,12 @@ import mutations from "./mutations"
 import actions from './actions'
 export default new Vuex.Store({
   state: {
-    isReportStage1Open: false,
-    isReportStage2Open: false,
-    isReportStage3Open: false,
-    isIdentifyFormStage1Open: false,
-    isIdentifyFormStage2Open: false,
-    isIdentifyFormStage3Open: false,
+    isReportStage1Open: true,
+    isReportStage2Open: true,
+    isReportStage3Open: true,
+    isIdentifyFormStage1Open: true,
+    isIdentifyFormStage2Open: true,
+    isIdentifyFormStage3Open: true,
     screenHeight:620,
     bannerHeight:100,
   },

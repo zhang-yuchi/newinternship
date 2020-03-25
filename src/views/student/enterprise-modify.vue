@@ -15,7 +15,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="企业名称" prop="corpName">
-              <el-input type="text" v-model="ruleForm.corpName" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.corpname" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -27,48 +27,48 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="法人" prop="legalPerson">
-              <el-input type="text" v-model="ruleForm.legalPerson" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.legalperson" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="注册资本" prop="registerCapita">
-              <el-input type="text" v-model="ruleForm.registerCapita" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.registercapital" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="创建时间" prop="createDate">
-              <el-input type="text" v-model="ruleForm.createDate" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.createdate" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="开始营业时间" prop="startBusiness">
-              <el-input type="text" v-model="ruleForm.startBusiness" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.startbusiness" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="营业期限截止日期" prop="endBusiness">
-              <el-input type="text" v-model="ruleForm.endBusiness" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.endbusiness" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="工商信息等级机关" prop="regAuthority">
-              <el-input type="text" v-model="ruleForm.regAuthority" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.regauthority" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="核准日期" prop="approvalDate">
-              <el-input type="text" v-model="ruleForm.approvalDate" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.approvaldate" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="登记状态" prop="regStatus">
-              <el-input type="text" v-model="ruleForm.regStatus" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.regstatus" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -87,14 +87,14 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="统一社会信用代码" prop="creditCode">
-              <el-input type="text" v-model="ruleForm.creditCode" autocomplete="off"></el-input>
+              <el-input type="text" v-model="ruleForm.creditcode" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="企业注册号" prop="regCode">
               <el-input
                 type="text"
-                v-model="ruleForm.regCode"
+                v-model="ruleForm.regcode"
                 placeholder="若企业有注册号则必填"
                 autocomplete="off"
               ></el-input>
@@ -119,8 +119,8 @@
       >
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="企业名称" prop="corpName">
-              <el-input type="text" v-model="ruleForm.corpName" autocomplete="off"></el-input>
+            <el-form-item label="企业名称" prop="corpname">
+              <el-input type="text" v-model="ruleForm.corpname" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -131,49 +131,49 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="法人" prop="legalPerson">
-              <el-input type="text" v-model="ruleForm.legalPerson" autocomplete="off"></el-input>
+            <el-form-item label="法人" prop="legalperson">
+              <el-input type="text" v-model="ruleForm.legalperson" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="注册资本" prop="registerCapita">
-              <el-input type="text" v-model="ruleForm.registerCapita" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="24">
-            <el-form-item label="创建时间" prop="createDate">
-              <el-input type="text" v-model="ruleForm.createDate" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="开始营业时间" prop="startBusiness">
-              <el-input type="text" v-model="ruleForm.startBusiness" autocomplete="off"></el-input>
+            <el-form-item label="注册资本" prop="registercapital">
+              <el-input type="text" v-model="ruleForm.registercapital" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="营业期限截止日期" prop="endBusiness">
-              <el-input type="text" v-model="ruleForm.endBusiness" autocomplete="off"></el-input>
+            <el-form-item label="创建时间" prop="createdate">
+              <el-input type="text" v-model="ruleForm.createdate" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="工商信息等级机关" prop="regAuthority">
-              <el-input type="text" v-model="ruleForm.regAuthority" autocomplete="off"></el-input>
+            <el-form-item label="开始营业时间" prop="startbusiness">
+              <el-input type="text" v-model="ruleForm.startbusiness" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="核准日期" prop="approvalDate">
-              <el-input type="text" v-model="ruleForm.approvalDate" autocomplete="off"></el-input>
+            <el-form-item label="营业期限截止日期" prop="endbusiness">
+              <el-input type="text" v-model="ruleForm.endbusiness" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="登记状态" prop="regStatus">
-              <el-input type="text" v-model="ruleForm.regStatus" autocomplete="off"></el-input>
+            <el-form-item label="工商信息等级机关" prop="regauthority">
+              <el-input type="text" v-model="ruleForm.regauthority" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="24">
+            <el-form-item label="核准日期" prop="approvaldate">
+              <el-input type="text" v-model="ruleForm.approvaldate" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="登记状态" prop="regstatus">
+              <el-input type="text" v-model="ruleForm.regstatus" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -191,15 +191,15 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="统一社会信用代码" prop="creditCode">
-              <el-input type="text" v-model="ruleForm.creditCode" autocomplete="off"></el-input>
+            <el-form-item label="统一社会信用代码" prop="creditcode">
+              <el-input type="text" v-model="ruleForm.creditcode" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="企业注册号" prop="regCode">
+            <el-form-item label="企业注册号" prop="regcode">
               <el-input
                 type="text"
-                v-model="ruleForm.regCode"
+                v-model="ruleForm.regcode"
                 placeholder="若企业有注册号则必填"
                 autocomplete="off"
               ></el-input>

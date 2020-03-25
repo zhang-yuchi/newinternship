@@ -4,17 +4,12 @@
     <el-card class="box-card" v-loading="cardLoading">
       <div slot="header" class="clearfix">
         <span style="font-weight:bold;">我的企业</span>
-        <el-button
-          style="float: right; padding: 3px 0"
-          @click="dialogVisible = true"
-          type="text"
-        >绑定实习岗位</el-button>
       </div>
       <el-row :gutter="20">
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">企业名称</span>
-            <span class="header-content">{{corp.corpName}}</span>
+            <span class="header-content">{{corp.corpname}}</span>
           </div>
         </el-col>
         <el-col :span="12">
@@ -28,13 +23,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">法人</span>
-            <span class="header-content">{{corp.legalPerson}}</span>
+            <span class="header-content">{{corp.legalperson}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">注册资本</span>
-            <span class="header-content">{{corp.registerCapita}}万元</span>
+            <span class="header-content">{{corp.registercapital+" "}}单位:万元</span>
           </div>
         </el-col>
       </el-row>
@@ -42,13 +37,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">企业注册号</span>
-            <span class="header-content">{{corp.regCode}}</span>
+            <span class="header-content">{{corp.regcode}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">创建日期</span>
-            <span class="header-content">{{corp.createDate}}</span>
+            <span class="header-content">{{corp.createdate}}</span>
           </div>
         </el-col>
       </el-row>
@@ -56,13 +51,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">开始营业日期</span>
-            <span class="header-content">{{corp.startBusiness}}</span>
+            <span class="header-content">{{corp.startbusiness}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">营业期限截止日期</span>
-            <span class="header-content">{{corp.endBusiness}}</span>
+            <span class="header-content">{{corp.endbusiness}}</span>
           </div>
         </el-col>
       </el-row>
@@ -70,13 +65,13 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">工商信息登记机关</span>
-            <span class="header-content">{{corp.regAuthority}}</span>
+            <span class="header-content">{{corp.regauthority}}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">核准日期</span>
-            <span class="header-content">{{corp.approvalDate}}</span>
+            <span class="header-content">{{corp.approvaldate}}</span>
           </div>
         </el-col>
       </el-row>
@@ -84,7 +79,7 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">登记状态</span>
-            <span class="header-content">{{corp.regStatus}}</span>
+            <span class="header-content">{{corp.regstatus}}</span>
           </div>
         </el-col>
         <el-col :span="12">
@@ -104,7 +99,7 @@
         <el-col :span="12">
           <div class="text item">
             <span class="header-title">统一社会信用代码</span>
-            <span class="header-content">{{corp.creditCode}}</span>
+            <span class="header-content">{{corp.creditcode}}</span>
           </div>
         </el-col>
       </el-row>
@@ -160,6 +155,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { checkCorp, getStudentInfo, modifyPosition } from "../../network";
+import { replaceNull } from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -226,18 +222,19 @@ export default {
       this.cardLoading = true;
       checkCorp()
         .then(res => {
-          // console.log(res);
-          if (res.data.status == 1) {
-            this.corp = res.data.data;
+          console.log(res);
+          if (res.data.status == 100) {
+            this.corp = replaceNull(res.data.data);
+            
           }
         })
         .then(() => {
-          getStudentInfo().then(res => {
-            // console.log(res);
-            if (res.data.status == 1) {
-              this.Form.position = res.data.data.corpPosition;
-            }
-          });
+          // getStudentInfo().then(res => {
+          //   // console.log(res);
+          //   if (res.data.status == 1) {
+          //     this.Form.position = res.data.data.corpPosition;
+          //   }
+          // });
         })
         .finally(() => {
           this.cardLoading = false;

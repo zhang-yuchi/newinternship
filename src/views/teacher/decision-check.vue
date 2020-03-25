@@ -131,7 +131,6 @@ import limit from "../../components/content/limit-number";
 import { Obj2html } from "../../command/utils";
 import {
   getStudentIdentify,
-  getStudentInfoById,
   completeDecision
 } from "../../network/index";
 export default {
@@ -260,28 +259,28 @@ export default {
     }
   },
   mounted() {
-    let stuNo = this.$route.params.stuNo;
-    getStudentInfoById(stuNo).then(res => {
-      // console.log(res);
-      if (res.data.status == 1) {
-        this.info = res.data.data;
-        getStudentIdentify(stuNo).then(resp => {
-          // console.log(resp);
-          if (resp.data.status == 1) {
-            this.res = Obj2html(resp.data.data);
-            if (this.res.collegePrincipalOpinion == null) {
-              this.res.collegePrincipalOpinion = "";
-            }
-            this.disabled = !this.$store.state.isIdentifyFormStage2Open;
-            if (this.disabled) {
-              this.$alert("未到评价时间", "提示", {
-                confirmButtonText: "确定"
-              });
-            }
-          }
-        });
-      }
-    });
+    // let stuNo = this.$route.params.stuNo;
+    // getStudentInfoById(stuNo).then(res => {
+    //   // console.log(res);
+    //   if (res.data.status == 1) {
+    //     this.info = res.data.data;
+    //     getStudentIdentify(stuNo).then(resp => {
+    //       // console.log(resp);
+    //       if (resp.data.status == 1) {
+    //         this.res = Obj2html(resp.data.data);
+    //         if (this.res.collegePrincipalOpinion == null) {
+    //           this.res.collegePrincipalOpinion = "";
+    //         }
+    //         this.disabled = !this.$store.state.isIdentifyFormStage2Open;
+    //         if (this.disabled) {
+    //           this.$alert("未到评价时间", "提示", {
+    //             confirmButtonText: "确定"
+    //           });
+    //         }
+    //       }
+    //     });
+    //   }
+    // });
   }
 };
 </script>

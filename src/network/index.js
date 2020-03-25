@@ -131,26 +131,30 @@ export const downloadIdentify = () => {
 
 //------------------教师接口----------------------------
 //获取所有学生
-export const getStudentList = (params) => {
-  return service.get(getRandom('/teacher/students'),params)
-}
-//获取某个学生的信息
-export const getStudentInfoById = (stuNo,params) => {
-  return service.get(getRandom('/teacher/student/' + stuNo),params)
+export const getStudentList = () => {
+  return service.get(getRandom('/teacher/student'))
 }
 //获取某个学生鉴定表
 export const getStudentIdentify = (stuNo,params) => {
-  return service.get(getRandom('/teacher/student/identify/' + stuNo),params)
+  return service.get(getRandom('/teacher/student/' + stuNo+'/appraisal'),params)
+}
+//教师填写鉴定表
+export const completeDecision = (stuNo,params) => {
+  return service.post('/teacher/student/' + stuNo+'/appraisal', params)
 }
 //获取某个学生报告册
 export const getStudentReport = (stuNo,params) => {
-  return service.get(getRandom('/teacher/student/report/' + stuNo),params)
+  return service.get(getRandom('/teacher/student/' + stuNo+'/report'),params)
 }
-//教师填写鉴定表
-export const completeDecision = (params) => {
-  return service.post('/teacher/student/identifyForm', params)
+//报告册一阶段打分
+export const completeRep1 = (stuNo,params) => {
+  return service.post('/teacher/student/' + stuNo+'/report/stage1',params)
 }
-//教师填写报告册
-export const completeReport = (params) => {
-  return service.post('/teacher/student/reportForm', params)
+//报告册二阶段打分
+export const completeRep2 = (stuNo,params) => {
+  return service.post('/teacher/student/' + stuNo+'/report/stage2',params)
+}
+//报告册综合评价填写
+export const completeRepTotal = (stuNo,params) => {
+  return service.post('/teacher/student/' + stuNo+'/report/total',params)
 }

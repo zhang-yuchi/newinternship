@@ -118,8 +118,6 @@ export default {
     }
   },
   mounted() {
-    let token = sessionStorage.getItem('Authorization')
-    console.log({token})
     getStudentList().then(res => {
       if (res.data.status == 1) {
         console.log(res);

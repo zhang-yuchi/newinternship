@@ -198,8 +198,9 @@ import limit from "../../components/content/limit-number";
 import { Obj2html } from "../../command/utils";
 import {
   getStudentReport,
-  getStudentInfoById,
-  completeReport
+  completeRep1,
+  completeRep2,
+  completeRepTotal
 } from "../../network/index";
 export default {
   components: {
@@ -394,43 +395,43 @@ export default {
     }
   },
   mounted() {
-    let stuNo = this.$route.params.stuNo;
-    getStudentInfoById(stuNo).then(res => {
-      // console.log(res);
-      if (res.data.status == 1) {
-        this.info = res.data.data;
-        getStudentReport(stuNo).then(resp => {
-          // console.log(resp);
-          if (resp.data.status == 1) {
-            this.res = Obj2html(resp.data.data);
-            if (this.res.stage1Comment == null) {
-              this.res.stage1Comment = "";
-            }
-            if (this.res.stage2Comment == null) {
-              this.res.stage2Comment = "";
-            }
-            if (!this.res.stage1Summary) {
-              this.res.stage1Summary = "暂无";
-            }
-            if (!this.res.stage1GuideWay) {
-              this.res.stage1GuideWay = "暂无";
-            }
-            if (!this.res.stage2Summary) {
-              this.res.stage2Summary = "暂无";
-            }
-            if (!this.res.stage2GuideWay) {
-              this.res.stage2GuideWay = "暂无";
-            }
-            this.disabled = !this.$store.state.isReportStage3Open;
-            if (this.disabled) {
-              this.$alert("未到评价时间", "提示", {
-                confirmButtonText: "确定"
-              });
-            }
-          }
-        });
-      }
-    });
+    // let stuNo = this.$route.params.stuNo;
+    // getStudentInfoById(stuNo).then(res => {
+    //   // console.log(res);
+    //   if (res.data.status == 1) {
+    //     this.info = res.data.data;
+    //     getStudentReport(stuNo).then(resp => {
+    //       // console.log(resp);
+    //       if (resp.data.status == 1) {
+    //         this.res = Obj2html(resp.data.data);
+    //         if (this.res.stage1Comment == null) {
+    //           this.res.stage1Comment = "";
+    //         }
+    //         if (this.res.stage2Comment == null) {
+    //           this.res.stage2Comment = "";
+    //         }
+    //         if (!this.res.stage1Summary) {
+    //           this.res.stage1Summary = "暂无";
+    //         }
+    //         if (!this.res.stage1GuideWay) {
+    //           this.res.stage1GuideWay = "暂无";
+    //         }
+    //         if (!this.res.stage2Summary) {
+    //           this.res.stage2Summary = "暂无";
+    //         }
+    //         if (!this.res.stage2GuideWay) {
+    //           this.res.stage2GuideWay = "暂无";
+    //         }
+    //         this.disabled = !this.$store.state.isReportStage3Open;
+    //         if (this.disabled) {
+    //           this.$alert("未到评价时间", "提示", {
+    //             confirmButtonText: "确定"
+    //           });
+    //         }
+    //       }
+    //     });
+    //   }
+    // });
   }
 };
 </script>

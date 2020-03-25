@@ -131,19 +131,19 @@ export const downloadIdentify = () => {
 
 //------------------教师接口----------------------------
 //获取所有学生
-export const getStudentList = () => {
+export const getStudentList = (params) => {
   return service.get(getRandom('/teacher/students'),params)
 }
 //获取某个学生的信息
-export const getStudentInfoById = (stuNo) => {
+export const getStudentInfoById = (stuNo,params) => {
   return service.get(getRandom('/teacher/student/' + stuNo),params)
 }
 //获取某个学生鉴定表
-export const getStudentIdentify = (stuNo) => {
+export const getStudentIdentify = (stuNo,params) => {
   return service.get(getRandom('/teacher/student/identify/' + stuNo),params)
 }
 //获取某个学生报告册
-export const getStudentReport = (stuNo) => {
+export const getStudentReport = (stuNo,params) => {
   return service.get(getRandom('/teacher/student/report/' + stuNo),params)
 }
 //教师填写鉴定表

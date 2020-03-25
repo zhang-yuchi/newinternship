@@ -118,12 +118,16 @@ export default {
     }
   },
   mounted() {
+    let token = sessionStorage.getItem('Authorization')
+    console.log({token})
     getStudentList().then(res => {
       if (res.data.status == 1) {
         console.log(res);
         this.tableData = res.data.data;
         this.data = one2arr(this.tableData, this.pageSize);
         console.log(this.data);
+      }else{
+
       }
       this.loading = false
     });

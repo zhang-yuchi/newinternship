@@ -53,6 +53,9 @@ export const getNewsList = () => {
 export const getNewsDetail = (id) => {
   return service.get('/news/' + id)
 }
+export const modifyPassword = (params)=>{
+  return service.post('/auth/password',params)
+}
 //------------------学生接口----------------------------
 //获取学生本人信息
 export const getStudentInfo = () => {

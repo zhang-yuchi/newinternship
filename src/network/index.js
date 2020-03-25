@@ -10,7 +10,13 @@ service.interceptors.request.use((config) => {
   config.headers = Object.assign({}, config.headers, {
     token: sessionStorage.getItem('token')
   })
-  config.data = qs.stringify(config.data)
+  // console.log(config);
+  if(config.url==="/pdf"&&config.method==="delete"){
+
+  }else{
+    config.data = qs.stringify(config.data)
+  }
+
   return config
 })
 service.interceptors.response.use((res) => {
@@ -18,7 +24,7 @@ service.interceptors.response.use((res) => {
   // console.log(res)
   const SUCCESS_STATUS = 200
   if (res.status == SUCCESS_STATUS) {
-    console.log(res);
+    // console.log(res);
     return res
   } else {
     errorHandle()
@@ -86,7 +92,7 @@ export const modifyPswInner = (params) => {
 }
 //学生查看企业信息
 export const checkCorp = () => {
-  return service.get(getRandom('/student/student/corp'))
+  return service.get(getRandom('/student/corp'))
 }
 //学生修改职位
 export const modifyPosition = (params) => {
@@ -94,11 +100,11 @@ export const modifyPosition = (params) => {
 }
 //企业信息更改
 export const modifyCorp = (params) => {
-  return service.post('/student/student/corp', params)
+  return service.post('/student/corp', params)
 }
 //获取学生报告册信息
 export const getReportInfo = () => {
-  return service.get(getRandom('/student/reportForm'))
+  return service.get(getRandom('/student/report'))
 }
 //填写第一阶段报告册
 export const submitReportStage1 = (params) => {
@@ -121,12 +127,17 @@ export const getStage = () => {
   return service.get(getRandom('/user/reportStage'))
 }
 //下载报告册
-export const downloadReport = () => {
-  return service.get(getRandom('/student/report/form'))
+export const download = (params) => {
+  return service.post('/pdf/convert',params)
 }
-//下载鉴定表
-export const downloadIdentify = () => {
-  return service.get(getRandom('/student/identify/form'))
+export const getTask = () => {
+  return service.get('/pdf/task')
+}
+export const getTaskList = () => {
+  return service.get('/pdf')
+}
+export const deleteTask = (params)=>{
+  return service.delete('/pdf',params)
 }
 
 //------------------教师接口----------------------------

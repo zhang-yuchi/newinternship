@@ -41,7 +41,7 @@
           ></limit-number>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :loading="btnloading" @click="submit1Form('stage1Form')">提交</el-button>
+          <el-button type="primary" :loading="btnLoading" @click="submit1Form('stage1Form')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -87,7 +87,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" :loading="btnloading" @click="submit2Form('stage2Form')">提交</el-button>
+          <el-button type="primary" :loading="btnLoading" @click="submit2Form('stage2Form')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -105,29 +105,13 @@ import {
   submitReportStage2
 } from "../../network";
 import moment from "moment";
+import axios from 'axios'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     limitNumber
   },
   data() {
-    var checkAge = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("年龄不能为空"));
-      }
-      setTimeout(() => {
-        if (!Number.isInteger(value)) {
-          callback(new Error("请输入数字值"));
-        } else {
-          if (value < 18) {
-            callback(new Error("必须年满18岁"));
-          } else {
-            callback();
-          }
-        }
-      }, 1000);
-    };
-
     return {
       state: "",
       stage1Form: {
@@ -233,14 +217,14 @@ export default {
       getReportInfo()
         .then(res => {
           this.stage1Form = {
-            stage1GuideDate: res.data.data.stage1GuideDate,
-            stage1GuideWay: res.data.data.stage1GuideWay,
-            stage1Summary: res.data.data.stage1Summary
+            stage1GuideDate: res.data.data.report.stage1GuideDate,
+            stage1GuideWay: res.data.data.report.stage1GuideWay,
+            stage1Summary: res.data.data.report.stage1Summary
           };
           this.stage2Form = {
-            stage2GuideDate: res.data.data.stage2GuideDate,
-            stage2GuideWay: res.data.data.stage2GuideWay,
-            stage2Summary: res.data.data.stage2Summary
+            stage2GuideDate: res.data.data.report.stage2GuideDate,
+            stage2GuideWay: res.data.data.report.stage2GuideWay,
+            stage2Summary: res.data.data.report.stage2Summary
           };
           if (this.state == 0) {
             if (this.stage1Form.stage1GuideDate) {

@@ -1,0 +1,223 @@
+<!--  -->
+<template>
+  <div class="download">
+    <div class="load-title">文件下载</div>
+    <div class="target">{{reportMsg}}</div>
+    <div class="target">{{appiMsg}}</div>
+    <el-button type="primary" @click="downloadFile(true)" size="mini">下载报告册</el-button>
+    <el-button type="warning" @click="downloadFile(false)" size="mini">下载鉴定表</el-button>
+    <el-button type="danger" size="mini" @click="DeleteSelected">删除所选项</el-button>
+    <el-button icon="el-icon-refresh" size="mini" @click="getList"></el-button>
+    <el-table
+      ref="multipleTable"
+      :data="nowList"
+      v-loading="tableLoading"
+      tooltip-effect="dark"
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column label="创建时间" width="100">
+        <template slot-scope="scope">{{ scope.row.created }}</template>
+      </el-table-column>
+      <el-table-column prop="name" label="类型" width="120">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.report?'primary':'warning'">{{scope.row.report?"报告册":"鉴定表"}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="name" label="状态" width="120">
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.converting?'warning':'success'"
+          >{{scope.row.converting?"转换中":"转换完成"}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="name" label="结果" width="120">
+        <template slot-scope="scope">
+          <el-tag
+            v-if="!scope.row.converting"
+            :type="scope.row.failed?'danger':'success'"
+          >{{scope.row.failed?"失败":"成功"}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleDownload(scope.$index, scope.row)"
+            :disabled="scope.row.failed"
+          >下载</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      @current-change="pageChange"
+      hide-on-single-page
+      background
+      :page-size="pageSize"
+      layout="prev, pager, next"
+      :total="tableData.length"
+    ></el-pagination>
+  </div>
+</template>
+
+<script>
+//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
+//例如：import 《组件名称》 from '《组件路径》';
+import moment from "moment";
+import Poller from "../../command/poller";
+import { download, getTask, getTaskList, deleteTask } from "../../network";
+export default {
+  //import引入的组件需要注入到对象中才能使用
+  components: {},
+  data() {
+    //这里存放数据
+    return {
+      tableData: [],
+      multipleSelection: [],
+      reportMsg: "",
+      appiMsg:"",
+      currentPage: 0,
+      pageSize: 7,
+      tableLoading: false,
+      poller:null,
+    };
+  },
+  //监听属性 类似于data概念
+  computed: {
+    nowList() {
+      //用于分页
+      return this.tableData.slice(
+        this.currentPage * this.pageSize,
+        this.currentPage * this.pageSize + this.pageSize
+      );
+    }
+  },
+  //监控data中的数据变化
+  watch: {},
+  //方法集合
+  methods: {
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    downloadFile(isReport) {
+      download({
+        report: isReport,
+        token: sessionStorage.getItem("token")
+      }).then(res => {
+        // console.log(res);
+        if (res.data.status === 100) {
+          this.$message.success(res.data.message);
+        }
+      });
+    },
+    pageChange(size) {
+      // console.log(size);
+      this.currentPage = size - 1;
+    },
+    getList() {
+      this.tableLoading = true;
+      getTaskList()
+        .then(res => {
+          // console.log(res);
+          this.tableData = res.data.data.map(item => {
+            // console.log(item);
+            item.created = moment(item.created).format("YYYY-MM-DD HH:mm:ss");
+            return item;
+          });
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
+    },
+    handleDelete(index, item) {
+      // console.log(item);
+      deleteTask({ data: [item.id] }).then(res => {
+        // console.log(res);
+        if(res.data.status===100){
+          this.$message.success("删除成功")
+          this.getList()
+        }else{
+          this.$message.error(res.data.message)
+        }
+      });
+    },
+    DeleteSelected() {
+      console.log(this.multipleSelection);
+      const idList =  this.multipleSelection.map(item=>{
+        return item.id
+      })
+      deleteTask({data:idList}).then(res=>{
+        console.log(res);
+        if(res.data.status===100){
+          this.$message.success(res.data.data)
+          this.getList()
+        }else{
+          this.$message.error(res.data.message)
+        }
+      })
+    },
+    handleDownload(index,item){
+      // console.log();
+      // console.log(item);
+      window.open("http://"+item.url)
+    }
+  },
+  //生命周期 - 创建完成（可以访问当前this实例）
+  created() {},
+  //生命周期 - 挂载完成（可以访问DOM元素）
+  mounted() {
+    this.getList();
+    this.poller = new Poller({axios:getTask,success:(res)=>{
+      // console.log(res);
+      this.reportMsg = res.data.data.report
+      this.appiMsg = res.data.data.appraisal
+    }})
+    this.poller.start(3000)
+  },
+  beforeCreate() {}, //生命周期 - 创建之前
+  beforeMount() {}, //生命周期 - 挂载之前
+  beforeUpdate() {}, //生命周期 - 更新之前
+  updated() {}, //生命周期 - 更新之后
+  beforeDestroy() {}, //生命周期 - 销毁之前
+  destroyed() {
+    this.poller.destroy()
+  }, //生命周期 - 销毁完成
+  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
+};
+</script>
+<style lang="less" scoped>
+.download {
+  padding: 20px;
+  .el-table {
+    margin-top: 20px;
+  }
+  .load-title {
+    font-weight: bold;
+
+    font-size: 18px;
+  }
+  .el-pagination {
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+  .target {
+    padding: 15px 0;
+    span {
+      margin-right: 18px;
+    }
+  }
+}
+</style>

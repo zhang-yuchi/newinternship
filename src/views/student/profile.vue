@@ -15,11 +15,11 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">学号</span>
-                <span class="item-content">{{studentInfo.stuNo}}</span>
+                <span class="item-content">{{studentInfo.stuno}}</span>
               </div>
             </el-col>
           </el-row>
-          <el-row>
+          <!-- <el-row>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">微信</span>
@@ -32,14 +32,14 @@
                 <span class="item-content">{{studentInfo.age}}</span>
               </div>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <div class="text item">
                 <span class="item-title">电话</span>
                 <span class="item-content">{{studentInfo.phone}}</span>
               </div>
-            </el-col>
+            </el-col> -->
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">专业</span>
@@ -51,23 +51,23 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">实习岗位</span>
-                <span class="item-content">{{studentInfo.corpPosition}}</span>
+                <span class="item-content">{{studentInfo.position}}</span>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">实习企业</span>
-                <span class="item-content">{{studentInfo.corpName}}</span>
+                <span class="item-content">{{studentInfo.corp}}</span>
               </div>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <div class="text item">
                 <span class="item-title">qq</span>
                 <span class="item-content">{{studentInfo.qq}}</span>
               </div>
-            </el-col>
+            </el-col> -->
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">学院</span>
@@ -79,13 +79,13 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">实习开始时间</span>
-                <span class="item-content">{{studentInfo.gmtStart}}</span>
+                <span class="item-content">{{studentInfo.starttime}}</span>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">实习结束时间</span>
-                <span class="item-content">{{studentInfo.gmtEnd}}</span>
+                <span class="item-content">{{studentInfo.endtime}}</span>
               </div>
             </el-col>
           </el-row>
@@ -93,7 +93,7 @@
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">身份证号</span>
-                <span class="item-content">{{studentInfo.idCard}}</span>
+                <span class="item-content">{{studentInfo.idcard}}</span>
               </div>
             </el-col>
           </el-row>
@@ -203,6 +203,7 @@ import {
   selectTeacher,
   selectTeacherByNo
 } from "../../network";
+import moment from 'moment'
 import { replaceNull } from "../../command/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -231,7 +232,10 @@ export default {
       getStudentInfo()
         .then(res => {
           console.log(res);
-          this.studentInfo = Object.assign({}, res.data.data, {});
+          this.studentInfo = Object.assign({}, res.data.data, {
+            starttime:moment(res.data.data.starttime).format("YYYY-MM-DD HH:mm:ss"),
+            endtime:moment(res.data.data.endtime).format("YYYY-MM-DD HH:mm:ss"),
+          });
           this.studentInfo = replaceNull(this.studentInfo);
           // console.log(this.studentInfo)
         })

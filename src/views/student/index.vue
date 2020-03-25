@@ -101,6 +101,10 @@
               <el-menu-item index="/student/decision">填写鉴定表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
+          <el-menu-item index="/student/download">
+            <i class="el-icon-setting"></i>
+            <span slot="title">文件下载</span>
+          </el-menu-item>
         </el-menu>
       </el-col>
     </layout>
@@ -146,30 +150,30 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.activeNav = this.$router.history.current.path;
-    getStage().then(res => {
-      // console.log(res);
-      if (res.data.status == 1) {
-        const states = res.data.data;
-        this.$store.commit("changeReportStage1", states.isReportStage1Open);
-        this.$store.commit("changeReportStage2", states.isReportStage2Open);
-        this.$store.commit("changeReportStage3", states.isReportStage3Open);
-        this.$store.commit(
-          "changeIdentifyStage1",
-          states.isIdentifyFormStage1Open
-        );
-        this.$store.commit(
-          "changeIdentifyStage2",
-          states.isIdentifyFormStage2Open
-        );
-        this.$store.commit(
-          "changeIdentifyStage3",
-          states.isIdentifyFormStage3Open
-        );
-      }
-    }).
-    catch(()=>{
-      this.$message.error("阶段控制接口出错!请检测网络或告知管理员!!")
-    })
+    // getStage().then(res => {
+    //   // console.log(res);
+    //   if (res.data.status == 1) {
+    //     const states = res.data.data;
+    //     this.$store.commit("changeReportStage1", states.isReportStage1Open);
+    //     this.$store.commit("changeReportStage2", states.isReportStage2Open);
+    //     this.$store.commit("changeReportStage3", states.isReportStage3Open);
+    //     this.$store.commit(
+    //       "changeIdentifyStage1",
+    //       states.isIdentifyFormStage1Open
+    //     );
+    //     this.$store.commit(
+    //       "changeIdentifyStage2",
+    //       states.isIdentifyFormStage2Open
+    //     );
+    //     this.$store.commit(
+    //       "changeIdentifyStage3",
+    //       states.isIdentifyFormStage3Open
+    //     );
+    //   }
+    // }).
+    // catch(()=>{
+    //   this.$message.error("阶段控制接口出错!请检测网络或告知管理员!!")
+    // })
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

@@ -4,20 +4,6 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix" style="overflow:hidden">
           <span style="color:rgb(64,158,255);">{{title}}</span>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="一二阶段此按钮没有区别"
-            style="float:right;width:90px;height:40px;"
-            placement="top-start"
-          >
-            <el-button
-              :loading="btnLoading"
-              type="primary"
-              style="padding:0;"
-              @click="downloadPdf"
-            >下载pdf</el-button>
-          </el-tooltip>
         </div>
         <div class="text item">
           <span class="header-title">指导时间</span>
@@ -61,8 +47,9 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import formBlock from "../../components/content/form-block";
-import { getReportInfo, downloadReport, baseUrl } from "../../network";
+import { getReportInfo, baseUrl } from "../../network";
 import { Obj2html, replaceNull } from "../../command/utils";
+import axios from 'axios'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -113,31 +100,18 @@ export default {
           break;
       }
     },
-    downloadPdf() {
-      this.btnLoading = true;
-      downloadReport()
-        .then(res => {
-          // console.log(res)
-          if (res.data.status == 1) {
-            window.open(baseUrl + res.data.data);
-          }
-        })
-        .finally(() => {
-          this.btnLoading = false;
-        });
-    },
     getContent() {
       this.pageLoading = true;
       getReportInfo()
         .then(res => {
           console.log(res);
-          let data = res.data.data;
+          let data = res.data.data.report;
           data = Obj2html(data);
           data = replaceNull(data);
 
           if (this.state == 0) {
             this.showContent = {
-              stageGuideDate: data.stage1GuideDate,
+              stageGuideDate: res.data.data.reportdate,
               stageGuideWay: data.stage1GuideWay,
               stageSummary: data.stage1Summary,
               stageGradeDate: data.stage1GradeDate,
@@ -146,7 +120,7 @@ export default {
             };
           } else if (this.state == 1) {
             this.showContent = {
-              stageGuideDate: data.stage2GuideDate,
+              stageGuideDate: res.data.data.reportdate,
               stageGuideWay: data.stage2GuideWay,
               stageSummary: data.stage2Summary,
               stageGradeDate: data.stage2GradeDate,

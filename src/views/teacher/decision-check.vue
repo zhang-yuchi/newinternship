@@ -17,35 +17,35 @@
         </div>
         <div class="text item twoItem">
           <span class="header-title">学号</span>
-          <span class="header-content">{{ info.stuNo }}</span>
+          <span class="header-content">{{ info.stuno }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习单位</span>
-          <span class="header-content">{{ info.corpName }}</span>
+          <span class="header-content">{{ info.corp ?info.corp:"未填写"}}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习岗位</span>
-          <span class="header-content">{{ info.corpPosition }}</span>
+          <span class="header-content">{{ info.position ?info.position:"未填写"}}</span>
         </div>
       </div>
 
       <div class="state-title">鉴定表</div>
       <form-item
         title="实习内容"
-        :content="res.sxContent ? res.sxContent : '暂无'"
+        :content="appraisal.content ? appraisal.content : '暂无'"
       ></form-item>
       <form-item
         title="自我总结"
-        :content="res.selfSummary ? res.selfSummary : '暂无'"
+        :content="appraisal.summary ? appraisal.summary : '暂无'"
       ></form-item>
       <form-item
         title="实习单位指导教师评语"
-        :content="res.corpTeacherOpinion ? res.corpTeacherOpinion : '暂无'"
-        :time="res.ctodate ? res.ctodate : '暂无'"
+        :content="appraisal.corpTeacherOpinion ? appraisal.corpTeacherOpinion : '暂无'"
+        :time="appraisaldate.corpteacher ? appraisaldate.corpteacher : '暂无'"
       ></form-item>
       <div class="item-title">成绩评定</div>
       <el-select
-        v-model="res.corpTeacherGrade"
+        v-model="appraisal.corpTeacherGrade"
         placeholder="请选择"
       >
         <el-option
@@ -58,12 +58,12 @@
       </el-select>
       <form-item
         title="实习单位指审核意见"
-        :content="res.corpOpinion ? res.corpOpinion : '暂无'"
-        :time="res.codate ? res.codate : '暂无'"
+        :content="appraisal.corpOpinion ? appraisal.corpOpinion : '暂无'"
+        :time="appraisaldate.corp ? appraisaldate.corp : '暂无'"
       ></form-item>
       <div class="item-title">所在学院指导老师成绩评定</div>
       <el-select
-        v-model="res.teacherGrade"
+        v-model="appraisal.teacherGrade"
         placeholder="请选择"
       >
         <el-option
@@ -74,41 +74,25 @@
         >
         </el-option>
       </el-select>
-      <div class="block">
-        <el-date-picker
-          v-model="res.tgdate"
-          type="date"
-          placeholder="选择日期"
-        >
-        </el-date-picker>
-      </div>
       <form-item
         title="综合实习成绩评定"
-        :content="res.comprehsvGrade ? res.comprehsvGrade : '暂无成绩'"
-        :time="res.cgdate ? res.cgdate : '暂无'"
+        :content="appraisal.synthGrade ? appraisal.synthGrade : '暂无成绩'"
+        :time="appraisaldate.synth ? appraisaldate.synth : '暂无'"
       ></form-item>
       <el-form
-        :model="res"
+        :model="appraisal"
         status-icon
         :rules="rules"
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
       >
-        <el-form-item label="所在学院实习领导小组意见" prop="res">
+        <el-form-item label="所在学院实习领导小组意见" prop="appraisal">
           <el-input
             type="textarea"
             :rows="5"
-            v-model="res.collegePrincipalOpinion"
+            v-model="appraisal.leaderOpinion"
           ></el-input>
-          <div class="block">
-            <el-date-picker
-              v-model="res.cpodate"
-              type="date"
-              placeholder="选择日期"
-            >
-            </el-date-picker>
-          </div>
         </el-form-item>
 
         <el-form-item>
@@ -124,7 +108,7 @@
 <script>
 import formItem from "../../components/content/form-block";
 import limit from "../../components/content/limit-number";
-import { Obj2html } from "../../command/utils";
+import { Obj2html, date2str } from "../../command/utils";
 import {
   getStudentIdentify,
   completeDecision
@@ -141,24 +125,14 @@ export default {
         name: "加载中",
         college: "加载中",
         major: "加载中",
-        stuNo: "加载中",
-        corpName: "加载中",
-        corpPosition: "加载中"
+        stuno: "加载中",
+        corp: "加载中",
+        position: "加载中",
+        starttime:"加载中",
+        endtime:"加载中"
       },
-      res: {
-        sxContent: "加载中",
-        selfSummary: "加载中",
-        corpTeacherOpinion: "加载中",
-        corpTeacherGrade: "",
-        corpOpinion: "加载中",
-        teacherGrade: "",
-        comprehsvGrade: "加载中",
-        collegePrincipalOpinion: "",
-        ctodate: "",
-        codate: "",
-        tgdate: "",
-        cpodate: ""
-      },
+      appraisaldate:{},
+      appraisal:{},
       options: [
         {
           value: "优秀",
@@ -187,40 +161,12 @@ export default {
   methods: {
     submitDecision() {
       let obj = {
-        stuNo: this.info.stuNo,
-        corpTeacherGrade: this.res.corpTeacherGrade,
-        teacherGrade: this.res.teacherGrade,
-        collegePrincipalOpinion: this.res.collegePrincipalOpinion
+        corpTeacherGrade: this.appraisal.corpTeacherGrade,
+        teacherGrade: this.appraisal.teacherGrade,
+        leaderOpinion: this.appraisal.leaderOpinion
       };
-      if (this.res.tgdate) {
-        if (typeof this.res.tgdate == "string") {
-          obj.tgdate = this.res.tgdate;
-        } else {
-          obj.tgdate =
-            this.res.tgdate.getFullYear() +
-            "-" +
-            (this.res.tgdate.getMonth() + 1) +
-            "-" +
-            this.res.tgdate.getDate();
-        }
-        obj.tGDate = obj.tgdate;
-      }
-      if (this.res.cpodate) {
-        if (typeof this.res.cpodate == "string") {
-          obj.cpodate = this.res.cpodate;
-        } else {
-          obj.cpodate =
-            this.res.cpodate.getFullYear() +
-            "-" +
-            (this.res.cpodate.getMonth() + 1) +
-            "-" +
-            this.res.cpodate.getDate();
-        }
-        obj.cPODate = obj.cpodate;
-      }
+      
       console.log(obj);
-      console.log(this.res);
-
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
@@ -228,7 +174,7 @@ export default {
       })
         .then(() => {
           this.loading = true;
-          completeDecision(obj).then(res => {
+          completeDecision(this.$route.params.stuNo ,obj).then(res => {
             console.log(res);
             if (res.data.status == 100) {
               this.$message({
@@ -237,6 +183,7 @@ export default {
               });
               this.$router.back();
             } else {
+              this.loading = false
               this.$message({
                 type: "error",
                 message: "提交失败：" + res.data.message
@@ -255,32 +202,34 @@ export default {
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    getStudentIdentify().then(res=>{
+    getStudentIdentify(stuNo).then(res=>{
+      console.log(res);
       if(res.data.status == 100){
+        this.info = res.data.data.student;
+        if (this.info.starttime) {
+          this.info.starttime = date2str(this.info.starttime);
+        }
+        if (this.info.endtime) {
+          this.info.endtime = date2str(this.info.endtime);
+        }
+
+        this.appraisaldate = res.data.data.appraisaldate
+        if (this.appraisaldate.corpteacher) {
+          this.appraisaldate.corpteacher = date2str(this.appraisaldate.corpteacher);
+        }
+        if (this.appraisaldate.corp) {
+          this.appraisaldate.corp = date2str(this.appraisaldate.corp);
+        }
+        if (this.appraisaldate.synth) {
+          this.appraisaldate.synth = date2str(this.appraisaldate.synth);
+        }
+        if (this.appraisaldate.leader) {
+          this.appraisaldate.leader = date2str(this.appraisaldate.leader);
+        }
         
+        this.appraisal = res.data.data.appraisal
       }
     })
-    // getStudentInfoById(stuNo).then(res => {
-    //   // console.log(res);
-    //   if (res.data.status == 1) {
-    //     this.info = res.data.data;
-    //     getStudentIdentify(stuNo).then(resp => {
-    //       // console.log(resp);
-    //       if (resp.data.status == 1) {
-    //         this.res = Obj2html(resp.data.data);
-    //         if (this.res.collegePrincipalOpinion == null) {
-    //           this.res.collegePrincipalOpinion = "";
-    //         }
-    //         this.disabled = !this.$store.state.isIdentifyFormStage2Open;
-    //         if (this.disabled) {
-    //           this.$alert("未到评价时间", "提示", {
-    //             confirmButtonText: "确定"
-    //           });
-    //         }
-    //       }
-    //     });
-    //   }
-    // });
   }
 };
 </script>
@@ -331,8 +280,5 @@ export default {
 }
 .item-title {
   line-height: 40px;
-}
-.block {
-  margin: 20px 0;
 }
 </style>

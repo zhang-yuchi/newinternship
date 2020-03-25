@@ -126,10 +126,18 @@ const routes = [
         },
       },
       {
-        path:"report-list",
-        component:()=>import('../views/teacher/report-list'),
+        path:"report-list1",
+        component:()=>import('../views/teacher/report-list1'),
         meta:{
-          title:'报告册填写情况',
+          title:'报告册(一)填写情况',
+          keepAlive:true
+        },
+      },
+      {
+        path:"report-list2",
+        component:()=>import('../views/teacher/report-list2'),
+        meta:{
+          title:'报告册(二)填写情况',
           keepAlive:true
         },
       },
@@ -145,14 +153,14 @@ const routes = [
         path:"report-check1/:stuNo",
         component:()=>import('../views/teacher/report-check1'),
         meta:{
-          title:'报告册评价'
+          title:'报告册(一)评价'
         },
       },
       {
         path:"report-check2/:stuNo",
         component:()=>import('../views/teacher/report-check2'),
         meta:{
-          title:'报告册评价'
+          title:'报告册(二)评价'
         },
       },
       {

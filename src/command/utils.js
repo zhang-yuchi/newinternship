@@ -48,3 +48,12 @@ export const one2arr = (arr,pageSize) => {
   }
   return data
 }
+
+// 日期字符串 -> 字符串
+export const date2str = (date)=>{
+  let time = new Date(date)
+  let year = time.getFullYear()
+  let month = ('0' + (time.getMonth()+1)).slice(-2)
+  let day = ('0' + time.getDate()).slice(-2)
+  return year+'-'+month+'-'+ day
+}

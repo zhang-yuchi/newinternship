@@ -15,24 +15,28 @@
         </div>
         <div class="text item twoItem">
           <span class="header-title">学号</span>
-          <span class="header-content">{{ info.stuNo }}</span>
+          <span class="header-content">{{ info.stuno }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">学院指导教师工号</span>
-          <span class="header-content">{{ info.teacherNo }}</span>
+          <span class="header-content">{{ info.teachno }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习单位</span>
-          <span class="header-content">{{ info.corpName }}</span>
+          <span class="header-content">{{
+            info.corp ? info.corp : "未填写"
+          }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习岗位</span>
-          <span class="header-content">{{ info.corpPosition }}</span>
+          <span class="header-content">{{
+            info.position ? info.position : "未填写"
+          }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习日期</span>
           <span class="header-content"
-            >{{ res.gmtStart }} 至 {{ res.gmtEnd }}</span
+            >{{ info.starttime }} 至 {{ info.endtime }}</span
           >
         </div>
       </div>
@@ -41,47 +45,33 @@
       <div class="state-title">第二阶段</div>
       <form-item
         title="第二阶段实习总结"
-        :content="res.stage2Summary"
+        :content="report.stage2Summary"
+        :time="reportdate.stage2Fill"
       ></form-item>
       <form-item
         title="第二阶段实习指导方式"
-        :content="res.stage2GuideWay"
-        :time="res.stage2GuideDate"
+        :content="report.stage2GuideWay"
+        :time="reportdate.stage2Duration"
       ></form-item>
       <el-form
-        :model="res"
+        :model="report"
         status-icon
         :rules="rules"
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
       >
-        <el-form-item label="教师评语" prop="res">
+        <el-form-item label="教师评语" prop="report">
           <el-input
             type="textarea"
             :rows="5"
-            v-model="res.stage2Comment"
+            v-model="report.stage2Comment"
           ></el-input>
-          <limit :maxLength="500" :testString="res.stage2Comment"></limit>
+          <limit :maxLength="500" :testString="report.stage2Comment"></limit>
         </el-form-item>
-        <div class="block">
-          <el-date-picker
-            v-model="res.stage2Date"
-            type="date"
-            placeholder="选择日期"
-          >
-          </el-date-picker>
-        </div>
-        <!-- <el-form-item label="成绩评定" prop="res">
-          <el-input
-            type="textarea"
-            :rows="5"
-            v-model="res.stage2Grade"
-          ></el-input>
-        </el-form-item> -->
         <div class="item-title">成绩评定</div>
         <el-form-item>
-          <el-select v-model="res.stage2Grade" placeholder="请选择">
+          <el-select v-model="report.stage2Grade" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -91,45 +81,23 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- <div class="block">
-          <el-date-picker
-            v-model="res.stage2GradeDate"
-            type="date"
-            placeholder="选择日期"
-          >
-          </el-date-picker>
-        </div> -->
       </el-form>
-
       <div class="state-title">总评</div>
       <el-form
-        :model="res"
+        :model="report"
         status-icon
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
       >
-        <el-form-item label="评语" prop="res">
+        <el-form-item label="评语" prop="report">
           <el-input
             type="textarea"
             :rows="5"
-            v-model="res.totalGrade"
+            v-model="report.totalEval"
           ></el-input>
+          <limit :maxLength="500" :testString="report.totalEval"></limit>
         </el-form-item>
-
-        <div class="item-title">成绩</div>
-        <el-form-item>
-          <el-select v-model="res.totalScore" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-
         <el-form-item>
           <el-button type="primary" @click="submitReport2" :loading="loading"
             >提交</el-button
@@ -142,7 +110,7 @@
 <script>
 import formItem from "../../components/content/form-block";
 import limit from "../../components/content/limit-number";
-import { Obj2html } from "../../command/utils";
+import { Obj2html, date2str } from "../../command/utils";
 import {
   getStudentReport,
   completeRep2,
@@ -156,7 +124,28 @@ export default {
   },
   data() {
     return {
-
+      loading: false,
+      info: {
+        name: "加载中",
+        college: "加载中",
+        major: "加载中",
+        stuno: "加载中",
+        teachno: "加载中",
+        corp: "加载中",
+        position: "加载中",
+        starttime: "加载中",
+        endtime: "加载中"
+      },
+      reportdate: {
+        stage2Duration: "加载中",
+        stage2Fill: ""
+      },
+      report: {
+        stage2GuideWay: "加载中",
+        stage2Summary: "加载中",
+        stage2Comment: "",
+        totalEval: ""
+      },
       options: [
         {
           value: "优秀",
@@ -178,128 +167,94 @@ export default {
           value: "不及格",
           label: "不及格"
         }
-      ]
+      ],
+      rules: {}
     };
   },
+  mounted() {
+    let stuNo = this.$route.params.stuNo;
+    getStudentReport(stuNo).then(res => {
+      console.log(res);
+      if (res.data.status == 100) {
+        this.info = res.data.data.student;
+        if (this.info.starttime) {
+          this.info.starttime = date2str(this.info.starttime);
+        }
+        if (this.info.endtime) {
+          this.info.endtime = date2str(this.info.endtime);
+        }
+        this.reportdate = res.data.data.reportdate;
+        if (this.reportdate.stage2Fill) {
+          this.reportdate.stage2Fill = date2str(this.reportdate.stage2Fill);
+        }
+        this.report.stage2Summary = Obj2html({
+          str: this.report.stage2Summary
+        }).str;
+        this.report = res.data.data.report;
+      }
+    });
+  },
   methods: {
-    submitReport1() {
+    submitReport2() {
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
         type: "info"
       })
         .then(() => {
-          // console.log(this.res);
           this.loading = true;
-          if (
-            this.res.stage1Comment.length != 0 &&
-            this.res.stage1Comment.length < 60
-          ) {
-            this.$alert("一阶段评语不能低于60字", "提交失败", {
+          if (this.report.stage2Comment.length < 60) {
+            this.$alert("二阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
-            this.loading = false;
             throw "false";
-            return false;
           }
-          // if (
-          //   this.res.stage2Comment.length != 0 &&
-          //   this.res.stage2Comment.length < 60
-          // ) {
-          //   this.$alert("二阶段评语不能低于60字", "提交失败", {
-          //     confirmButtonText: "确定"
-          //   });
-          //   this.loading = false;
-          //   throw "false";
-          //   return false;
-          // }
-          // if (
-          //   this.res.totalGrade.length != 0 &&
-          //   this.res.totalGrade.length < 60
-          // ) {
-          //   this.$alert("总评不能低于60字", "提交失败", {
-          //     confirmButtonText: "确定"
-          //   });
-          //   this.loading = false;
-          //   throw "false";
-          //   return false;
-          // }
+          if (this.report.totalEval.length < 60) {
+            this.$alert("总评不能低于60字", "提交失败", {
+              confirmButtonText: "确定"
+            });
+            throw "false";
+          }
           let obj = {};
-          obj.id = this.res.id;
-          obj.stuNo = this.res.stuNo;
-          if (this.res.stage1Comment) {
-            obj.stage1Comment = this.res.stage1Comment;
-          } else {
-            obj.stage1Comment = "";
-          }
-          if (this.res.stage1Grade) {
-            obj.stage1Grade = this.res.stage1Grade;
-          } else {
-            obj.stage1Grade = "";
-          }
-          if (this.res.stage2Comment) {
-            obj.stage2Comment = this.res.stage2Comment;
-          } else {
-            obj.stage2Comment = "";
-          }
-          if (this.res.stage2Grade) {
-            obj.stage2Grade = this.res.stage2Grade;
+          if (this.report.stage2Grade) {
+            obj.stage2Grade = this.report.stage2Grade;
           } else {
             obj.stage2Grade = "";
           }
-          if (this.res.totalGrade) {
-            obj.totalGrade = this.res.totalGrade;
-          } else {
-            obj.totalGrade = "";
-          }
-          if (this.res.totalScore) {
-            obj.totalScore = this.res.totalScore;
-          }
-
-          if (this.res.stage1Date) {
-            if (typeof this.res.stage1Date == "string") {
-              obj.stage1Date = this.res.stage1Date;
-            } else {
-              obj.stage1Date =
-                this.res.stage1Date.getFullYear() +
-                "-" +
-                (this.res.stage1Date.getMonth() + 1) +
-                "-" +
-                this.res.stage1Date.getDate();
-            }
-            obj.stage1GradeDate = obj.stage1Date;
-          }
-          if (this.res.stage2Date) {
-            if (typeof this.res.stage2Date == "string") {
-              obj.stage2Date = this.res.stage2Date;
-            } else {
-              obj.stage2Date =
-                this.res.stage2Date.getFullYear() +
-                "-" +
-                (this.res.stage2Date.getMonth() + 1) +
-                "-" +
-                this.res.stage2Date.getDate();
-            }
-            obj.stage2GradeDate = obj.stage2Date;
-          }
+          obj.stage2Comment = this.report.stage2Comment;
+          console.log(this.report.totalEval);
           console.log(obj);
-          completeReport(obj).then(res => {
+          Promise.all([
+            completeRep2(this.$route.params.stuNo, obj),
+            completeRepTotal(this.$route.params.stuNo, {
+              total_eval: this.report.totalEval
+            })
+          ]).then(res => {
             console.log(res);
-            if (res.data.status == 100) {
+            if (res[0].data.status == 100 && res[1].data.status == 100) {
               this.$message({
                 type: "success",
                 message: "提交成功!"
               });
               this.$router.back();
             } else {
+              this.loading = false;
               this.$message({
-                type: "error",
-                message: "提交失败：" + res.data.message
+                type: "info",
+                message:
+                  "提交失败：" + res[0].data.status !== 100
+                    ? res[0].data.message
+                    : res[1].data.message
               });
             }
-          });
+          })
+          .catch(err=>{
+            console.log(err);
+
+          })
         })
         .catch(() => {
+          this.loading = false
           this.$message({
             type: "info",
             message: "已取消提交"
@@ -309,4 +264,59 @@ export default {
   }
 };
 </script>
-<style scoped></style>
+<style scoped>
+.text {
+  font-size: 14px;
+}
+
+.item {
+  padding: 18px 0;
+}
+.twoItem {
+  width: 50%;
+  float: left;
+}
+.box-card {
+  width: 80%;
+  transition: none;
+}
+.header-title,
+.header-content {
+  display: inline-block;
+}
+.header-title {
+  color: #378f8c;
+  margin-right: 8px;
+}
+.header-content {
+  width: 350px;
+}
+.report-check {
+  display: flex;
+  justify-content: center;
+}
+.summary {
+  margin-left: 20px;
+  width: 456px;
+}
+.Divider {
+  padding: 10px 0;
+  color: rgb(64, 158, 255);
+  /* border-bottom: 1px solid #ddd; */
+}
+.state-title {
+  padding: 20px 0;
+  font-weight: 700;
+  font-size: 20px;
+}
+.item-title {
+  line-height: 40px;
+}
+.clearfix::after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+</style>

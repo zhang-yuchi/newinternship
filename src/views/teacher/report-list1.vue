@@ -9,7 +9,7 @@
       v-loading="loading" element-loading-text="加 载 中"
     element-loading-spinner="el-icon-loading"
     >
-      <el-table-column prop="idcard" label="学号" width="180" fixed>
+      <el-table-column prop="stuno" label="学号" width="180" fixed>
       </el-table-column>
       <el-table-column prop="name" label="姓名" width="150" fixed>
       </el-table-column>
@@ -50,13 +50,6 @@
       <el-table-column fixed="right" label="报告册(一)" width="100">
         <template slot-scope="scope">
           <el-button @click="reportCheck1(scope.row)" type="text" size="small"
-            >评价</el-button
-          >
-        </template>
-      </el-table-column>
-      <el-table-column fixed="right" label="报告册(二)" width="100">
-        <template slot-scope="scope">
-          <el-button @click="reportCheck2(scope.row)" type="text" size="small"
             >评价</el-button
           >
         </template>
@@ -113,10 +106,7 @@ export default {
   },
   methods: {
     reportCheck1(item) {
-      this.$router.push("/teacher/report-check1/" + item.stuNo);
-    },
-    reportCheck2(item) {
-      this.$router.push("/teacher/report-check2/" + item.stuNo);
+      this.$router.push("/teacher/report-check1/" + item.stuno);
     },
     tableRowClassName({ row, rowIndex }) {
       if (this.data[this.currentPage-1][rowIndex].reportFlag === 2) {

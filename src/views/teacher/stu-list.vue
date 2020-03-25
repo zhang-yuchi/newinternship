@@ -92,13 +92,13 @@ export default {
   },
   methods: {
     reportCheck1(item) {
-      this.$router.push("/teacher/report-check1/" + item.idcard);
+      this.$router.push("/teacher/report-check1/" + item.stuno);
     },
     reportCheck2(item) {
-      this.$router.push("/teacher/report-check2/" + item.idcard);
+      this.$router.push("/teacher/report-check2/" + item.stuno);
     },
     decisionCheck(item) {
-      this.$router.push("/teacher/decision-check/" + item.idcard);
+      this.$router.push("/teacher/decision-check/" + item.stuno);
     },
     prevClick() {
       this.currentPage--;

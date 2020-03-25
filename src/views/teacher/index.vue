@@ -3,22 +3,27 @@
   <div class="main">
     <layout>
       <el-col slot="nav" style="height:100%;" class="main-nav">
-        <el-menu
-          :default-active="activeNav"
-          :router="true"
-        >
-        <el-menu-item index="/teacher/profile">
+        <el-menu :default-active="activeNav" :router="true">
+          <el-menu-item index="/teacher/profile">
             <i class="el-icon-user"></i>
             <span slot="title">我的信息</span>
           </el-menu-item>
           <el-menu-item index="/teacher/stu-list">
-            <i class="el-icon-s-order"></i>
-            <span slot="title">学生列表</span>
+            <template slot="title">
+              <i class="el-icon-s-order"></i>
+              <span slot="title">学生列表</span>
+            </template>
           </el-menu-item>
-          <el-menu-item index="/teacher/report-list">
-            <i class="el-icon-edit"></i>
-            <span slot="title">报告册</span>
-          </el-menu-item>
+          <el-submenu index="">
+            <template slot="title">
+              <i class="el-icon-edit"></i>
+              <span slot="title">报告册</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/teacher/report-list1">一阶段</el-menu-item>
+              <el-menu-item index="/teacher/report-list2">二阶段</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
           <el-menu-item index="/teacher/decision-list">
             <i class="el-icon-edit"></i>
             <span slot="title">鉴定表</span>
@@ -76,8 +81,8 @@ export default {
   height: 100%;
   min-width: 1200px;
 }
-.main-nav{
-  min-width: 200px !important
+.main-nav {
+  min-width: 150px !important;
 }
 .el-menu {
   height: 100%;

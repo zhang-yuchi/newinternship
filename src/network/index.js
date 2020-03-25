@@ -130,6 +130,14 @@ export const downloadIdentify = () => {
 }
 
 //------------------教师接口----------------------------
+//获取老师信息
+export const getTeacher = () => {
+  return service.get(getRandom('/teacher/info'))
+}
+//修改老师信息
+export const modifyTeacher = (params) => {
+  return service.post('/teacher/info',params)
+}
 //获取所有学生
 export const getStudentList = () => {
   return service.get(getRandom('/teacher/student'))
@@ -143,8 +151,8 @@ export const completeDecision = (stuNo,params) => {
   return service.post('/teacher/student/' + stuNo+'/appraisal', params)
 }
 //获取某个学生报告册
-export const getStudentReport = (stuNo,params) => {
-  return service.get(getRandom('/teacher/student/' + stuNo+'/report'),params)
+export const getStudentReport = (stuNo) => {
+  return service.get(getRandom('/teacher/student/' + stuNo+'/report'))
 }
 //报告册一阶段打分
 export const completeRep1 = (stuNo,params) => {

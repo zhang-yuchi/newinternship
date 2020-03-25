@@ -1,5 +1,4 @@
 <template>
-  <!-- 一阶段 -->
   <div class="report-check">
     <el-card class="box-card">
       <div slot="header">
@@ -55,7 +54,6 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
-        :disabled="disabled"
       >
         <el-form-item label="教师评语" prop="res">
           <el-input
@@ -65,20 +63,8 @@
           ></el-input>
           <limit :maxLength="500" :testString="res.stage1Comment"></limit>
         </el-form-item>
-        <div class="block">
-          <el-date-picker
-            v-model="res.stage1Date"
-            type="date"
-            placeholder="选择日期"
-          >
-          </el-date-picker>
-        </div>
         <div class="item-title">成绩评定</div>
-        <el-select
-          v-model="res.stage1Grade"
-          placeholder="请选择"
-          :disabled="disabled"
-        >
+        <el-select v-model="res.stage1Grade" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -87,105 +73,10 @@
           >
           </el-option>
         </el-select>
-      </el-form>
-      <!-- 二阶段 -->
-      <div class="state-title">第二阶段</div>
-      <form-item
-        title="第二阶段实习总结"
-        :content="res.stage2Summary"
-      ></form-item>
-      <form-item
-        title="第二阶段实习指导方式"
-        :content="res.stage2GuideWay"
-        :time="res.stage2GuideDate"
-      ></form-item>
-      <el-form
-        :model="res"
-        status-icon
-        :rules="rules"
-        label-width="100px"
-        class="demo-ruleForm"
-        label-position="top"
-        :disabled="disabled"
-      >
-        <el-form-item label="教师评语" prop="res">
-          <el-input
-            type="textarea"
-            :rows="5"
-            v-model="res.stage2Comment"
-          ></el-input>
-          <limit :maxLength="500" :testString="res.stage2Comment"></limit>
-        </el-form-item>
-        <div class="block">
-          <el-date-picker
-            v-model="res.stage2Date"
-            type="date"
-            placeholder="选择日期"
+        <el-form-item>
+          <el-button type="primary" @click="submitReport1" :loading="loading"
+            >提交</el-button
           >
-          </el-date-picker>
-        </div>
-        <!-- <el-form-item label="成绩评定" prop="res">
-          <el-input
-            type="textarea"
-            :rows="5"
-            v-model="res.stage2Grade"
-          ></el-input>
-        </el-form-item> -->
-        <div class="item-title">成绩评定</div>
-        <el-form-item>
-          <el-select v-model="res.stage2Grade" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <!-- <div class="block">
-          <el-date-picker
-            v-model="res.stage2GradeDate"
-            type="date"
-            placeholder="选择日期"
-          >
-          </el-date-picker>
-        </div> -->
-      </el-form>
-
-      <div class="state-title">总评</div>
-      <el-form
-        :model="res"
-        status-icon
-        :rules="rules"
-        label-width="100px"
-        class="demo-ruleForm"
-        label-position="top"
-        :disabled="disabled"
-      >
-        <el-form-item label="评语" prop="res">
-          <el-input
-            type="textarea"
-            :rows="5"
-            v-model="res.totalGrade"
-          ></el-input>
-        </el-form-item>
-
-        <div class="item-title">成绩</div>
-        <el-form-item>
-          <el-select v-model="res.totalScore" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="submitReport" :loading="loading">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -209,8 +100,7 @@ export default {
   },
   data() {
     return {
-      disabled: true,
-      loading:false,
+      loading: false,
       info: {
         name: "加载中",
         college: "加载中",
@@ -226,10 +116,13 @@ export default {
         stage1Summary: "加载中",
         stage1GuideWay: "加载中",
         stage1GuideDate: "加载中",
+
         stage1Comment: "",
+        stage1Grade: "",
+
         stage1Date: "加载中",
         stage1GradeDate: "",
-        stage1Grade: "",
+
         stage2Summary: "加载中",
         stage2GuideWay: "加载中",
         stage2Comment: "",
@@ -272,7 +165,7 @@ export default {
     };
   },
   methods: {
-    submitReport() {
+    submitReport1() {
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
@@ -280,99 +173,37 @@ export default {
       })
         .then(() => {
           // console.log(this.res);
-          this.loading = true
-          if (this.res.stage1Comment.length !=0 && this.res.stage1Comment.length < 60) {
+          this.loading = true;
+          if (
+            this.res.stage1Comment.length != 0 &&
+            this.res.stage1Comment.length < 60
+          ) {
             this.$alert("一阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
             });
-            this.loading = false
-            throw 'false'
+            this.loading = false;
+            throw "false";
             return false;
           }
-          if (
-            this.res.stage2Comment.length != 0 &&
-            this.res.stage2Comment.length < 60
-          ) {
-            this.$alert("二阶段评语不能低于60字", "提交失败", {
-              confirmButtonText: "确定"
-            });
-            this.loading = false
-            throw 'false'
-            return false;
-          }
-          if (
-            this.res.totalGrade.length != 0 &&
-            this.res.totalGrade.length < 60
-          ) {
-            this.$alert("总评不能低于60字", "提交失败", {
-              confirmButtonText: "确定"
-            });
-            this.loading = false
-            throw 'false'
-            return false
-          }
+        
           let obj = {};
           obj.id = this.res.id;
           obj.stuNo = this.res.stuNo;
           if (this.res.stage1Comment) {
             obj.stage1Comment = this.res.stage1Comment;
-          }else{
-            obj.stage1Comment = ''
+          } else {
+            obj.stage1Comment = "";
           }
           if (this.res.stage1Grade) {
             obj.stage1Grade = this.res.stage1Grade;
-          }else{
-            obj.stage1Grade = ''
+          } else {
+            obj.stage1Grade = "";
           }
-          if (this.res.stage2Comment) {
-            obj.stage2Comment = this.res.stage2Comment;
-          }else{
-            obj.stage2Comment = ''
-          }
-          if (this.res.stage2Grade) {
-            obj.stage2Grade = this.res.stage2Grade;
-          }else{
-            obj.stage2Grade = ''
-          }
-          if (this.res.totalGrade) {
-            obj.totalGrade = this.res.totalGrade;
-          }else{
-            obj.totalGrade = ''
-          }
-          if (this.res.totalScore) {
-            obj.totalScore = this.res.totalScore;
-          }
-
-          if (this.res.stage1Date) {
-            if (typeof this.res.stage1Date == "string") {
-              obj.stage1Date = this.res.stage1Date;
-            } else {
-              obj.stage1Date =
-                this.res.stage1Date.getFullYear() +
-                "-" +
-                (this.res.stage1Date.getMonth() + 1) +
-                "-" +
-                this.res.stage1Date.getDate();
-            }
-            obj.stage1GradeDate = obj.stage1Date;
-          }
-          if (this.res.stage2Date) {
-            if (typeof this.res.stage2Date == "string") {
-              obj.stage2Date = this.res.stage2Date;
-            } else {
-              obj.stage2Date =
-                this.res.stage2Date.getFullYear() +
-                "-" +
-                (this.res.stage2Date.getMonth() + 1) +
-                "-" +
-                this.res.stage2Date.getDate();
-            }
-            obj.stage2GradeDate = obj.stage2Date;
-          }
+         
           console.log(obj);
           completeReport(obj).then(res => {
             console.log(res);
-            if (res.data.status == 1) {
+            if (res.data.status == 100) {
               this.$message({
                 type: "success",
                 message: "提交成功!"
@@ -395,7 +226,12 @@ export default {
     }
   },
   mounted() {
-    // let stuNo = this.$route.params.stuNo;
+    let stuNo = this.$route.params.stuNo;
+    getStudentReport(stuNo).then(res => {
+      if (res.data.status == 100) {
+        console.log(res);
+      }
+    });
     // getStudentInfoById(stuNo).then(res => {
     //   // console.log(res);
     //   if (res.data.status == 1) {

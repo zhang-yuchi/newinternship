@@ -4,19 +4,21 @@
       :data="data[currentPage - 1]"
       :row-class-name="tableRowClassName"
       height="628"
+      border
+      style="width: 100%"
       v-loading="loading" element-loading-text="加 载 中"
     element-loading-spinner="el-icon-loading"
     >
-      <el-table-column prop="stuNo" label="学号" width="150" fixed>
+      <el-table-column prop="idcard" label="学号" width="180" fixed>
       </el-table-column>
       <el-table-column prop="name" label="姓名" width="150" fixed>
       </el-table-column>
-      <el-table-column prop="sex" label="性别" width="200"> </el-table-column>
-      <el-table-column prop="age" label="年龄" width="200"> </el-table-column>
+      <el-table-column prop="sex" label="性别" width="150"> </el-table-column>
+      <el-table-column prop="age" label="年龄" width="150"> </el-table-column>
       <el-table-column prop="college" label="学院" width="200">
       </el-table-column>
       <el-table-column prop="major" label="专业" width="200"> </el-table-column>
-      <el-table-column prop="corpName" label="实习企业" width="200">
+      <el-table-column prop="corp" label="实习企业" width="200">
       </el-table-column>
       <el-table-column prop="corpPosition" label="实习岗位" width="200">
       </el-table-column>
@@ -58,7 +60,7 @@
       id="fenye"
       background
       layout="prev, pager, next"
-      :total="tableData['length']"
+      :total="arrlength"
       :current-page="currentPage"
       :page-size="pageSize"
       @prev-click="prevClick()"
@@ -116,8 +118,8 @@ export default {
       console.log(this.currentPage);
     },
     filterClick(e) {
-      console.log("父组件拿到：" + e);
       let arr = [];
+      this.currentPage = 1
       if (e == 3) {
         // 全部
         for (let item of this.tableData) {
@@ -126,18 +128,19 @@ export default {
       } else if (e == 2) {
         //已填完
         for (let item of this.tableData) {
-          if (item.identifyFilledFlag == 2) {
+          if (item.appraisalContent && item.appraisalSummary) {
             arr.push(item);
           }
         }
       } else {
         //未填完
         for (let item of this.tableData) {
-          if (item.identifyFilledFlag !== 2) {
+          if ( !item.appraisalContent || !item.appraisalSummary) {
             arr.push(item);
           }
         }
       }
+      this.arrlength = arr.length
       this.data = one2arr(arr, this.pageSize);
     }
   },
@@ -147,14 +150,16 @@ export default {
       data: [],
       currentPage: 1,
       pageSize: 10,
-      loading:true
+      loading:true,
+      arrlength:0
     };
   },
   mounted() {
     getStudentList().then(res => {
-      if (res.data.status == 1) {
+      if (res.data.status == 100) {
         // console.log(res);
         this.tableData = res.data.data;
+        this.arrlength = this.tableData.length
         this.data = one2arr(this.tableData, this.pageSize);
         if (this.tableData.length) {
           for (let item of this.tableData) {

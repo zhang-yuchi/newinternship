@@ -47,7 +47,6 @@
       <el-select
         v-model="res.corpTeacherGrade"
         placeholder="请选择"
-        :disabled="disabled"
       >
         <el-option
           v-for="item in options"
@@ -66,7 +65,6 @@
       <el-select
         v-model="res.teacherGrade"
         placeholder="请选择"
-        :disabled="disabled"
       >
         <el-option
           v-for="item in options"
@@ -81,7 +79,6 @@
           v-model="res.tgdate"
           type="date"
           placeholder="选择日期"
-          :disabled="disabled"
         >
         </el-date-picker>
       </div>
@@ -97,7 +94,6 @@
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
-        :disabled="disabled"
       >
         <el-form-item label="所在学院实习领导小组意见" prop="res">
           <el-input
@@ -140,7 +136,6 @@ export default {
   },
   data() {
     return {
-      disabled: true,
       loading: false,
       info: {
         name: "加载中",
@@ -235,7 +230,7 @@ export default {
           this.loading = true;
           completeDecision(obj).then(res => {
             console.log(res);
-            if (res.data.status == 1) {
+            if (res.data.status == 100) {
               this.$message({
                 type: "success",
                 message: "提交成功!"
@@ -259,7 +254,12 @@ export default {
     }
   },
   mounted() {
-    // let stuNo = this.$route.params.stuNo;
+    let stuNo = this.$route.params.stuNo;
+    getStudentIdentify().then(res=>{
+      if(res.data.status == 100){
+        
+      }
+    })
     // getStudentInfoById(stuNo).then(res => {
     //   // console.log(res);
     //   if (res.data.status == 1) {

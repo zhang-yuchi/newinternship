@@ -98,16 +98,24 @@ const routes = [
     children:[
       {
         path:"",
-        redirect:"/teacher/stu-list",
+        redirect:"/teacher/profile",
+      },
+      {
+        path:"profile",
+        component:()=>import('../views/teacher/profile'),
         meta:{
-          title:'学生信息'
+          title:'我的信息'
         },
+      },
+      {
+        path:"modify-profile",
+        component:()=>import('../views/teacher/modify-profile')
       },
       {
         path:"stu-list",
         component:()=>import('../views/teacher/stu-list'),
         meta:{
-          title:'学生信息'
+          title:'学生列表'
         },
       },
       {
@@ -127,8 +135,15 @@ const routes = [
         },
       },
       {
-        path:"report-check/:stuNo",
-        component:()=>import('../views/teacher/report-check'),
+        path:"report-check1/:stuNo",
+        component:()=>import('../views/teacher/report-check1'),
+        meta:{
+          title:'报告册评价'
+        },
+      },
+      {
+        path:"report-check2/:stuNo",
+        component:()=>import('../views/teacher/report-check2'),
         meta:{
           title:'报告册评价'
         },

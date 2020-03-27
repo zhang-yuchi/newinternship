@@ -3,22 +3,24 @@
     <el-table
       :data="data[currentPage - 1]"
       :row-class-name="tableRowClassName"
+      border
       height="628"
+      style="width: 100%"
       v-loading="loading" element-loading-text="加 载 中"
     element-loading-spinner="el-icon-loading"
     >
-      <el-table-column prop="stuNo" label="学号" width="150" fixed>
+      <el-table-column prop="stuno" label="学号" width="180" fixed>
       </el-table-column>
       <el-table-column prop="name" label="姓名" width="150" fixed>
       </el-table-column>
-      <el-table-column prop="sex" label="性别" width="200"> </el-table-column>
-      <el-table-column prop="age" label="年龄" width="200"> </el-table-column>
+      <el-table-column prop="sex" label="性别" width="150"> </el-table-column>
+      <el-table-column prop="age" label="年龄" width="150"> </el-table-column>
       <el-table-column prop="college" label="学院" width="200">
       </el-table-column>
       <el-table-column prop="major" label="专业" width="200"> </el-table-column>
-      <el-table-column prop="corpName" label="实习企业" width="200">
+      <el-table-column prop="corp" label="实习企业" width="200">
       </el-table-column>
-      <el-table-column prop="corpPosition" label="实习岗位" width="200">
+      <el-table-column prop="position" label="实习岗位" width="200">
       </el-table-column>
       <el-table-column
         prop="corpTeacherNo"
@@ -45,9 +47,9 @@
         width="100"
       >
       </el-table-column>
-      <el-table-column fixed="right" label="报告册" width="100">
+      <el-table-column fixed="right" label="报告册(一)" width="100">
         <template slot-scope="scope">
-          <el-button @click="reportCheck(scope.row)" type="text" size="small"
+          <el-button @click="reportCheck1(scope.row)" type="text" size="small"
             >评价</el-button
           >
         </template>
@@ -57,7 +59,7 @@
       id="fenye"
       background
       layout="prev, pager, next"
-      :total="tableData['length']"
+      :total="arrlength"
       :current-page="currentPage"
       :page-size="pageSize"
       @prev-click="prevClick()"
@@ -92,9 +94,19 @@ export default {
   components: {
     fillfilter
   },
+  data() {
+    return {
+      tableData: [],
+      data: [],
+      currentPage: 1,
+      pageSize: 10,
+      loading:true,
+      arrlength:0
+    };
+  },
   methods: {
-    reportCheck(item) {
-      this.$router.push("/teacher/report-check/" + item.stuNo);
+    reportCheck1(item) {
+      this.$router.push("/teacher/report-check1/" + item.stuno);
     },
     tableRowClassName({ row, rowIndex }) {
       if (this.data[this.currentPage-1][rowIndex].reportFlag === 2) {
@@ -115,8 +127,8 @@ export default {
       console.log(this.currentPage);
     },
     filterClick(e) {
-      console.log("父组件拿到：" + e);
       let arr = [];
+      this.currentPage = 1
       if (e == 3) {
         // 全部
         for (let item of this.tableData) {
@@ -125,35 +137,28 @@ export default {
       } else if (e == 2) {
         //已填完
         for (let item of this.tableData) {
-          if (item.reportFilledFlag == 2) {
+          if (item.reportStage1Summary && item.reportStage2Summary) {
             arr.push(item);
           }
         }
       } else {
         //未填完
         for (let item of this.tableData) {
-          if (item.reportFilledFlag !== 2) {
+          if (!item.reportStage1Summary || !item.reportStage2Summary) {
             arr.push(item);
           }
         }
       }
+      this.arrlength = arr.length
       this.data = one2arr(arr, this.pageSize);
     }
   },
-  data() {
-    return {
-      tableData: [],
-      data: [],
-      currentPage: 1,
-      pageSize: 10,
-      loading:true
-    };
-  },
   mounted() {
     getStudentList().then(res => {
-      if (res.data.status == 1) {
+      if (res.data.status == 100) {
         // console.log(res);
         this.tableData = res.data.data;
+        this.arrlength = this.tableData.length
         this.data = one2arr(this.tableData, this.pageSize);
         if (this.tableData.length) {
           for (let item of this.tableData) {

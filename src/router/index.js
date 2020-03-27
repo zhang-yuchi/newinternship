@@ -106,23 +106,39 @@ const routes = [
     children:[
       {
         path:"",
-        redirect:"/teacher/stu-list",
+        redirect:"/teacher/profile",
+      },
+      {
+        path:"profile",
+        component:()=>import('../views/teacher/profile'),
         meta:{
-          title:'学生信息'
+          title:'我的信息'
         },
+      },
+      {
+        path:"modify-profile",
+        component:()=>import('../views/teacher/modify-profile')
       },
       {
         path:"stu-list",
         component:()=>import('../views/teacher/stu-list'),
         meta:{
-          title:'学生信息'
+          title:'学生列表'
         },
       },
       {
-        path:"report-list",
-        component:()=>import('../views/teacher/report-list'),
+        path:"report-list1",
+        component:()=>import('../views/teacher/report-list1'),
         meta:{
-          title:'报告册填写情况',
+          title:'报告册(一)填写情况',
+          keepAlive:true
+        },
+      },
+      {
+        path:"report-list2",
+        component:()=>import('../views/teacher/report-list2'),
+        meta:{
+          title:'报告册(二)填写情况',
           keepAlive:true
         },
       },
@@ -135,10 +151,17 @@ const routes = [
         },
       },
       {
-        path:"report-check/:stuNo",
-        component:()=>import('../views/teacher/report-check'),
+        path:"report-check1/:stuNo",
+        component:()=>import('../views/teacher/report-check1'),
         meta:{
-          title:'报告册评价'
+          title:'报告册(一)评价'
+        },
+      },
+      {
+        path:"report-check2/:stuNo",
+        component:()=>import('../views/teacher/report-check2'),
+        meta:{
+          title:'报告册(二)评价'
         },
       },
       {

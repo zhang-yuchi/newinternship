@@ -3,11 +3,12 @@
     <el-table
       :data="data[currentPage - 1]"
       :row-class-name="tableRowClassName"
-      height="628"
       border
+      height="628"
       style="width: 100%"
-      v-loading="loading" element-loading-text="加 载 中"
-    element-loading-spinner="el-icon-loading"
+      v-loading="loading"
+      element-loading-text="加 载 中"
+      element-loading-spinner="el-icon-loading"
     >
       <el-table-column prop="stuno" label="学号" width="180" fixed>
       </el-table-column>
@@ -20,7 +21,7 @@
       <el-table-column prop="major" label="专业" width="200"> </el-table-column>
       <el-table-column prop="corp" label="实习企业" width="200">
       </el-table-column>
-      <el-table-column prop="corpPosition" label="实习岗位" width="200">
+      <el-table-column prop="position" label="实习岗位" width="200">
       </el-table-column>
       <el-table-column
         prop="corpTeacherNo"
@@ -47,15 +48,14 @@
         width="100"
       >
       </el-table-column>
-      <el-table-column fixed="right" label="鉴定表" width="100">
+      <el-table-column fixed="right" label="报告册(二)" width="100">
         <template slot-scope="scope">
-          <el-button @click="decisionCheck(scope.row)" type="text" size="small"
+          <el-button @click="reportCheck2(scope.row)" type="text" size="small"
             >评价</el-button
           >
         </template>
       </el-table-column>
     </el-table>
-
     <el-pagination
       id="fenye"
       background
@@ -95,17 +95,27 @@ export default {
   components: {
     fillfilter
   },
+  data() {
+    return {
+      tableData: [],
+      data: [],
+      currentPage: 1,
+      pageSize: 10,
+      loading: true,
+      arrlength: 0
+    };
+  },
   methods: {
+    reportCheck2(item) {
+      this.$router.push("/teacher/report-check2/" + item.stuno);
+    },
     tableRowClassName({ row, rowIndex }) {
-      if (this.data[this.currentPage-1][rowIndex].identifyFlag === 2) {
+      if (this.data[this.currentPage - 1][rowIndex].reportFlag === 2) {
         return "success-row";
-      } else if (this.data[this.currentPage-1][rowIndex].identifyFlag === 1) {
+      } else if (this.data[this.currentPage - 1][rowIndex].reportFlag === 1) {
         return "warning-row";
       }
       return "";
-    },
-    decisionCheck(item) {
-      this.$router.push("/teacher/decision-check/" + item.stuno);
     },
     prevClick() {
       this.currentPage--;
@@ -119,7 +129,7 @@ export default {
     },
     filterClick(e) {
       let arr = [];
-      this.currentPage = 1
+      this.currentPage = 1;
       if (e == 3) {
         // 全部
         for (let item of this.tableData) {
@@ -128,59 +138,49 @@ export default {
       } else if (e == 2) {
         //已填完
         for (let item of this.tableData) {
-          if (item.appraisalContent && item.appraisalSummary) {
+          if (item.reportStage1Summary && item.reportStage2Summary) {
             arr.push(item);
           }
         }
       } else {
         //未填完
         for (let item of this.tableData) {
-          if ( !item.appraisalContent || !item.appraisalSummary) {
+          if (!item.reportStage1Summary || !item.reportStage2Summary) {
             arr.push(item);
           }
         }
       }
-      this.arrlength = arr.length
+      this.arrlength = arr.length;
       this.data = one2arr(arr, this.pageSize);
     }
-  },
-  data() {
-    return {
-      tableData: [],
-      data: [],
-      currentPage: 1,
-      pageSize: 10,
-      loading:true,
-      arrlength:0
-    };
   },
   mounted() {
     getStudentList().then(res => {
       if (res.data.status == 100) {
         // console.log(res);
         this.tableData = res.data.data;
-        this.arrlength = this.tableData.length
+        this.arrlength = this.tableData.length;
         this.data = one2arr(this.tableData, this.pageSize);
         if (this.tableData.length) {
           for (let item of this.tableData) {
-            if (item.identifyFlag === 2) {
+            if (item.reportFlag == 2) {
               item.teaWrite = "已评价完";
-            } else if (item.identifyFlag === 1) {
+            } else if (item.reportFlag == 1) {
               item.teaWrite = "未评价完";
             } else {
               item.teaWrite = "未评价";
             }
-            if (item.identifyFilledFlag === 2) {
+            if (item.reportFilledFlag == 2) {
               item.stuWrite = "已填完";
-            } else if (item.identifyFilledFlag === 1) {
-              item.stuWrite = "填写中";
+            } else if (item.reportFilledFlag == 1) {
+              item.stuWrite = "一阶段已填";
             } else {
               item.stuWrite = "未填写";
             }
           }
         }
       }
-      this.loading = false
+      this.loading = false;
     });
   }
 };

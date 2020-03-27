@@ -2,20 +2,28 @@
 <template>
   <div class="main">
     <layout>
-      <el-col slot="nav" style="height:100%;" :span="24">
-        <el-menu
-          :default-active="activeNav"
-          :router="true"
-          class="el-menu-vertical-demo"
-        >
-          <el-menu-item index="/teacher/stu-list">
+      <el-col slot="nav" style="height:100%;" class="main-nav">
+        <el-menu :default-active="activeNav" :router="true">
+          <el-menu-item index="/teacher/profile">
             <i class="el-icon-user"></i>
-            <span slot="title">学生信息</span>
+            <span slot="title">我的信息</span>
           </el-menu-item>
-          <el-menu-item index="/teacher/report-list">
-            <i class="el-icon-edit"></i>
-            <span slot="title">报告册</span>
+          <el-menu-item index="/teacher/stu-list">
+            <template slot="title">
+              <i class="el-icon-s-order"></i>
+              <span slot="title">学生列表</span>
+            </template>
           </el-menu-item>
+          <el-submenu index="">
+            <template slot="title">
+              <i class="el-icon-edit"></i>
+              <span slot="title">报告册</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/teacher/report-list1">一阶段</el-menu-item>
+              <el-menu-item index="/teacher/report-list2">二阶段</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
           <el-menu-item index="/teacher/decision-list">
             <i class="el-icon-edit"></i>
             <span slot="title">鉴定表</span>
@@ -57,27 +65,6 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.activeNav = this.$router.history.current.path;
-    getStage().then(res => {
-      // console.log(res);
-      if (res.data.status == 1) {
-        const states = res.data.data;
-        this.$store.commit("changeReportStage1", states.isReportStage1Open);
-        this.$store.commit("changeReportStage2", states.isReportStage2Open);
-        this.$store.commit("changeReportStage3", states.isReportStage3Open);
-        this.$store.commit(
-          "changeIdentifyStage1",
-          states.isIdentifyFormStage1Open
-        );
-        this.$store.commit(
-          "changeIdentifyStage2",
-          states.isIdentifyFormStage2Open
-        );
-        this.$store.commit(
-          "changeIdentifyStage3",
-          states.isIdentifyFormStage3Open
-        );
-      }
-    });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -92,6 +79,10 @@ export default {
 <style scoped>
 .main {
   height: 100%;
+  min-width: 1200px;
+}
+.main-nav {
+  min-width: 150px !important;
 }
 .el-menu {
   height: 100%;

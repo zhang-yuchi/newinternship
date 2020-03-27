@@ -2,9 +2,7 @@
   <div class="report-check">
     <el-card class="box-card">
       <div slot="header">
-        <span style="color:rgb(64,158,255);" class="clearfix"
-          >{{ info.name }}的报告册</span
-        >
+        <span style="color:rgb(64,158,255);">{{ info.name }}的报告册</span>
       </div>
       <div class="clearfix">
         <div class="text item twoItem">
@@ -20,83 +18,68 @@
           <span class="header-content">{{ info.stuno }}</span>
         </div>
         <div class="text item twoItem">
+          <span class="header-title">学院指导教师工号</span>
+          <span class="header-content">{{ info.teachno }}</span>
+        </div>
+        <div class="text item twoItem">
           <span class="header-title">实习单位</span>
-          <span class="header-content">{{ info.corp ?info.corp:"未填写"}}</span>
+          <span class="header-content">{{
+            info.corp ? info.corp : "未填写"
+          }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习岗位</span>
-          <span class="header-content">{{ info.position ?info.position:"未填写"}}</span>
+          <span class="header-content">{{
+            info.position ? info.position : "未填写"
+          }}</span>
+        </div>
+        <div class="text item twoItem">
+          <span class="header-title">实习日期</span>
+          <span class="header-content">{{info.starttime}} 至 {{info.endtime}}</span>
         </div>
       </div>
 
-      <div class="state-title">鉴定表</div>
+      <div class="state-title">第一阶段</div>
       <form-item
-        title="实习内容"
-        :content="appraisal.content ? appraisal.content : '暂无'"
+        title="第一阶段实习总结"
+        :content="report.stage1Summary?report.stage1Summary:'暂无'"
+        :time="reportdate.stage1Fill"
       ></form-item>
       <form-item
-        title="自我总结"
-        :content="appraisal.summary ? appraisal.summary : '暂无'"
-      ></form-item>
-      <form-item
-        title="实习单位指导教师评语"
-        :content="appraisal.corpTeacherOpinion ? appraisal.corpTeacherOpinion : '暂无'"
-        :time="appraisaldate.corpteacher ? appraisaldate.corpteacher : '暂无'"
-      ></form-item>
-      <div class="item-title">成绩评定</div>
-      <el-select
-        v-model="appraisal.corpTeacherGrade"
-        placeholder="请选择"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
-      </el-select>
-      <form-item
-        title="实习单位指审核意见"
-        :content="appraisal.corpOpinion ? appraisal.corpOpinion : '暂无'"
-        :time="appraisaldate.corp ? appraisaldate.corp : '暂无'"
-      ></form-item>
-      <div class="item-title">所在学院指导老师成绩评定</div>
-      <el-select
-        v-model="appraisal.teacherGrade"
-        placeholder="请选择"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
-      </el-select>
-      <form-item
-        title="综合实习成绩评定"
-        :content="appraisal.synthGrade ? appraisal.synthGrade : '暂无成绩'"
-        :time="appraisaldate.synth ? appraisaldate.synth : '暂无'"
+        title="第一阶段实习指导方式"
+        :content="report.stage1GuideWay"
+        :time="reportdate.stage1Duration"
       ></form-item>
       <el-form
-        :model="appraisal"
+        :model="report"
         status-icon
         :rules="rules"
         label-width="100px"
         class="demo-ruleForm"
         label-position="top"
       >
-        <el-form-item label="所在学院实习领导小组意见" prop="appraisal">
+        <el-form-item label="教师评语" prop="report">
           <el-input
             type="textarea"
             :rows="5"
-            v-model="appraisal.leaderOpinion"
+            v-model="report.stage1Comment"
           ></el-input>
+          <limit :maxLength="500" :testString="report.stage1Comment"></limit>
         </el-form-item>
-
+        <div class="item-title">成绩评定</div>
         <el-form-item>
-          <el-button type="primary" @click="submitDecision" :loading="loading"
+          <el-select v-model="report.stage1Grade" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitReport1" :loading="loading"
             >提交</el-button
           >
         </el-form-item>
@@ -109,10 +92,7 @@
 import formItem from "../../components/content/form-block";
 import limit from "../../components/content/limit-number";
 import { Obj2html, date2str } from "../../command/utils";
-import {
-  getStudentIdentify,
-  completeDecision
-} from "../../network/index";
+import { getStudentReport, completeRep1 } from "../../network/index";
 export default {
   components: {
     formItem,
@@ -126,13 +106,23 @@ export default {
         college: "加载中",
         major: "加载中",
         stuno: "加载中",
+        teachno: "加载中",
         corp: "加载中",
         position: "加载中",
-        starttime:"加载中",
+        starttime:'加载中',
         endtime:"加载中"
       },
-      appraisaldate:{},
-      appraisal:{},
+      reportdate: {
+        stage1Duration: "加载中",
+        stage1Fill: "加载中"
+      },
+      report: {
+        stage1GuideWay: "加载中",
+        stage1Summary: "加载中",
+        stage1Comment: "",
+        stage1Grade: ""
+      },
+      rules: {},
       options: [
         {
           value: "优秀",
@@ -154,27 +144,31 @@ export default {
           value: "不及格",
           label: "不及格"
         }
-      ],
-      rules: {}
+      ]
     };
   },
   methods: {
-    submitDecision() {
-      let obj = {
-        corpTeacherGrade: this.appraisal.corpTeacherGrade,
-        teacherGrade: this.appraisal.teacherGrade,
-        leaderOpinion: this.appraisal.leaderOpinion
-      };
-      
-      console.log(obj);
+    submitReport1() {
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
         type: "info"
       })
         .then(() => {
+          // console.log(this.res);
           this.loading = true;
-          completeDecision(this.$route.params.stuNo ,obj).then(res => {
+          if (this.report.stage1Comment.length < 60) {
+            this.$alert("一阶段评语不能低于60字", "提交失败", {
+              confirmButtonText: "确定"
+            });
+            this.loading = false;
+            throw "false";
+          }
+          let obj = {};
+          obj.stage1Comment = this.report.stage1Comment
+          obj.stage1Grade = this.report.stage1Grade
+          console.log(obj);
+          completeRep1( this.$route.params.stuNo,obj).then(res => {
             console.log(res);
             if (res.data.status == 100) {
               this.$message({
@@ -183,16 +177,15 @@ export default {
               });
               this.$router.back();
             } else {
-              this.loading = false
               this.$message({
                 type: "error",
                 message: "提交失败：" + res.data.message
               });
+              this.loading = false
             }
           });
         })
         .catch(() => {
-          this.loading = false;
           this.$message({
             type: "info",
             message: "已取消提交"
@@ -202,9 +195,9 @@ export default {
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    getStudentIdentify(stuNo).then(res=>{
+    getStudentReport(stuNo).then(res => {
       console.log(res);
-      if(res.data.status == 100){
+      if (res.data.status == 100) {
         this.info = res.data.data.student;
         if (this.info.starttime) {
           this.info.starttime = date2str(this.info.starttime);
@@ -212,38 +205,19 @@ export default {
         if (this.info.endtime) {
           this.info.endtime = date2str(this.info.endtime);
         }
-
-        this.appraisaldate = res.data.data.appraisaldate
-        if (this.appraisaldate.corpteacher) {
-          this.appraisaldate.corpteacher = date2str(this.appraisaldate.corpteacher);
+        this.reportdate = res.data.data.reportdate;
+        if(this.reportdate.stage1Fill){
+          this.reportdate.stage1Fill = date2str(this.reportdate.stage1Fill)
         }
-        if (this.appraisaldate.corp) {
-          this.appraisaldate.corp = date2str(this.appraisaldate.corp);
-        }
-        if (this.appraisaldate.synth) {
-          this.appraisaldate.synth = date2str(this.appraisaldate.synth);
-        }
-        if (this.appraisaldate.leader) {
-          this.appraisaldate.leader = date2str(this.appraisaldate.leader);
-        }
-        
-        this.appraisal = res.data.data.appraisal
+        this.report.stage1Summary = Obj2html({str:this.report.stage1Summary}).str
+        this.report = res.data.data.report;
       }
-    })
+    });
   }
 };
 </script>
 
 <style scoped>
-.box-card {
-  /* width: 480px; */
-  width: 80%;
-  transition: none;
-}
-.report-check {
-  display: flex;
-  justify-content: center;
-}
 .text {
   font-size: 14px;
 }
@@ -254,6 +228,10 @@ export default {
 .twoItem {
   width: 50%;
   float: left;
+}
+.box-card {
+  width: 80%;
+  transition: none;
 }
 .header-title,
 .header-content {
@@ -266,10 +244,26 @@ export default {
 .header-content {
   width: 350px;
 }
+.report-check {
+  display: flex;
+  justify-content: center;
+}
+.summary {
+  margin-left: 20px;
+  width: 456px;
+}
+.Divider {
+  padding: 10px 0;
+  color: rgb(64, 158, 255);
+  /* border-bottom: 1px solid #ddd; */
+}
 .state-title {
   padding: 20px 0;
   font-weight: 700;
   font-size: 20px;
+}
+.item-title {
+  line-height: 40px;
 }
 .clearfix::after {
   content: "";
@@ -277,8 +271,5 @@ export default {
   height: 0;
   clear: both;
   visibility: hidden;
-}
-.item-title {
-  line-height: 40px;
 }
 </style>

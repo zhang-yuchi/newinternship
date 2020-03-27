@@ -44,6 +44,10 @@
             <el-menu-item index="/student/decision-check">第一阶段查看</el-menu-item>
             <el-menu-item index="/student/decision">第一阶段填写</el-menu-item>
           </el-submenu>
+          <el-submenu index="5">
+            <template slot="title">文件下载</template>
+            <el-menu-item index="/student/download">查看队列</el-menu-item>
+          </el-submenu>
         </el-menu>
       </div>
       <el-col slot="nav" style="height:100%;" :span="24">

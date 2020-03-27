@@ -19,7 +19,7 @@
               </div>
             </el-col>
           </el-row>
-          <!-- <el-row>
+          <el-row>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">微信</span>
@@ -32,14 +32,14 @@
                 <span class="item-content">{{studentInfo.age}}</span>
               </div>
             </el-col>
-          </el-row> -->
+          </el-row>
           <el-row>
-            <!-- <el-col :span="12">
+            <el-col :span="12">
               <div class="text item">
                 <span class="item-title">电话</span>
                 <span class="item-content">{{studentInfo.phone}}</span>
               </div>
-            </el-col> -->
+            </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">专业</span>
@@ -62,12 +62,12 @@
             </el-col>
           </el-row>
           <el-row>
-            <!-- <el-col :span="12">
+            <el-col :span="12">
               <div class="text item">
                 <span class="item-title">qq</span>
                 <span class="item-content">{{studentInfo.qq}}</span>
               </div>
-            </el-col> -->
+            </el-col>
             <el-col :span="12">
               <div class="text item">
                 <span class="item-title">学院</span>
@@ -104,28 +104,28 @@
           <div class="card-title">导师信息</div>
           <div class="text item">
             <span class="item-title">姓名</span>
-            <span class="item-content">{{teacherInfo.name}}</span>
+            <span class="item-content">{{studentInfo.name}}</span>
           </div>
 
           <div class="text item">
             <span class="item-title">工号</span>
-            <span class="item-content">{{teacherInfo.teacherNo}}</span>
+            <span class="item-content">{{studentInfo.teachno}}</span>
           </div>
           <div class="text item">
             <span class="item-title">性别</span>
-            <span class="item-content">{{teacherInfo.sex}}</span>
+            <span class="item-content">{{studentInfo.sex}}</span>
           </div>
           <div class="text item">
             <span class="item-title">年龄</span>
-            <span class="item-content">{{teacherInfo.age}}</span>
+            <span class="item-content">{{studentInfo.age}}</span>
           </div>
           <div class="text item">
             <span class="item-title">学院</span>
-            <span class="item-content">{{teacherInfo.college}}</span>
+            <span class="item-content">{{studentInfo.college}}</span>
           </div>
         </el-card>
 
-        <el-card class="box-card" v-if="!hasTeacher" v-loading="teacherLoading">
+        <!-- <el-card class="box-card" v-if="!hasTeacher" v-loading="teacherLoading">
           <div class="card-title" style="margin-bottom:18px;">选择导师</div>
           <el-select v-model="teacherNo" placeholder="请选择导师">
             <el-option
@@ -141,7 +141,7 @@
           <div style="margin-top:18px;">
             <el-button type="primary" @click="selectTeacher">提交</el-button>
           </div>
-        </el-card>
+        </el-card> -->
       </el-col>
     </el-row>
 
@@ -151,28 +151,28 @@
           <div class="card-title">导师信息</div>
           <div class="text item">
             <span class="item-title">姓名</span>
-            <span class="item-content">{{teacherInfo.name}}</span>
+            <span class="item-content">{{studentInfo.name}}</span>
           </div>
 
           <div class="text item">
             <span class="item-title">工号</span>
-            <span class="item-content">{{teacherInfo.teacherNo}}</span>
+            <span class="item-content">{{studentInfo.teacherNo}}</span>
           </div>
           <div class="text item">
             <span class="item-title">性别</span>
-            <span class="item-content">{{teacherInfo.sex}}</span>
+            <span class="item-content">{{studentInfo.sex}}</span>
           </div>
           <div class="text item">
             <span class="item-title">年龄</span>
-            <span class="item-content">{{teacherInfo.age}}</span>
+            <span class="item-content">{{studentInfo.age}}</span>
           </div>
           <div class="text item">
             <span class="item-title">院校</span>
-            <span class="item-content">{{teacherInfo.college}}</span>
+            <span class="item-content">{{studentInfo.college}}</span>
           </div>
         </el-card>
 
-        <el-card class="box-card" v-if="!hasTeacher" v-loading="teacherLoading">
+        <!-- <el-card class="box-card" v-if="!hasTeacher" v-loading="teacherLoading">
           <div class="card-title" style="margin-bottom:18px;">选择导师</div>
           <el-select v-model="teacherNo" placeholder="请选择导师">
             <el-option
@@ -188,7 +188,7 @@
           <div style="margin-top:18px;">
             <el-button type="primary" @click="selectTeacher">提交</el-button>
           </div>
-        </el-card>
+        </el-card> -->
       </el-col>
     </el-row>
   </div>
@@ -211,8 +211,26 @@ export default {
   data() {
     //这里存放数据
     return {
-      studentInfo: {},
-      teacherInfo: {},
+      studentInfo: {
+        qq:"",
+        college:"",
+        corp:"",
+        created:"",
+        sex:"",
+        teachno:"",
+        wechat:"",
+        endtime:"",
+        starttime:"",
+        majorcode:"",
+        major:"",
+        phone:"",
+        idcard:"",
+        name:"",
+        collegecode:"",
+        position:"",
+        stuno:"",
+        status:""
+      },
       teacherLoading: false,
       studentLoading: false,
       hasTeacher: true,
@@ -231,75 +249,52 @@ export default {
       this.teacherLoading = true;
       getStudentInfo()
         .then(res => {
-          console.log(res);
-          this.studentInfo = Object.assign({}, res.data.data, {
-            starttime:moment(res.data.data.starttime).format("YYYY-MM-DD HH:mm:ss"),
-            endtime:moment(res.data.data.endtime).format("YYYY-MM-DD HH:mm:ss"),
-          });
+          // console.log(res);
+          let data = res.data.data
+          let hasStartTime = !!data.starttime
+          let hasEndTime = !!data.endtime
+          hasStartTime&&formatTime(data,"starttime")
+          hasEndTime&&formatTime(data,"endtime")
+          this.studentInfo = Object.assign({}, this.studentInfo, res.data.data);
           this.studentInfo = replaceNull(this.studentInfo);
           // console.log(this.studentInfo)
         })
         .finally(() => {
           this.studentLoading = false;
-        })
-        .then(() => {
-          console.log(this.studentInfo.teacherNo);
-          if (this.studentInfo.teacherNo !== "暂无") {
-            getTeacherInfo().then(res => {
-              console.log(res);
-              this.hasTeacher = true;
-              this.teacherInfo = Object.assign({}, res.data.data, {});
-              this.teacherInfo = replaceNull(this.teacherInfo);
-              // console.log(this.teacherInfo)
-            });
-          } else {
-            // console.log(111)
-            selectTeacher().then(res => {
-              // console.log(res)
-              this.hasTeacher = false;
-              if (res.data.status == 1) {
-                this.teachers = [];
-                res.data.data.map(item => {
-                  this.teachers.push({
-                    value: item.teacherNo,
-                    label: item.name
-                  });
-                });
-              }
-            });
-          }
-        })
-        .finally(() => {
           this.teacherLoading = false;
-        });
-    },
-    selectTeacher() {
-      // console.log(11)
-      if (!this.teacherNo) {
-        this.$message.error("请先选择导师!");
-        return;
-      }
-      this.$confirm("确定你的选择", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          selectTeacherByNo({ tNo: this.teacherNo }).then(res => {
-            // console.log(res)
-            if (res.data.status == 1) {
-              this.$message.success("提交成功!");
-              this.getInfo();
-            }
-          });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消"
-          });
-        });
-    }
+        function formatTime(obj,key){
+          obj[key] = moment(obj[key]).format('YYYY-MM-DD HH:mm:ss')
+        }
+    },
+    // selectTeacher() {
+    //   // console.log(11)
+    //   if (!this.teacherNo) {
+    //     this.$message.error("请先选择导师!");
+    //     return;
+    //   }
+    //   this.$confirm("确定你的选择", "提示", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning"
+    //   })
+    //     .then(() => {
+    //       selectTeacherByNo({ tNo: this.teacherNo }).then(res => {
+    //         // console.log(res)
+    //         if (res.data.status == 1) {
+    //           this.$message.success("提交成功!");
+    //           this.getInfo();
+    //         }
+    //       });
+    //     })
+    //     .catch(() => {
+    //       this.$message({
+    //         type: "info",
+    //         message: "已取消"
+    //       });
+    //     });
+    // }
+    
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},

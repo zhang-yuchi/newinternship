@@ -10,13 +10,17 @@ service.interceptors.request.use((config) => {
   config.headers = Object.assign({}, config.headers, {
     token: sessionStorage.getItem('token')
   })
+  // console.log(config.data);
   // console.log(config);
   if(config.url==="/pdf"&&config.method==="delete"){
 
-  }else{
+  }else if(config.url==="/student/info"&&config.method==="post"){
+    config.headers['Content-Type'] = "application/json"
+  }
+  else{
     config.data = qs.stringify(config.data)
   }
-
+  console.log(config.data);
   return config
 })
 service.interceptors.response.use((res) => {
@@ -62,6 +66,10 @@ export const getNewsDetail = (id) => {
 export const modifyPassword = (params)=>{
   return service.post('/auth/password',params)
 }
+//判断token是否过期
+export const checkToken = ()=>{
+  return service.get(getRandom('/auth/token/expire'))
+}
 //------------------学生接口----------------------------
 //获取学生本人信息
 export const getStudentInfo = () => {
@@ -80,7 +88,7 @@ export const selectTeacherByNo = (params) => {
 }
 //修改学生信息
 export const modifySelfInfo = (params) => {
-  return service.post('/student/selfInfo', params)
+  return service.post('/student/info', params)
 }
 //修改实习开始和结束
 export const modifyReportDate = (params) => {
@@ -96,11 +104,14 @@ export const checkCorp = () => {
 }
 //学生修改职位
 export const modifyPosition = (params) => {
-  return service.post('/student/student/position', params)
+  return service.post('/student/student/position', params,{headers:{
+    'Content-Type':'application/x-www-form-urlencoded'
+  }})
 }
 //企业信息更改
 export const modifyCorp = (params) => {
-  return service.post('/student/corp', params)
+  console.log(params);
+  return service.post('/student/corp',params)
 }
 //获取学生报告册信息
 export const getReportInfo = () => {
@@ -114,13 +125,16 @@ export const submitReportStage1 = (params) => {
 export const submitReportStage2 = (params) => {
   return service.post('/student/report/stage2', params)
 }
+export const submitReportDate = (params)=>{
+  return service.post("/student/report/date",params)
+}
 //查看鉴定表
 export const getDecisionTable = () => {
-  return service.get('/student/identifyForm')
+  return service.get('/student/appraisal')
 }
 //提交鉴定表
 export const submitDecision = (params) => {
-  return service.post('/student/identify', params)
+  return service.post('/student/appraisal', params)
 }
 //获取当前阶段
 export const getStage = () => {

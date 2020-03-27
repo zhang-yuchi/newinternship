@@ -14,7 +14,7 @@
       >
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="企业名称" prop="corpName">
+            <el-form-item label="企业名称" prop="corpname">
               <el-input type="text" v-model="ruleForm.corpname" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
@@ -26,7 +26,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="法人" prop="legalPerson">
+            <el-form-item label="法人" prop="legalperson">
               <el-input type="text" v-model="ruleForm.legalperson" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
@@ -219,7 +219,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import formLayout from "../../components/content/form-layout";
-import { checkCorp ,modifyCorp } from "../../network";
+import { checkCorp, modifyCorp } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -229,42 +229,23 @@ export default {
     var checkNull = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("必填不能为空"));
-      }else{
-        callback()
+      } else {
+        callback();
       }
-
     };
     //这里存放数据
     return {
-      ruleForm: {
-        address: "",
-        approvalDate: "",
-        businessScope: "",
-        corpName: "",
-        createDate: "",
-        creditCode: "",
-        endBushiness: "",
-        id: "",
-        isCorpChecked: "",
-        legalPerson: "",
-        regAuthority: "",
-        regCode: "",
-        regStatus: "",
-        registerCapita: "",
-        startBusiness: "",
-        stuNo: "",
-        type: ""
-      },
-      btnLoading:false,
+      ruleForm: {},
+      btnLoading: false,
       rules: {
-        corpName: [
+        corpname: [
           {
             validator: checkNull,
             required: true,
             trigger: "blur"
           }
         ],
-        legalPerson: [
+        legalperson: [
           {
             validator: checkNull,
             required: true,
@@ -285,19 +266,52 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
-          this.btnLoading = true
-          modifyCorp(this.ruleForm)
-          .then(res=>{
-            console.log(res)
-            if(res.data.status==1){
-              this.$message.success('修改成功!')
-              this.getCorp()
-              
-            }
+          this.btnLoading = true;
+          // console.log(this.ruleForm);
+          const {
+            id,
+            corpname,
+            legalperson,
+            type,
+            registercapital,
+            createdate,
+            startbusiness,
+            endbusiness,
+            regauthority,
+            approvaldate,
+            regstatus,
+            address,
+            businessScope,
+            creditcode,
+            regcode
+          } = this.ruleForm;
+          modifyCorp({
+            id,
+            corpname,
+            legalperson,
+            type,
+            registercapital,
+            createdate,
+            startbusiness,
+            endbusiness,
+            regauthority,
+            approvaldate,
+            regstatus,
+            address,
+            businessScope,
+            creditcode,
+            regcode
           })
-          .finally(()=>{
-            this.btnLoading = false
-          })
+            .then(res => {
+              console.log(res);
+              if (res.data.status == 100) {
+                this.$message.success("修改成功!");
+                this.getCorp();
+              }
+            })
+            .finally(() => {
+              this.btnLoading = false;
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -309,7 +323,7 @@ export default {
       checkCorp()
         .then(res => {
           // console.log(res);
-          if (res.data.status == 1) {
+          if (res.data.status == 100) {
             this.ruleForm = Object.assign({}, res.data.data, {});
           }
         })
@@ -342,11 +356,11 @@ export default {
   font-weight: bold;
   margin-bottom: 16px;
 }
-.hidden-sm{
+.hidden-sm {
   display: none;
 }
-@media screen and (min-width:768px) {
-  .hidden-sm{
+@media screen and (min-width: 768px) {
+  .hidden-sm {
     display: block !important;
   }
 }

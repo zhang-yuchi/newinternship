@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import { checkToken } from '../network'
+import vm from 'element-ui'
 Vue.use(VueRouter)
 
 const routes = [
@@ -160,6 +161,23 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
+  console.log(to);
+  if(to.path.match(/^\/student/)){
+    // console.log('123');
+    console.log(to.path.match(/student/));
+    checkToken().then(res=>{
+      // console.log(res);
+      if(res.data.status!==100){
+        vm.MessageBox({
+          title:"身份验证过期",
+          message:"请退出重新登录"
+        })
+        .finally(()=>{
+          router.push('/')
+        })
+      }
+    })
+  }
   if (to.meta.title) {
     document.title = to.meta.title
   }

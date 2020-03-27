@@ -16,12 +16,12 @@
         <el-form-item label="实习内容"  prop="practiceContent">
           <el-input
             type="textarea"
-            v-model="ruleForm.practiceContent"
+            v-model="ruleForm.content"
             :rows="15"
             autocomplete="off"
             :disabled="!$store.state.isIdentifyFormStage1Open"
           ></el-input>
-          <limit :maxLength="1200" :testString="ruleForm.practiceContent"></limit>
+          <limit :maxLength="1200" :testString="ruleForm.content"></limit>
         </el-form-item>
         <div class="tip">
           <div class="tip-title">实习自我总结(简明扼要认真填写)</div>
@@ -32,9 +32,9 @@
           <div class="p">4.实习总结及体会：要求条理清楚、逻辑性强；着重写出对实习内容的总结、体会和感受，特别是自己所学的专业理论与实践的差距和今后应努力的方向。</div>
         </div>
         <el-form-item label prop="selfSummary">
-          <el-input type="textarea" :disabled="!$store.state.isIdentifyFormStage1Open" :rows="10" v-model="ruleForm.selfSummary" autocomplete="off"></el-input>
+          <el-input type="textarea" :disabled="!$store.state.isIdentifyFormStage1Open" :rows="10" v-model="ruleForm.summary" autocomplete="off"></el-input>
         </el-form-item>
-        <limit :maxLength="1200" :testString="ruleForm.selfSummary"></limit>
+        <limit :maxLength="1200" :testString="ruleForm.summary"></limit>
         <el-form-item label="企业评价意见" prop="corpOpinion" >
           <el-input type="textarea" :rows="5" v-model="ruleForm.corpOpinion" :disabled="!$store.state.isIdentifyFormStage3Open"></el-input>
         </el-form-item>
@@ -64,8 +64,8 @@ export default {
     //这里存放数据
     return {
       ruleForm: {
-        practiceContent: "",
-        selfSummary: "",
+        content: "",
+        summary: "",
         corpOpinion: "",
         corpTeacherOpinion: ""
       },
@@ -87,8 +87,8 @@ export default {
           let temp = this.ruleForm
           this.btnLoading = true
           submitDecision(temp).then(res => {
-            // console.log(res);
-            if (res.data.status == 1) {
+            console.log(res);
+            if (res.data.status == 100) {
               this.$message.success("提交成功!");
               this.getTable();
             }
@@ -106,19 +106,16 @@ export default {
       this.formLoading = true
       getDecisionTable().then(res => {
         console.log(res);
-        if (res.data.status == 1) {
-          let temp = res.data.data;
+        if (res.data.status == 100) {
+          let temp = res.data.data.appraisal;
           // temp = Obj2text(temp);
-          const practiceContent = temp.sxContent;
-          const selfSummary = temp.selfSummary;
-          const corpOpinion = temp.corpOpinion;
-          const corpTeacherOpinion = temp.corpTeacherOpinion;
           this.ruleForm = {
-            practiceContent: temp.sxContent,
-            selfSummary: temp.selfSummary,
+            content: temp.content,
+            summary: temp.summary,
             corpOpinion: temp.corpOpinion,
             corpTeacherOpinion: temp.corpTeacherOpinion
           };
+          console.log(this.ruleForm);
         }
       })
       .finally(()=>{

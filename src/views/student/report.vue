@@ -102,10 +102,10 @@ import { text2html } from "../../command/utils";
 import {
   getReportInfo,
   submitReportStage1,
-  submitReportStage2
+  submitReportStage2,
+  submitReportDate
 } from "../../network";
 import moment from "moment";
-import axios from 'axios'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -160,48 +160,70 @@ export default {
       }
     },
     submit1Form(formName) {
-      this.$refs[formName]
-        .validate(valid => {
-          if (valid) {
-            // alert("submit!");
-            if (this.startTime) {
-              this.stage1Form.stage1GuideDate =
-                moment(this.startTime).format("YYYY-MM-DD") +
-                " - " +
-                moment(this.endTime).format("YYYY-MM-DD");
-            }
-            this.btnLoading = true;
-            submitReportStage1(this.stage1Form).then(res => {
+      console.log("hello");
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // alert("submit!");
+          if (this.startTime) {
+            this.stage1Form.stage1Duration =
+              moment(this.startTime).format("YYYY-MM-DD") +
+              " - " +
+              moment(this.endTime).format("YYYY-MM-DD");
+          }
+          this.btnLoading = true;
+          submitReportStage1(this.stage1Form)
+            .then(res => {
               // console.log(res)
-              if (res.data.status == 1) {
+              if (res.data.status == 100) {
+                return submitReportDate({
+                  stage1Duration: this.stage1Form.stage1Duration
+                });
+              }
+            })
+            .then(res => {
+              if (res.data.status === 100) {
                 this.$message.success("提交成功!");
                 this.getContent();
               }
+            })
+            .finally(() => {
+              this.btnLoading = false;
             });
-          } else {
-            console.log("error submit!!");
-            return false;
-          }
-        })
-        .finally(() => {
-          this.btnLoading = false;
-        });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     submit2Form(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.startTime) {
-            this.stage2Form.stage2GuideDate =
+            this.stage2Form.stage2Duration =
               moment(this.startTime).format("YYYY-MM-DD") +
               " - " +
               moment(this.endTime).format("YYYY-MM-DD");
             this.btnLoading = true;
             submitReportStage2(this.stage2Form)
               .then(res => {
-                // console.log(res)
-                this.$message.success("提交成功!");
-                this.getContent();
+                console.log(res);
+                if (res.data.status === 100) {
+                  // this.$message.success("提交成功!");
+                  // this.getContent();
+                  return submitReportDate({
+                    stage2Duration: this.stage2Form.stage2Duration
+                  });
+                }
               })
+              .then(res => {
+                if (res.data.status === 100) {
+                  this.$message.success("提交成功!");
+                  this.getContent();
+                  // return submitReportDate({stage2Duration:this.stage2Form.stage2Duration})
+                }
+                console.log(res);
+              })
+
               .finally(() => {
                 this.btnLoading = false;
               });
@@ -216,13 +238,14 @@ export default {
       this.pageLoading = true;
       getReportInfo()
         .then(res => {
+          console.log(res);
           this.stage1Form = {
-            stage1GuideDate: res.data.data.report.stage1GuideDate,
+            stage1GuideDate: res.data.data.reportdate.stage1Duration,
             stage1GuideWay: res.data.data.report.stage1GuideWay,
             stage1Summary: res.data.data.report.stage1Summary
           };
           this.stage2Form = {
-            stage2GuideDate: res.data.data.report.stage2GuideDate,
+            stage2GuideDate: res.data.data.reportdate.stage2Duration,
             stage2GuideWay: res.data.data.report.stage2GuideWay,
             stage2Summary: res.data.data.report.stage2Summary
           };

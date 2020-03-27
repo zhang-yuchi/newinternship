@@ -111,7 +111,7 @@ export default {
 
           if (this.state == 0) {
             this.showContent = {
-              stageGuideDate: res.data.data.reportdate,
+              stageGuideDate: res.data.data.reportdate.stage1Duration,
               stageGuideWay: data.stage1GuideWay,
               stageSummary: data.stage1Summary,
               stageGradeDate: data.stage1GradeDate,
@@ -120,14 +120,14 @@ export default {
             };
           } else if (this.state == 1) {
             this.showContent = {
-              stageGuideDate: res.data.data.reportdate,
+              stageGuideDate: res.data.data.reportdate.stage2Duration,
               stageGuideWay: data.stage2GuideWay,
               stageSummary: data.stage2Summary,
               stageGradeDate: data.stage2GradeDate,
               stageGrade: data.stage2Grade,
               stageComment: data.stage2Comment,
               totalGrade: data.totalGrade,
-              totalScore: data.totalScore
+              totalScore: data.totalEval
             };
           }
         })

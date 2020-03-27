@@ -20,27 +20,27 @@
         <el-form-item label="实习岗位" prop="position">
           <el-input type="text" v-model="ruleForm.position" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="实习开始时间" placeholder="选择日期" prop="gmtStart">
+        <el-form-item label="实习开始时间" placeholder="选择日期" >
           <el-date-picker type="date" v-model="ruleForm.starttime" autocomplete="off"></el-date-picker>
         </el-form-item>
-        <el-form-item label="实习结束时间" placeholder="选择日期" prop="gmtEnd">
+        <el-form-item label="实习结束时间" placeholder="选择日期" >
           <el-date-picker type="date" v-model="ruleForm.endtime" autocomplete="off"></el-date-picker>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
           <el-input type="text" v-model="ruleForm.phone" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="微信" prop="wechat">
+        <el-form-item label="微信" >
           <el-input type="text" v-model="ruleForm.wechat" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="QQ" prop="age">
+        <el-form-item label="QQ" >
           <el-input v-model.number="ruleForm.qq"></el-input>
         </el-form-item>
-        <el-form-item label="年龄" prop="age">
+        <el-form-item label="年龄" >
           <el-input v-model.number="ruleForm.age"></el-input>
         </el-form-item>
-        <el-form-item label="校外导师工号" prop="age">
+        <!-- <el-form-item label="校外导师工号" prop="age">
           <el-input v-model.number="ruleForm.corpTeacherNo"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" :loading="btnLoading" @click="submitForm('ruleForm')">修改</el-button>
         </el-form-item>
@@ -239,7 +239,7 @@ export default {
     return {
       ruleForm: {
         age: "",
-        corpTeacherNo: "",
+        // corpTeacherNo: "",
         phone: "",
         qq: "",
         wechat: "",
@@ -294,10 +294,16 @@ export default {
         if (valid) {
           // alert("submit!");
           this.btnLoading = true;
+          console.log(this.ruleForm);
+          let hasStartTime = !!this.ruleForm.starttime
+          let hasEndTime = !!this.ruleForm.endtime
+          hasStartTime&&formatTime(this.ruleForm,"starttime")
+          hasEndTime&&formatTime(this.ruleForm,"endtime")
+          console.log(this.ruleForm);
           modifySelfInfo(this.ruleForm)
             .then(res => {
               // console.log(res);
-              if (res.data.status == 1) {
+              if (res.data.status == 100) {
                 this.$message.success("修改成功!");
                 this.getInfo();
               }
@@ -311,6 +317,9 @@ export default {
           return false;
         }
       });
+      function formatTime(data,key){
+        data[key] = moment(data[key]).format("YYYY-MM-DD HH:mm:ss")
+      }
     },
 
     handleClose(done) {},
@@ -398,7 +407,9 @@ export default {
       getStudentInfo()
         .then(res => {
           console.log(res);
-          this.ruleForm = res.data.data;
+          let {qq,age,phone,wechat,position,starttime,endtime} = res.data.data
+          this.ruleForm = {qq,age,phone,wechat,position,starttime,endtime};
+          console.log(this.ruleForm);
           this.timeForm.gmtStart = res.data.data.gmtStart;
           this.timeForm.gmtEnd = res.data.data.gmtEnd;
         })

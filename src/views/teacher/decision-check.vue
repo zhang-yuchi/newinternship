@@ -226,7 +226,6 @@ export default {
         if (this.appraisaldate.leader) {
           this.appraisaldate.leader = date2str(this.appraisaldate.leader);
         }
-        
         this.appraisal = res.data.data.appraisal
       }
     })

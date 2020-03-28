@@ -110,9 +110,8 @@ export default {
       this.$router.push("/teacher/report-check2/" + item.stuno);
     },
     tableRowClassName({ row, rowIndex }) {
-      if (this.data[this.currentPage - 1][rowIndex].reportFlag === 2) {
-        return "success-row";
-      } else if (this.data[this.currentPage - 1][rowIndex].reportFlag === 1) {
+      let item = this.data[this.currentPage - 1][rowIndex]
+      if (!item.reportStage2Comment || !item.reportStage2Grade || !item.reportTotalEval) {
         return "warning-row";
       }
       return "";
@@ -138,14 +137,14 @@ export default {
       } else if (e == 2) {
         //已填完
         for (let item of this.tableData) {
-          if (item.reportStage1Summary && item.reportStage2Summary) {
+          if (item.reportStage2Summary) {
             arr.push(item);
           }
         }
       } else {
         //未填完
         for (let item of this.tableData) {
-          if (!item.reportStage1Summary || !item.reportStage2Summary) {
+          if (!item.reportStage2Summary) {
             arr.push(item);
           }
         }
@@ -163,19 +162,15 @@ export default {
         this.data = one2arr(this.tableData, this.pageSize);
         if (this.tableData.length) {
           for (let item of this.tableData) {
-            if (item.reportFlag == 2) {
+            if (item.reportStage2Comment && item.reportStage2Grade && item.reportTotalEval) {
               item.teaWrite = "已评价完";
-            } else if (item.reportFlag == 1) {
+            } else {
               item.teaWrite = "未评价完";
-            } else {
-              item.teaWrite = "未评价";
-            }
-            if (item.reportFilledFlag == 2) {
+            } 
+            if (item.reportStage2Summary) {
               item.stuWrite = "已填完";
-            } else if (item.reportFilledFlag == 1) {
-              item.stuWrite = "一阶段已填";
             } else {
-              item.stuWrite = "未填写";
+              item.stuWrite = "未填完";
             }
           }
         }

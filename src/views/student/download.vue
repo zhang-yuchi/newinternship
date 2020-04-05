@@ -4,8 +4,8 @@
     <div class="load-title">文件下载</div>
     <div class="target">{{reportMsg}}</div>
     <div class="target">{{appiMsg}}</div>
-    <el-button type="primary" @click="downloadFile(true)" size="mini">下载报告册</el-button>
-    <el-button type="warning" @click="downloadFile(false)" size="mini">下载鉴定表</el-button>
+    <el-button type="primary" @click="downloadFile(true)" size="mini">加入报告册到队列</el-button>
+    <el-button type="warning" @click="downloadFile(false)" size="mini">加入鉴定表到队列</el-button>
     <el-button type="danger" size="mini" @click="DeleteSelected">删除所选项</el-button>
     <el-button icon="el-icon-refresh" size="mini" @click="getList"></el-button>
     <el-table
@@ -28,16 +28,20 @@
       <el-table-column prop="name" label="状态" width="120">
         <template slot-scope="scope">
           <el-tag
+            v-if="!scope.row.failed"
             :type="scope.row.converting?'warning':'success'"
           >{{scope.row.converting?"转换中":"转换完成"}}</el-tag>
+          <el-tag
+            v-if="scope.row.failed"
+            :type="'danger'"
+          >转换失败</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="结果" width="120">
         <template slot-scope="scope">
           <el-tag
-            v-if="!scope.row.converting"
             :type="scope.row.failed?'danger':'success'"
-          >{{scope.row.failed?"失败":"成功"}}</el-tag>
+          >{{scope.row.failed?'失败':'成功'}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -81,7 +85,7 @@ export default {
       currentPage: 0,
       pageSize: 7,
       tableLoading: false,
-      poller:null,
+      poller:null
     };
   },
   //监听属性 类似于data概念
@@ -119,7 +123,12 @@ export default {
         if (res.data.status === 100) {
           this.$message.success(res.data.message);
         }
-      });
+      })
+      .finally(()=>{
+        setTimeout(()=>{
+          this.getList()
+        },1000)
+      })
     },
     pageChange(size) {
       // console.log(size);
@@ -153,12 +162,12 @@ export default {
       });
     },
     DeleteSelected() {
-      console.log(this.multipleSelection);
+      // console.log(this.multipleSelection);
       const idList =  this.multipleSelection.map(item=>{
         return item.id
       })
       deleteTask({data:idList}).then(res=>{
-        console.log(res);
+        // console.log(res);
         if(res.data.status===100){
           this.$message.success(res.data.data)
           this.getList()
@@ -184,6 +193,7 @@ export default {
       this.appiMsg = res.data.data.appraisal
     }})
     this.poller.start(3000)
+
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

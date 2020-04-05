@@ -136,9 +136,14 @@ export default {
   color: #606266;
   font-weight: bold;
   text-align: center;
-  border-top: 1px solid #f1f1f1;
-  border-bottom: 1px solid #f1f1f1;
-  box-shadow: 0 1px 3px 2px #f1f1f1;
+  
+}
+@media screen and (min-width: 600px) {
+  .title{
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+    box-shadow: 0 1px 3px 2px #f1f1f1;
+  }
 }
 .box-card {
   min-height: 400px;

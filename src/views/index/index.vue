@@ -50,6 +50,9 @@
         <el-button type="primary" @click="showDetail = false">确 定</el-button>
       </div>
     </el-dialog>
+  <div class="footer">
+    Copyright ©2019 成都文理学院教务处 | WhyStudio(四川农业大学)制作,All rights reserved.
+  </div>
   </div>
 </template>
 
@@ -128,10 +131,14 @@ export default {
 }
 .title {
   margin: 30px auto;
+  padding: 1vw 0;
   font-size: 30px;
   color: #606266;
   font-weight: bold;
   text-align: center;
+  border-top: 1px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
+  box-shadow: 0 1px 3px 2px #f1f1f1;
 }
 .box-card {
   min-height: 400px;
@@ -154,5 +161,14 @@ export default {
   font-size: 14px;
   color: #606266;
   text-align: right;
+}
+.footer{
+  /* position:fixed; */
+  width: 100%;
+  padding: 1vw 0;
+  border-top: 1px solid #f1f1f1;
+  bottom: 0;
+  text-align: center;
+  color: #606266;
 }
 </style>

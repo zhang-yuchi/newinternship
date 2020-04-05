@@ -1,8 +1,14 @@
 <template>
-  <div class="report-check">
+  <div
+    class="report-check"
+    v-loading="errorLoading"
+    element-loading-text="加载失败!"
+    element-loading-background="rgba(0, 0, 0, .9)"
+    element-loading-spinner="el-icon-circle-close"
+  >
     <el-card class="box-card">
       <div slot="header">
-        <span style="color:rgb(64,158,255);">{{ info.name }}的报告册</span>
+        <span style="color: rgb(64, 158, 255);">{{ info.name }}的报告册</span>
       </div>
       <div class="clearfix">
         <div class="text item twoItem">
@@ -36,7 +42,7 @@
         <div class="text item twoItem">
           <span class="header-title">实习日期</span>
           <span class="header-content"
-            >{{ info.starttime }} 至 {{ info.endtime }}</span
+            >{{ info.starttime?info.starttime:'' }} 至 {{ info.endtime?info.endtime:'' }}</span
           >
         </div>
       </div>
@@ -114,17 +120,18 @@ import { Obj2html, date2str } from "../../command/utils";
 import {
   getStudentReport,
   completeRep2,
-  completeRepTotal
+  completeRepTotal,
 } from "../../network/index";
 export default {
   name: "Report-check2",
   components: {
     formItem,
-    limit
+    limit,
   },
   data() {
     return {
       loading: false,
+      errorLoading: false,
       info: {
         name: "加载中",
         college: "加载中",
@@ -134,46 +141,46 @@ export default {
         corp: "加载中",
         position: "加载中",
         starttime: "加载中",
-        endtime: "加载中"
+        endtime: "加载中",
       },
       reportdate: {
         stage2Duration: "加载中",
-        stage2Fill: ""
+        stage2Fill: "",
       },
       report: {
         stage2GuideWay: "加载中",
         stage2Summary: "加载中",
         stage2Comment: "",
-        totalEval: ""
+        totalEval: "",
       },
       options: [
         {
           value: "优秀",
-          label: "优秀"
+          label: "优秀",
         },
         {
           value: "良好",
-          label: "良好"
+          label: "良好",
         },
         {
           value: "中等",
-          label: "中等"
+          label: "中等",
         },
         {
           value: "及格",
-          label: "及格"
+          label: "及格",
         },
         {
           value: "不及格",
-          label: "不及格"
-        }
+          label: "不及格",
+        },
       ],
-      rules: {}
+      rules: {},
     };
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    getStudentReport(stuNo).then(res => {
+    getStudentReport(stuNo).then((res) => {
       console.log(res);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
@@ -188,9 +195,11 @@ export default {
           this.reportdate.stage2Fill = date2str(this.reportdate.stage2Fill);
         }
         this.report.stage2Summary = Obj2html({
-          str: this.report.stage2Summary
+          str: this.report.stage2Summary,
         }).str;
         this.report = res.data.data.report;
+      } else {
+        this.errorLoading = true
       }
     });
   },
@@ -199,19 +208,19 @@ export default {
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(() => {
           this.loading = true;
           if (this.report.stage2Comment.length < 60) {
             this.$alert("二阶段评语不能低于60字", "提交失败", {
-              confirmButtonText: "确定"
+              confirmButtonText: "确定",
             });
             throw "false";
           }
           if (this.report.totalEval.length < 60) {
             this.$alert("总评不能低于60字", "提交失败", {
-              confirmButtonText: "确定"
+              confirmButtonText: "确定",
             });
             throw "false";
           }
@@ -227,41 +236,41 @@ export default {
           Promise.all([
             completeRep2(this.$route.params.stuNo, obj),
             completeRepTotal(this.$route.params.stuNo, {
-              total_eval: this.report.totalEval
+              total_eval: this.report.totalEval,
+            }),
+          ])
+            .then((res) => {
+              console.log(res);
+              if (res[0].data.status == 100 && res[1].data.status == 100) {
+                this.$message({
+                  type: "success",
+                  message: "提交成功!",
+                });
+                this.$router.back();
+              } else {
+                this.loading = false;
+                this.$message({
+                  type: "info",
+                  message:
+                    "提交失败：" + res[0].data.status !== 100
+                      ? res[0].data.message
+                      : res[1].data.message,
+                });
+              }
             })
-          ]).then(res => {
-            console.log(res);
-            if (res[0].data.status == 100 && res[1].data.status == 100) {
-              this.$message({
-                type: "success",
-                message: "提交成功!"
-              });
-              this.$router.back();
-            } else {
-              this.loading = false;
-              this.$message({
-                type: "info",
-                message:
-                  "提交失败：" + res[0].data.status !== 100
-                    ? res[0].data.message
-                    : res[1].data.message
-              });
-            }
-          })
-          .catch(err=>{
-            console.log(err);
-
-          })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch(() => {
-          this.loading = false
+          this.loading = false;
           this.$message({
             type: "info",
-            message: "已取消提交"
+            message: "已取消提交",
           });
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

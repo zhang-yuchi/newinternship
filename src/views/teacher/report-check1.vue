@@ -1,17 +1,27 @@
 <template>
-  <div class="report-check">
+  <div
+    class="report-check"
+    v-loading="errorLoading"
+    element-loading-text="加载失败!"
+    element-loading-background="rgba(0, 0, 0, .9)"
+    element-loading-spinner="el-icon-circle-close"
+  >
     <el-card class="box-card">
       <div slot="header">
-        <span style="color:rgb(64,158,255);">{{ info.name }}的报告册</span>
+        <span style="color: rgb(64, 158, 255);">{{ info.name }}的报告册</span>
       </div>
       <div class="clearfix">
         <div class="text item twoItem">
           <span class="header-title">学院</span>
-          <span class="header-content">{{ info.college }}</span>
+          <span class="header-content">{{
+            info.college ? info.college : "未填写"
+          }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">专业</span>
-          <span class="header-content">{{ info.major }}</span>
+          <span class="header-content">{{
+            info.major ? info.major : "未填写"
+          }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">学号</span>
@@ -35,20 +45,23 @@
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习日期</span>
-          <span class="header-content">{{info.starttime}} 至 {{info.endtime}}</span>
+          <span class="header-content"
+            >{{ info.starttime ? info.starttime : "" }} 至
+            {{ info.endtime ? info.endtime : "" }}</span
+          >
         </div>
       </div>
 
       <div class="state-title">第一阶段</div>
       <form-item
         title="第一阶段实习总结"
-        :content="report.stage1Summary?report.stage1Summary:'暂无'"
+        :content="report.stage1Summary ? report.stage1Summary : '暂无'"
         :time="reportdate.stage1Fill"
       ></form-item>
       <form-item
         title="第一阶段实习指导方式"
-        :content="report.stage1GuideWay"
-        :time="reportdate.stage1Duration"
+        :content="report.stage1GuideWay ? report.stage1GuideWay : '未填写'"
+        :time="reportdate.stage1Duration ? reportdate.stage1Duration : '无'"
       ></form-item>
       <el-form
         :model="report"
@@ -96,11 +109,12 @@ import { getStudentReport, completeRep1 } from "../../network/index";
 export default {
   components: {
     formItem,
-    limit
+    limit,
   },
   data() {
     return {
       loading: false,
+      errorLoading: false,
       info: {
         name: "加载中",
         college: "加载中",
@@ -109,42 +123,42 @@ export default {
         teachno: "加载中",
         corp: "加载中",
         position: "加载中",
-        starttime:'加载中',
-        endtime:"加载中"
+        starttime: "加载中",
+        endtime: "加载中",
       },
       reportdate: {
         stage1Duration: "加载中",
-        stage1Fill: "加载中"
+        stage1Fill: "加载中",
       },
       report: {
         stage1GuideWay: "加载中",
         stage1Summary: "加载中",
         stage1Comment: "",
-        stage1Grade: ""
+        stage1Grade: "",
       },
       rules: {},
       options: [
         {
           value: "优秀",
-          label: "优秀"
+          label: "优秀",
         },
         {
           value: "良好",
-          label: "良好"
+          label: "良好",
         },
         {
           value: "中等",
-          label: "中等"
+          label: "中等",
         },
         {
           value: "及格",
-          label: "及格"
+          label: "及格",
         },
         {
           value: "不及格",
-          label: "不及格"
-        }
-      ]
+          label: "不及格",
+        },
+      ],
     };
   },
   methods: {
@@ -152,50 +166,50 @@ export default {
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(() => {
           // console.log(this.res);
           this.loading = true;
           if (this.report.stage1Comment.length < 60) {
             this.$alert("一阶段评语不能低于60字", "提交失败", {
-              confirmButtonText: "确定"
+              confirmButtonText: "确定",
             });
             this.loading = false;
             throw "false";
           }
           let obj = {};
-          obj.stage1Comment = this.report.stage1Comment
-          obj.stage1Grade = this.report.stage1Grade
+          obj.stage1Comment = this.report.stage1Comment;
+          obj.stage1Grade = this.report.stage1Grade;
           console.log(obj);
-          completeRep1( this.$route.params.stuNo,obj).then(res => {
+          completeRep1(this.$route.params.stuNo, obj).then((res) => {
             console.log(res);
             if (res.data.status == 100) {
               this.$message({
                 type: "success",
-                message: "提交成功!"
+                message: "提交成功!",
               });
               this.$router.back();
             } else {
               this.$message({
                 type: "error",
-                message: "提交失败：" + res.data.message
+                message: "提交失败：" + res.data.message,
               });
-              this.loading = false
+              this.loading = false;
             }
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消提交"
+            message: "已取消提交",
           });
         });
-    }
+    },
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    getStudentReport(stuNo).then(res => {
+    getStudentReport(stuNo).then((res) => {
       console.log(res);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
@@ -206,14 +220,18 @@ export default {
           this.info.endtime = date2str(this.info.endtime);
         }
         this.reportdate = res.data.data.reportdate;
-        if(this.reportdate.stage1Fill){
-          this.reportdate.stage1Fill = date2str(this.reportdate.stage1Fill)
+        if (this.reportdate.stage1Fill) {
+          this.reportdate.stage1Fill = date2str(this.reportdate.stage1Fill);
         }
-        this.report.stage1Summary = Obj2html({str:this.report.stage1Summary}).str
+        this.report.stage1Summary = Obj2html({
+          str: this.report.stage1Summary,
+        }).str;
         this.report = res.data.data.report;
+      } else {
+        this.errorLoading = true;
       }
     });
-  }
+  },
 };
 </script>
 

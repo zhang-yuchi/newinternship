@@ -1,9 +1,15 @@
 <template>
-  <div class="report-check">
+  <div
+    class="report-check"
+    v-loading="errorLoading"
+    element-loading-text="加载失败!"
+    element-loading-background="rgba(0, 0, 0, .9)"
+    element-loading-spinner="el-icon-circle-close"
+  >
     <el-card class="box-card">
       <div slot="header">
-        <span style="color:rgb(64,158,255);" class="clearfix"
-          >{{ info.name }}的报告册</span
+        <span style="color: rgb(64, 158, 255);" class="clearfix"
+          >{{ info.name }}的鉴定表</span
         >
       </div>
       <div class="clearfix">
@@ -21,11 +27,15 @@
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习单位</span>
-          <span class="header-content">{{ info.corp ?info.corp:"未填写"}}</span>
+          <span class="header-content">{{
+            info.corp ? info.corp : "未填写"
+          }}</span>
         </div>
         <div class="text item twoItem">
           <span class="header-title">实习岗位</span>
-          <span class="header-content">{{ info.position ?info.position:"未填写"}}</span>
+          <span class="header-content">{{
+            info.position ? info.position : "未填写"
+          }}</span>
         </div>
       </div>
 
@@ -40,14 +50,13 @@
       ></form-item>
       <form-item
         title="实习单位指导教师评语"
-        :content="appraisal.corpTeacherOpinion ? appraisal.corpTeacherOpinion : '暂无'"
+        :content="
+          appraisal.corpTeacherOpinion ? appraisal.corpTeacherOpinion : '暂无'
+        "
         :time="appraisaldate.corpteacher ? appraisaldate.corpteacher : '暂无'"
       ></form-item>
       <div class="item-title">成绩评定</div>
-      <el-select
-        v-model="appraisal.corpTeacherGrade"
-        placeholder="请选择"
-      >
+      <el-select v-model="appraisal.corpTeacherGrade" placeholder="请选择">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -62,10 +71,7 @@
         :time="appraisaldate.corp ? appraisaldate.corp : '暂无'"
       ></form-item>
       <div class="item-title">所在学院指导老师成绩评定</div>
-      <el-select
-        v-model="appraisal.teacherGrade"
-        placeholder="请选择"
-      >
+      <el-select v-model="appraisal.teacherGrade" placeholder="请选择">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -109,18 +115,16 @@
 import formItem from "../../components/content/form-block";
 import limit from "../../components/content/limit-number";
 import { Obj2html, date2str } from "../../command/utils";
-import {
-  getStudentIdentify,
-  completeDecision
-} from "../../network/index";
+import { getStudentIdentify, completeDecision } from "../../network/index";
 export default {
   components: {
     formItem,
-    limit
+    limit,
   },
   data() {
     return {
       loading: false,
+      errorLoading: false,
       info: {
         name: "加载中",
         college: "加载中",
@@ -128,34 +132,34 @@ export default {
         stuno: "加载中",
         corp: "加载中",
         position: "加载中",
-        starttime:"加载中",
-        endtime:"加载中"
+        starttime: "加载中",
+        endtime: "加载中",
       },
-      appraisaldate:{},
-      appraisal:{},
+      appraisaldate: {},
+      appraisal: {},
       options: [
         {
           value: "优秀",
-          label: "优秀"
+          label: "优秀",
         },
         {
           value: "良好",
-          label: "良好"
+          label: "良好",
         },
         {
           value: "中等",
-          label: "中等"
+          label: "中等",
         },
         {
           value: "及格",
-          label: "及格"
+          label: "及格",
         },
         {
           value: "不及格",
-          label: "不及格"
-        }
+          label: "不及格",
+        },
       ],
-      rules: {}
+      rules: {},
     };
   },
   methods: {
@@ -163,30 +167,30 @@ export default {
       let obj = {
         corpTeacherGrade: this.appraisal.corpTeacherGrade,
         teacherGrade: this.appraisal.teacherGrade,
-        leaderOpinion: this.appraisal.leaderOpinion
+        leaderOpinion: this.appraisal.leaderOpinion,
       };
-      
+
       console.log(obj);
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(() => {
           this.loading = true;
-          completeDecision(this.$route.params.stuNo ,obj).then(res => {
+          completeDecision(this.$route.params.stuNo, obj).then((res) => {
             console.log(res);
             if (res.data.status == 100) {
               this.$message({
                 type: "success",
-                message: "提交成功!"
+                message: "提交成功!",
               });
               this.$router.back();
             } else {
-              this.loading = false
+              this.loading = false;
               this.$message({
                 type: "error",
-                message: "提交失败：" + res.data.message
+                message: "提交失败：" + res.data.message,
               });
             }
           });
@@ -195,16 +199,16 @@ export default {
           this.loading = false;
           this.$message({
             type: "info",
-            message: "已取消提交"
+            message: "已取消提交",
           });
         });
-    }
+    },
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    getStudentIdentify(stuNo).then(res=>{
+    getStudentIdentify(stuNo).then((res) => {
       console.log(res);
-      if(res.data.status == 100){
+      if (res.data.status == 100) {
         this.info = res.data.data.student;
         if (this.info.starttime) {
           this.info.starttime = date2str(this.info.starttime);
@@ -213,9 +217,11 @@ export default {
           this.info.endtime = date2str(this.info.endtime);
         }
 
-        this.appraisaldate = res.data.data.appraisaldate
+        this.appraisaldate = res.data.data.appraisaldate;
         if (this.appraisaldate.corpteacher) {
-          this.appraisaldate.corpteacher = date2str(this.appraisaldate.corpteacher);
+          this.appraisaldate.corpteacher = date2str(
+            this.appraisaldate.corpteacher
+          );
         }
         if (this.appraisaldate.corp) {
           this.appraisaldate.corp = date2str(this.appraisaldate.corp);
@@ -226,10 +232,12 @@ export default {
         if (this.appraisaldate.leader) {
           this.appraisaldate.leader = date2str(this.appraisaldate.leader);
         }
-        this.appraisal = res.data.data.appraisal
+        this.appraisal = res.data.data.appraisal;
+      }else{
+        this.errorLoading = true
       }
-    })
-  }
+    });
+  },
 };
 </script>
 

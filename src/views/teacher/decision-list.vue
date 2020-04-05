@@ -5,7 +5,7 @@
       :row-class-name="tableRowClassName"
       height="628"
       border
-      style="width: 100%"
+      style="width: 100%;"
       v-loading="loading"
       element-loading-text="加 载 中"
       element-loading-spinner="el-icon-loading"
@@ -94,16 +94,20 @@ import fillfilter from "../../components/content/Filter";
 import { one2arr } from "../../command/utils";
 export default {
   components: {
-    fillfilter
+    fillfilter,
   },
   methods: {
     tableRowClassName({ row, rowIndex }) {
-      if (this.data[this.currentPage - 1][rowIndex].identifyFlag === 2) {
-        return "success-row";
-      } else if (this.data[this.currentPage - 1][rowIndex].identifyFlag === 1) {
+      let item = this.data[this.currentPage - 1][rowIndex];
+      if (
+        !item.corpTeacherGrade ||
+        !item.appraisalTeacherGrade ||
+        !item.leaderOpinion
+      ) {
         return "warning-row";
+      } else {
+        return "";
       }
-      return "";
     },
     decisionCheck(item) {
       this.$router.push("/teacher/decision-check/" + item.stuno);
@@ -129,27 +133,31 @@ export default {
       } else if (e == 2) {
         //已填完
         for (let item of this.tableData) {
-          if (item.appraisalContent &&
-              item.appraisalSummary &&
-              item.corpOpinion &&
-              item.corpTeacherOpinion) {
+          if (
+            item.appraisalContent &&
+            item.appraisalSummary &&
+            item.corpOpinion &&
+            item.corpTeacherOpinion
+          ) {
             arr.push(item);
           }
         }
       } else {
         //未填完
         for (let item of this.tableData) {
-          if (!item.appraisalContent ||
-              !item.appraisalSummary ||
-              !item.corpOpinion ||
-              !item.corpTeacherOpinion) {
+          if (
+            !item.appraisalContent ||
+            !item.appraisalSummary ||
+            !item.corpOpinion ||
+            !item.corpTeacherOpinion
+          ) {
             arr.push(item);
           }
         }
       }
       this.arrlength = arr.length;
       this.data = one2arr(arr, this.pageSize);
-    }
+    },
   },
   data() {
     return {
@@ -158,11 +166,11 @@ export default {
       currentPage: 1,
       pageSize: 10,
       loading: true,
-      arrlength: 0
+      arrlength: 0,
     };
   },
   mounted() {
-    getStudentList().then(res => {
+    getStudentList().then((res) => {
       if (res.data.status == 100) {
         console.log(res);
         this.tableData = res.data.data;
@@ -176,7 +184,7 @@ export default {
               item.leaderOpinion
             ) {
               item.teaWrite = "已评价完";
-            } else{
+            } else {
               item.teaWrite = "未评价完";
             }
             if (
@@ -194,6 +202,6 @@ export default {
       }
       this.loading = false;
     });
-  }
+  },
 };
 </script>

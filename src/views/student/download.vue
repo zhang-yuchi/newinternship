@@ -1,4 +1,8 @@
-<!--  -->
+<!-- 
+  author:张宇弛
+  page:学生下载页面
+  function:学生下载鉴定表和报告册
+ -->
 <template>
   <div class="download">
     <div class="load-title">文件下载</div>
@@ -6,8 +10,8 @@
     <div class="target">{{appiMsg}}</div>
     <el-button type="primary" @click="downloadFile(true)" size="mini">加入报告册到队列</el-button>
     <el-button type="warning" @click="downloadFile(false)" size="mini">加入鉴定表到队列</el-button>
-    <el-button type="danger" size="mini" @click="DeleteSelected">删除所选项</el-button>
-    <el-button icon="el-icon-refresh" size="mini" @click="getList"></el-button>
+    <el-button type="danger" size="mini" @click="DeleteSelected" :disabled="multipleSelection.length<=0">删除所选项</el-button>
+    <el-button icon="el-icon-refresh" size="mini" @click="getList">刷新列表</el-button>
     <el-table
       ref="multipleTable"
       :data="nowList"
@@ -40,8 +44,13 @@
       <el-table-column prop="name" label="结果" width="120">
         <template slot-scope="scope">
           <el-tag
-            :type="scope.row.failed?'danger':'success'"
-          >{{scope.row.failed?'失败':'成功'}}</el-tag>
+            v-if="scope.row.failed"
+            type='danger'
+          >失败</el-tag>
+          <el-tag
+            v-else-if="!scope.row.converting"
+            type='success'
+          >成功</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作">

@@ -6,8 +6,9 @@
       border
       height="628"
       style="width: 100%"
-      v-loading="loading" element-loading-text="加 载 中"
-    element-loading-spinner="el-icon-loading"
+      v-loading="loading"
+      element-loading-text="加 载 中"
+      element-loading-spinner="el-icon-loading"
     >
       <el-table-column prop="stuno" label="学号" width="180" fixed>
       </el-table-column>
@@ -100,8 +101,8 @@ export default {
       data: [],
       currentPage: 1,
       pageSize: 10,
-      loading:true,
-      arrlength:0
+      loading: true,
+      arrlength: 0
     };
   },
   methods: {
@@ -109,12 +110,12 @@ export default {
       this.$router.push("/teacher/report-check1/" + item.stuno);
     },
     tableRowClassName({ row, rowIndex }) {
-      if (this.data[this.currentPage-1][rowIndex].reportFlag === 2) {
-        return "success-row";
-      } else if (this.data[this.currentPage-1][rowIndex].reportFlag === 1) {
+      let item = this.data[this.currentPage - 1][rowIndex]
+      if (!item.reportStage1Comment || !item.reportStage1Grade) {
         return "warning-row";
+      } else {
+        return "";
       }
-      return "";
     },
     prevClick() {
       this.currentPage--;
@@ -128,7 +129,7 @@ export default {
     },
     filterClick(e) {
       let arr = [];
-      this.currentPage = 1
+      this.currentPage = 1;
       if (e == 3) {
         // 全部
         for (let item of this.tableData) {
@@ -137,49 +138,45 @@ export default {
       } else if (e == 2) {
         //已填完
         for (let item of this.tableData) {
-          if (item.reportStage1Summary && item.reportStage2Summary) {
+          if (item.reportStage1Summary) {
             arr.push(item);
           }
         }
       } else {
         //未填完
         for (let item of this.tableData) {
-          if (!item.reportStage1Summary || !item.reportStage2Summary) {
+          if (!item.reportStage1Summary) {
             arr.push(item);
           }
         }
       }
-      this.arrlength = arr.length
+      this.arrlength = arr.length;
       this.data = one2arr(arr, this.pageSize);
     }
   },
   mounted() {
     getStudentList().then(res => {
       if (res.data.status == 100) {
-        // console.log(res);
+        console.log(res);
         this.tableData = res.data.data;
-        this.arrlength = this.tableData.length
+        this.arrlength = this.tableData.length;
         this.data = one2arr(this.tableData, this.pageSize);
         if (this.tableData.length) {
           for (let item of this.tableData) {
-            if (item.reportFlag == 2) {
+            if (item.reportStage1Comment && item.reportStage1Grade) {
               item.teaWrite = "已评价完";
-            } else if (item.reportFlag == 1) {
+            } else{
               item.teaWrite = "未评价完";
-            } else {
-              item.teaWrite = "未评价";
             }
-            if (item.reportFilledFlag == 2) {
+            if (item.reportStage1Summary) {
               item.stuWrite = "已填完";
-            } else if (item.reportFilledFlag == 1) {
-              item.stuWrite = "一阶段已填";
             } else {
-              item.stuWrite = "未填写";
+              item.stuWrite = "未填完";
             }
           }
         }
       }
-      this.loading = false
+      this.loading = false;
     });
   }
 };

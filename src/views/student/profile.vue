@@ -104,7 +104,7 @@
           <div class="card-title">导师信息</div>
           <div class="text item">
             <span class="item-title">姓名</span>
-            <span class="item-content">{{studentInfo.name}}</span>
+            <span class="item-content">{{studentInfo.teachname}}</span>
           </div>
 
           <div class="text item">
@@ -113,15 +113,15 @@
           </div>
           <div class="text item">
             <span class="item-title">性别</span>
-            <span class="item-content">{{studentInfo.sex}}</span>
+            <span class="item-content">{{studentInfo.teachsex}}</span>
           </div>
           <div class="text item">
             <span class="item-title">年龄</span>
-            <span class="item-content">{{studentInfo.age}}</span>
+            <span class="item-content">{{studentInfo.teachage}}</span>
           </div>
           <div class="text item">
             <span class="item-title">学院</span>
-            <span class="item-content">{{studentInfo.college}}</span>
+            <span class="item-content">{{studentInfo.teachcollege}}</span>
           </div>
         </el-card>
 
@@ -151,24 +151,24 @@
           <div class="card-title">导师信息</div>
           <div class="text item">
             <span class="item-title">姓名</span>
-            <span class="item-content">{{studentInfo.name}}</span>
+            <span class="item-content">{{studentInfo.teachname}}</span>
           </div>
 
           <div class="text item">
             <span class="item-title">工号</span>
-            <span class="item-content">{{studentInfo.teacherNo}}</span>
+            <span class="item-content">{{studentInfo.teachno}}</span>
           </div>
           <div class="text item">
             <span class="item-title">性别</span>
-            <span class="item-content">{{studentInfo.sex}}</span>
+            <span class="item-content">{{studentInfo.teachsex}}</span>
           </div>
           <div class="text item">
             <span class="item-title">年龄</span>
-            <span class="item-content">{{studentInfo.age}}</span>
+            <span class="item-content">{{studentInfo.teachage}}</span>
           </div>
           <div class="text item">
             <span class="item-title">院校</span>
-            <span class="item-content">{{studentInfo.college}}</span>
+            <span class="item-content">{{studentInfo.teachcollege}}</span>
           </div>
         </el-card>
 
@@ -229,7 +229,11 @@ export default {
         collegecode:"",
         position:"",
         stuno:"",
-        status:""
+        status:"",
+        teachname:"",
+        teachsex:"",
+        teachage:"",
+        teachcollege:""
       },
       teacherLoading: false,
       studentLoading: false,
@@ -249,7 +253,7 @@ export default {
       this.teacherLoading = true;
       getStudentInfo()
         .then(res => {
-          // console.log(res);
+          console.log(res);
           let data = res.data.data
           let hasStartTime = !!data.starttime
           let hasEndTime = !!data.endtime

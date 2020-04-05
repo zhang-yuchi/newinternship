@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="main">
+  <div id="main">
     <layout>
       <el-col slot="nav" style="height:100%;" class="main-nav">
         <el-menu :default-active="activeNav" :router="true">
@@ -77,7 +77,7 @@ export default {
 };
 </script>
 <style scoped>
-.main {
+#main {
   height: 100%;
   min-width: 1200px;
 }

@@ -51,7 +51,7 @@
       </div>
     </el-dialog>
   <div class="footer">
-    Copyright ©2019 成都文理学院教务处 | WhyStudio(四川农业大学)制作,All rights reserved.
+    Copyright ©2019 成都文理学院教务处 | WhyStudio制作,All rights reserved.
   </div>
   </div>
 </template>
@@ -107,7 +107,7 @@ export default {
           arr.push(item);
         }
         // console.log(arr);
-        this.news = arr;
+        this.news = arr.reverse();
       })
       .finally(()=>{
         this.newsLoading = false

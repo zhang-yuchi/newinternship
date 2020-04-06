@@ -83,7 +83,7 @@ export default {
 <style scoped>
 .layout {
   /* height: 100%; */
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .el-header {
   background-color: #b3c0d1;

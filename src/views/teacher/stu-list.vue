@@ -9,7 +9,7 @@
       style="width: 100%"
       element-loading-spinner="el-icon-loading"
     >
-      <el-table-column prop="idcard" label="学号" width="180" fixed>
+      <el-table-column prop="stuno" label="学号" width="180" fixed>
       </el-table-column>
       <el-table-column prop="name" label="姓名" width="150" fixed>
       </el-table-column>

@@ -81,10 +81,7 @@ export default {
 };
 </script>
 <style scoped>
-.layout {
-  /* height: 100%; */
-  /* overflow: hidden; */
-}
+
 .el-header {
   background-color: #b3c0d1;
   color: #333;

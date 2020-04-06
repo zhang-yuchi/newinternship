@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 const isDev = true
-const baseURL = isDev ? "http://ruankun.xyz:8255/internship" : "http://sx.cdcas.edu.cn:8890/"
+const baseURL = isDev ? "http://ruankun.xyz:8255/internship" : "http://sx.cdcas.edu.cn:8890/internship"
 const service = axios.create({
   baseURL
 })

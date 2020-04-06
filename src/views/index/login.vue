@@ -52,7 +52,7 @@
             <el-input v-model.number="forgetForm.account"></el-input>
           </el-form-item>
           <el-form-item label="身份证">
-            <el-input v-model.number="forgetForm.identify"></el-input>
+            <el-input v-model="forgetForm.identify"></el-input>
           </el-form-item>
           <el-form-item label="密码">
             <el-input type="password" v-model="forgetForm.pass" autocomplete="off"></el-input>
@@ -130,7 +130,7 @@
             <el-input v-model.number="forgetForm.account"></el-input>
           </el-form-item>
           <el-form-item label="身份证">
-            <el-input v-model.number="forgetForm.identify"></el-input>
+            <el-input v-model="forgetForm.identify"></el-input>
           </el-form-item>
           <el-form-item label="密码">
             <el-input type="password" v-model="forgetForm.password1" autocomplete="off"></el-input>

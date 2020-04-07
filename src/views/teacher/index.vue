@@ -2,16 +2,55 @@
 <template>
   <div id="main">
     <layout>
-      <el-col slot="nav" style="height:100%;" class="main-nav">
+      <div slot="add-nav" class="xs-hidden">
+        <el-button @click.prevent="toastPhone">
+          <i class="el-icon-menu"></i>
+        </el-button>
+        <el-menu
+          v-if="isphone"
+          :default-active="activeNav"
+          class="el-menu-vertical-demo phone-menu"
+          :collapse="true"
+          :router="true"
+          style="z-index:1000"
+          menu-trigger="click"
+          :unique-opened="true"
+          @select="hiddenMenu"
+          :collapse-transition="false"
+          background-color="#545c64"
+          active-text-color="#ffd04b"
+          text-color="#fff"
+          mode="horizontal"
+        >
+          <el-menu-item index="/teacher/profile">
+            <i class="el-icon-user"></i>我的信息
+          </el-menu-item>
+          <el-menu-item index="/teacher/stu-list">
+              <i class="el-icon-s-order"></i>学生列表
+          </el-menu-item>
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-edit"></i>报告册
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/teacher/report-list1">一阶段</el-menu-item>
+              <el-menu-item index="/teacher/report-list2">二阶段</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-menu-item index="/teacher/decision-list">
+            <i class="el-icon-edit"></i>鉴定表
+          </el-menu-item>
+        </el-menu>
+      </div>
+
+      <el-col slot="nav" style="height:100%;">
         <el-menu :default-active="activeNav" :router="true">
           <el-menu-item index="/teacher/profile">
-            <i class="el-icon-user"></i>
-            <span slot="title">我的信息</span>
+            <i class="el-icon-user"></i>我的信息
           </el-menu-item>
           <el-menu-item index="/teacher/stu-list">
             <template slot="title">
-              <i class="el-icon-s-order"></i>
-              <span slot="title">学生列表</span>
+              <i class="el-icon-s-order"></i>学生列表
             </template>
           </el-menu-item>
           <el-submenu index="">
@@ -25,8 +64,7 @@
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item index="/teacher/decision-list">
-            <i class="el-icon-edit"></i>
-            <span slot="title">鉴定表</span>
+            <i class="el-icon-edit"></i>鉴定表
           </el-menu-item>
         </el-menu>
       </el-col>
@@ -42,12 +80,13 @@ import { getStage } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
-    layout
+    layout,
   },
   data() {
     //这里存放数据
     return {
-      activeNav: "stu-list"
+      activeNav: "stu-list",
+      isphone: false,
     };
   },
   //监听属性 类似于data概念
@@ -56,10 +95,17 @@ export default {
   watch: {
     $route(newc, cur) {
       this.activeNav = newc.path;
-    }
+    },
   },
   //方法集合
-  methods: {},
+  methods: {
+    toastPhone() {
+      this.isphone = !this.isphone;
+    },
+    hiddenMenu() {
+      this.isphone = false;
+    },
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
@@ -73,16 +119,13 @@ export default {
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-  deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
+  deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>
 <style scoped>
 #main {
   height: 100%;
   min-width: 1200px;
-}
-.main-nav {
-  min-width: 150px !important;
 }
 .el-menu {
   height: 100%;
@@ -94,4 +137,26 @@ export default {
 .el-submenu .el-menu-item {
   min-width: 0;
 }
+.xs-hidden {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+}
+@media screen and (max-width: 768px) {
+  .xs-hidden {
+    display: block !important;
+  }
+}
+.phone-menu {
+  position: absolute;
+  background-color: white !important;
+}
+.phone-menu .el-submenu ,.phone-menu .el-menu-item{
+  width: 150px;
+  max-width: 150px;
+  background-color: white;
+}
+
 </style>

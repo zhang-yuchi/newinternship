@@ -1,5 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
+import vm from 'element-ui'
 const isDev = true
 const baseURL = isDev ? "http://ruankun.xyz:8255/internship" : "http://sx.cdcas.edu.cn:8890/internship"
 const service = axios.create({
@@ -20,20 +21,25 @@ service.interceptors.request.use((config) => {
   else{
     config.data = qs.stringify(config.data)
   }
-  console.log(config.data);
+  // console.log(config.data);
   return config
 })
 service.interceptors.response.use((res) => {
   //做全局处理
-  // console.log(res)
   const SUCCESS_STATUS = 200
   if (res.status == SUCCESS_STATUS) {
-    // console.log(res);
-    return res
+    console.log(res);
+    if(res.data.status===100||res.data.status===1001){
+      return res
+    }else{
+      vm.Message({
+        message:res.data.message,
+        type:"error"
+      })
+    }
   } else {
     errorHandle()
   }
-
 })
 
 function getRandom(url) {
@@ -41,7 +47,10 @@ function getRandom(url) {
 }
 export const errorHandle = () => {
   //当catch到错误时触发
-  this.$message.error('网络不佳或服务器异常!')
+  vm.Message({
+    message:"服务器开小差了...",
+    type:"error"
+  })
 }
 export const getVerify = () => {
   return axios({

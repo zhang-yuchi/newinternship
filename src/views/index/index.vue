@@ -44,7 +44,7 @@
     </el-row>
     <el-dialog :title="detail.title" :visible.sync="showDetail">
       <div v-html="detail.content"></div>
-      <div class="publisher">{{detail.publisher}}</div>
+      <div class="publisher"><span style="display:inline-block;margin-right:20px;">已读:{{detail.readnum}}</span>{{detail.publisher}}</div>
       <div class="time">{{detail.gmtModified}}</div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="showDetail = false">确 定</el-button>
@@ -98,7 +98,7 @@ export default {
     this.newsLoading = true
     getNewsList()
       .then(res => {
-        // console.log(res.data.data);
+        console.log(res.data.data);
         let arr = [];
         
         for (let i = res.data.data.length - 1; i >= 0; i--) {

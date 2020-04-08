@@ -185,7 +185,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   // console.log(to);
-  if(to.path.match(/^\/student/)){
+  if(to.path.match(/^\/student/) || to.path.match(/^\/teacher/)){
     // console.log('123');
     // console.log(to.path.match(/student/));
     checkToken().then(res=>{

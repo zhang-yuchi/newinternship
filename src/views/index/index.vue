@@ -88,6 +88,10 @@ export default {
       const tar = e.currentTarget.dataset.id;
       // console.log(tar);
       this.detail = this.news[tar];
+      getNewsDetail(this.detail.id)
+      // .then(res=>{
+      //   //增加已读
+      // })
       this.showDetail = true;
     }
   },

@@ -7,7 +7,8 @@
 <style>
   @import './assets/css/normalize.css';
   body,html{
-    height: 100%;
+    /* height: 100%; */
+    overflow: auto !important;
   }
   #app{
     height: 100%;

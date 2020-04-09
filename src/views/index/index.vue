@@ -93,7 +93,7 @@ export default {
       //   //增加已读
       // })
       this.showDetail = true;
-    }
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},

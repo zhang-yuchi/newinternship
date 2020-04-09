@@ -133,7 +133,7 @@
             <el-input v-model="forgetForm.identify"></el-input>
           </el-form-item>
           <el-form-item label="密码">
-            <el-input type="password" v-model="forgetForm.password1" autocomplete="off"></el-input>
+            <el-input type="password" v-model="forgetForm.pass" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="验证码" prop="code">
             <el-input type="text" v-model="forgetForm.code" autocomplete="off"></el-input>

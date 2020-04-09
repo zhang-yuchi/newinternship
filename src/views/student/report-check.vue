@@ -30,10 +30,10 @@
         ></form-block>
         <div class="state2" v-if="state==1">
           <div class="Divider">学院实习指导教师总评及成绩评定</div>
-          <form-block title="评语" :content="showContent.totalGrade"></form-block>
+          <form-block title="评语" :content="showContent.totalScore"></form-block>
           <div class="text item">
             <span class="header-title">实习成绩</span>
-            <span class="header-content">{{showContent.totalScore}}</span>
+            <span class="header-content">{{showContent.totalGrade}}</span>
           </div>
         </div>
       </el-card>
@@ -104,7 +104,7 @@ export default {
       this.pageLoading = true;
       getReportInfo()
         .then(res => {
-          console.log(res);
+          // console.log(res);
           let data = res.data.data.report;
           data = Obj2html(data);
           data = replaceNull(data);

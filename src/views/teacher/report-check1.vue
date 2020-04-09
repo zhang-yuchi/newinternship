@@ -46,8 +46,8 @@
         <div class="text item twoItem">
           <span class="header-title">实习日期</span>
           <span class="header-content"
-            >{{ info.starttime ? info.starttime : "" }} 至
-            {{ info.endtime ? info.endtime : "" }}</span
+            >{{ info.starttime ? info.starttime : "未填写" }} 至
+            {{ info.endtime ? info.endtime : "未填写" }}</span
           >
         </div>
       </div>
@@ -56,7 +56,7 @@
       <form-item
         title="第一阶段实习总结"
         :content="report.stage1Summary ? report.stage1Summary : '暂无'"
-        :time="reportdate.stage1Fill"
+        :time="reportdate.stage1Fill?reportdate.stage1Fill:'无'"
       ></form-item>
       <form-item
         title="第一阶段实习指导方式"
@@ -127,8 +127,8 @@ export default {
         endtime: "加载中",
       },
       reportdate: {
-        stage1Duration: "加载中",
-        stage1Fill: "加载中",
+        stage1Duration: "",
+        stage1Fill: "",
       },
       report: {
         stage1GuideWay: "加载中",
@@ -219,9 +219,11 @@ export default {
         if (this.info.endtime) {
           this.info.endtime = date2str(this.info.endtime);
         }
-        this.reportdate = res.data.data.reportdate;
-        if (this.reportdate.stage1Fill) {
-          this.reportdate.stage1Fill = date2str(this.reportdate.stage1Fill);
+        if (res.data.data.reportdate) {
+          this.reportdate = res.data.data.reportdate;
+          if (this.reportdate.stage1Fill) {
+            this.reportdate.stage1Fill = date2str(this.reportdate.stage1Fill);
+          }
         }
         this.report.stage1Summary = Obj2html({
           str: this.report.stage1Summary,

@@ -42,7 +42,8 @@
         <div class="text item twoItem">
           <span class="header-title">实习日期</span>
           <span class="header-content"
-            >{{ info.starttime?info.starttime:'' }} 至 {{ info.endtime?info.endtime:'' }}</span
+            >{{ info.starttime ? info.starttime : "未填写" }} 至
+            {{ info.endtime ? info.endtime : "未填写" }}</span
           >
         </div>
       </div>
@@ -51,13 +52,13 @@
       <div class="state-title">第二阶段</div>
       <form-item
         title="第二阶段实习总结"
-        :content="report.stage2Summary"
-        :time="reportdate.stage2Fill"
+        :content="report.stage2Summary?report.stage2Summary:'暂无'"
+        :time="reportdate.stage2Fill?reportdate.stage2Fill:'无'"
       ></form-item>
       <form-item
         title="第二阶段实习指导方式"
-        :content="report.stage2GuideWay"
-        :time="reportdate.stage2Duration"
+        :content="report.stage2GuideWay?report.stage2GuideWay:'未填写'"
+        :time="reportdate.stage2Duration?reportdate.stage2Duration:'无'"
       ></form-item>
       <el-form
         :model="report"
@@ -144,7 +145,7 @@ export default {
         endtime: "加载中",
       },
       reportdate: {
-        stage2Duration: "加载中",
+        stage2Duration: "",
         stage2Fill: "",
       },
       report: {
@@ -190,16 +191,18 @@ export default {
         if (this.info.endtime) {
           this.info.endtime = date2str(this.info.endtime);
         }
-        this.reportdate = res.data.data.reportdate;
-        if (this.reportdate.stage2Fill) {
-          this.reportdate.stage2Fill = date2str(this.reportdate.stage2Fill);
+        if (res.data.data.reportdate) {
+          this.reportdate = res.data.data.reportdate;
+          if (this.reportdate.stage2Fill) {
+            this.reportdate.stage2Fill = date2str(this.reportdate.stage2Fill);
+          }
         }
         this.report.stage2Summary = Obj2html({
           str: this.report.stage2Summary,
         }).str;
         this.report = res.data.data.report;
       } else {
-        this.errorLoading = true
+        this.errorLoading = true;
       }
     });
   },

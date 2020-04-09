@@ -206,8 +206,9 @@ export default {
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
+    console.log(stuNo)
     getStudentIdentify(stuNo).then((res) => {
-      console.log(res);
+      console.log(res.data.data);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
         if (this.info.starttime) {
@@ -216,25 +217,26 @@ export default {
         if (this.info.endtime) {
           this.info.endtime = date2str(this.info.endtime);
         }
-
-        this.appraisaldate = res.data.data.appraisaldate;
-        if (this.appraisaldate.corpteacher) {
-          this.appraisaldate.corpteacher = date2str(
-            this.appraisaldate.corpteacher
-          );
-        }
-        if (this.appraisaldate.corp) {
-          this.appraisaldate.corp = date2str(this.appraisaldate.corp);
-        }
-        if (this.appraisaldate.synth) {
-          this.appraisaldate.synth = date2str(this.appraisaldate.synth);
-        }
-        if (this.appraisaldate.leader) {
-          this.appraisaldate.leader = date2str(this.appraisaldate.leader);
+        if (res.data.data.appraisaldate) {
+          this.appraisaldate = res.data.data.appraisaldate;
+          if (this.appraisaldate.corpteacher) {
+            this.appraisaldate.corpteacher = date2str(
+              this.appraisaldate.corpteacher
+            );
+          }
+          if (this.appraisaldate.corp) {
+            this.appraisaldate.corp = date2str(this.appraisaldate.corp);
+          }
+          if (this.appraisaldate.synth) {
+            this.appraisaldate.synth = date2str(this.appraisaldate.synth);
+          }
+          if (this.appraisaldate.leader) {
+            this.appraisaldate.leader = date2str(this.appraisaldate.leader);
+          }
         }
         this.appraisal = res.data.data.appraisal;
-      }else{
-        this.errorLoading = true
+      } else {
+        this.errorLoading = true;
       }
     });
   },

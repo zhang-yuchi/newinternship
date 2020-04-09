@@ -177,8 +177,8 @@ export const getStudentList = () => {
   return service.get(getRandom('/teacher/student'))
 }
 //获取某个学生鉴定表
-export const getStudentIdentify = (stuNo,params) => {
-  return service.get(getRandom('/teacher/student/' + stuNo+'/appraisal'),params)
+export const getStudentIdentify = (stuNo) => {
+  return service.get(getRandom('/teacher/student/' + stuNo+'/appraisal'))
 }
 //教师填写鉴定表
 export const completeDecision = (stuNo,params) => {

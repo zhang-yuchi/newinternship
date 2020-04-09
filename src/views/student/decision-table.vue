@@ -81,6 +81,16 @@ export default {
   //方法集合
   methods: {
     submitForm(formName) {
+      let summaryValidator = this.ruleForm.summary.length>=800&&this.ruleForm.summary.length<=1200
+      let contentValidator = this.ruleForm.content.length>=800&&this.ruleForm.content.length<=1200
+      // if(!contentValidator){
+      //   this.$message.warning('实习内容字数应该在800-1200字')
+      //   return
+      // }
+      if(!summaryValidator){
+        this.$message.warning('个人总结字数应该在800-1200字')
+        return
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");

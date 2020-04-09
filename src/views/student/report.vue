@@ -29,7 +29,7 @@
             type="textarea"
             :rows="15"
             width="500px;"
-            placeholder="请输入内容,不少于1050字"
+            placeholder="请输入内容,不少于800字"
             v-model="stage1Form.stage1Summary"
           ></el-input>
         </el-form-item>
@@ -37,7 +37,7 @@
           <limit-number
             style="margin-top:-20px;"
             :testString="stage1Form.stage1Summary"
-            :maxLength="1050"
+            :maxLength="1200"
           ></limit-number>
         </el-form-item>
         <el-form-item>
@@ -74,7 +74,7 @@
             :show-word-limit="true"
             :rows="15"
             width="500px;"
-            placeholder="请输入内容,不少于1050字"
+            placeholder="请输入内容,不少于800字"
             v-model="stage2Form.stage2Summary"
           ></el-input>
         </el-form-item>
@@ -82,7 +82,7 @@
           <limit-number
             style="margin-top:-20px;"
             :testString="stage2Form.stage2Summary"
-            :maxLength="1050"
+            :maxLength="1200"
           ></limit-number>
         </el-form-item>
 
@@ -160,7 +160,12 @@ export default {
       }
     },
     submit1Form(formName) {
-      console.log("hello");
+      // console.log("hello");
+      let SummaryValidator = this.stage1Form.stage1Summary.length>=800&&this.stage1Form.stage1Summary.length<=1200
+      if(!SummaryValidator){
+        this.$message.warning('总结不能少于800字或多于1200字')
+        return
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
@@ -190,12 +195,17 @@ export default {
               this.btnLoading = false;
             });
         } else {
-          console.log("error submit!!");
+          // console.log("error submit!!");
           return false;
         }
       });
     },
     submit2Form(formName) {
+      let SummaryValidator = this.stage2Form.stage2Summary.length>=800&&this.stage2Form.stage2Summary.length<=1200
+      if(!SummaryValidator){
+        this.$message.warning('总结不能少于800字或多于1200字')
+        return
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.startTime) {

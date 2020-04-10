@@ -171,7 +171,8 @@ export default {
         .then(() => {
           // console.log(this.res);
           this.loading = true;
-          if (this.report.stage1Comment.length < 60) {
+          if (!this.report.stage1Comment || this.report.stage1Comment.length < 60) {
+            console.log(1)
             this.$alert("一阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定",
             });
@@ -183,7 +184,7 @@ export default {
           obj.stage1Grade = this.report.stage1Grade;
           console.log(obj);
           completeRep1(this.$route.params.stuNo, obj).then((res) => {
-            console.log(res);
+            console.log('提交：',res);
             if (res.data.status == 100) {
               this.$message({
                 type: "success",
@@ -199,7 +200,8 @@ export default {
             }
           });
         })
-        .catch(() => {
+        .catch((err) => {
+          // console.log(err)
           this.$message({
             type: "info",
             message: "已取消提交",

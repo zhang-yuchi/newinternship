@@ -182,7 +182,7 @@ export default {
   mounted() {
     let stuNo = this.$route.params.stuNo;
     getStudentReport(stuNo).then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
         if (this.info.starttime) {
@@ -215,13 +215,13 @@ export default {
       })
         .then(() => {
           this.loading = true;
-          if (this.report.stage2Comment.length < 60) {
+          if (!this.report.stage2Comment || this.report.stage2Comment.length < 60) {
             this.$alert("二阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定",
             });
             throw "false";
           }
-          if (this.report.totalEval.length < 60) {
+          if (!this.report.totalEval || this.report.totalEval.length < 60) {
             this.$alert("总评不能低于60字", "提交失败", {
               confirmButtonText: "确定",
             });

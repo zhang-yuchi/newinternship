@@ -52,13 +52,13 @@
       <div class="state-title">第二阶段</div>
       <form-item
         title="第二阶段实习总结"
-        :content="report.stage2Summary?report.stage2Summary:'暂无'"
-        :time="reportdate.stage2Fill?reportdate.stage2Fill:'无'"
+        :content="report.stage2Summary ? report.stage2Summary : '暂无'"
+        :time="reportdate.stage2Fill ? reportdate.stage2Fill : '无'"
       ></form-item>
       <form-item
         title="第二阶段实习指导方式"
-        :content="report.stage2GuideWay?report.stage2GuideWay:'未填写'"
-        :time="reportdate.stage2Duration?reportdate.stage2Duration:'无'"
+        :content="report.stage2GuideWay ? report.stage2GuideWay : '未填写'"
+        :time="reportdate.stage2Duration ? reportdate.stage2Duration : '无'"
       ></form-item>
       <el-form
         :model="report"
@@ -121,13 +121,13 @@ import { Obj2html, date2str } from "../../command/utils";
 import {
   getStudentReport,
   completeRep2,
-  completeRepTotal,
+  completeRepTotal
 } from "../../network/index";
 export default {
   name: "Report-check2",
   components: {
     formItem,
-    limit,
+    limit
   },
   data() {
     return {
@@ -142,46 +142,46 @@ export default {
         corp: "加载中",
         position: "加载中",
         starttime: "加载中",
-        endtime: "加载中",
+        endtime: "加载中"
       },
       reportdate: {
         stage2Duration: "",
-        stage2Fill: "",
+        stage2Fill: ""
       },
       report: {
         stage2GuideWay: "加载中",
         stage2Summary: "加载中",
         stage2Comment: "",
-        totalEval: "",
+        totalEval: ""
       },
       options: [
         {
           value: "优秀",
-          label: "优秀",
+          label: "优秀"
         },
         {
           value: "良好",
-          label: "良好",
+          label: "良好"
         },
         {
           value: "中等",
-          label: "中等",
+          label: "中等"
         },
         {
           value: "及格",
-          label: "及格",
+          label: "及格"
         },
         {
           value: "不及格",
-          label: "不及格",
-        },
+          label: "不及格"
+        }
       ],
-      rules: {},
+      rules: {}
     };
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    getStudentReport(stuNo).then((res) => {
+    getStudentReport(stuNo).then(res => {
       // console.log(res);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
@@ -198,7 +198,7 @@ export default {
           }
         }
         this.report.stage2Summary = Obj2html({
-          str: this.report.stage2Summary,
+          str: this.report.stage2Summary
         }).str;
         this.report = res.data.data.report;
       } else {
@@ -211,43 +211,44 @@ export default {
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
-        type: "info",
+        type: "info"
       })
         .then(() => {
           this.loading = true;
-          if (!this.report.stage2Comment || this.report.stage2Comment.length < 60) {
+          if (
+            !this.report.stage2Comment ||
+            this.report.stage2Comment.length < 60
+          ) {
             this.$alert("二阶段评语不能低于60字", "提交失败", {
-              confirmButtonText: "确定",
+              confirmButtonText: "确定"
             });
             throw "false";
           }
           if (!this.report.totalEval || this.report.totalEval.length < 60) {
             this.$alert("总评不能低于60字", "提交失败", {
-              confirmButtonText: "确定",
+              confirmButtonText: "确定"
             });
             throw "false";
           }
           let obj = {};
-          if (this.report.stage2Grade) {
-            obj.stage2Grade = this.report.stage2Grade;
-          } else {
-            obj.stage2Grade = "";
-          }
+          obj.stage2Grade = this.report.stage2Grade
+            ? this.report.stage2Grade
+            : "";
           obj.stage2Comment = this.report.stage2Comment;
           console.log(this.report.totalEval);
           console.log(obj);
           Promise.all([
             completeRep2(this.$route.params.stuNo, obj),
             completeRepTotal(this.$route.params.stuNo, {
-              total_eval: this.report.totalEval,
-            }),
+              total_eval: this.report.totalEval
+            })
           ])
-            .then((res) => {
+            .then(res => {
               console.log(res);
               if (res[0].data.status == 100 && res[1].data.status == 100) {
                 this.$message({
                   type: "success",
-                  message: "提交成功!",
+                  message: "提交成功!"
                 });
                 this.$router.back();
               } else {
@@ -257,11 +258,11 @@ export default {
                   message:
                     "提交失败：" + res[0].data.status !== 100
                       ? res[0].data.message
-                      : res[1].data.message,
+                      : res[1].data.message
                 });
               }
             })
-            .catch((err) => {
+            .catch(err => {
               console.log(err);
             });
         })
@@ -269,11 +270,11 @@ export default {
           this.loading = false;
           this.$message({
             type: "info",
-            message: "已取消提交",
+            message: "已取消提交"
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>

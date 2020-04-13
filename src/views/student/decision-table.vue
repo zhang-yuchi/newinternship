@@ -35,11 +35,11 @@
           <el-input type="textarea" :disabled="!$store.state.isIdentifyFormStage1Open" :rows="10" v-model="ruleForm.summary" autocomplete="off"></el-input>
         </el-form-item>
         <limit :maxLength="1200" :testString="ruleForm.summary"></limit>
-        <el-form-item label="企业评价意见" prop="corpOpinion" >
-          <el-input type="textarea" :rows="5" v-model="ruleForm.corpOpinion" :disabled="!$store.state.isIdentifyFormStage3Open"></el-input>
-        </el-form-item>
-        <el-form-item label="校外导师评价意见" prop="corpTeacherOpinion">
+        <el-form-item label="实习单位指导教师评语" prop="corpOpinion" >
           <el-input type="textarea" :rows="5" v-model="ruleForm.corpTeacherOpinion" :disabled="!$store.state.isIdentifyFormStage3Open"></el-input>
+        </el-form-item>
+        <el-form-item label="实习单位审核意见" prop="corpTeacherOpinion">
+          <el-input type="textarea" :rows="5" v-model="ruleForm.corpOpinion" :disabled="!$store.state.isIdentifyFormStage3Open"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" :loading="btnLoading" @click="submitForm('ruleForm')">提交</el-button>

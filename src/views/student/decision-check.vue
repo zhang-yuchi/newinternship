@@ -10,7 +10,7 @@
       <form-item title="实习内容" :content="decision.content"></form-item>
       <form-item title="实习生自我总结" :content="decision.summary"></form-item>
       <div class="Divider">评价</div>
-      <form-item title="实习单位指导老师评语" :content="decision.corpTeacherOpinion"></form-item>
+      <form-item title="实习单位指导教师评语" :content="decision.corpTeacherOpinion"></form-item>
       <form-item title="实习单位审核意见" :content="decision.corpOpinion"></form-item>
       <div class="sub-divider">实习成绩</div>
       <el-row :gutter="20">

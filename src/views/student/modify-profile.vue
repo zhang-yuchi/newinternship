@@ -112,65 +112,6 @@
         <el-button type="primary" :loading="pswLoading" @click="submitPsw('pswForm')">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 修改实习时间弹窗 -->
-    <el-dialog
-      title="修改实习时间"
-      :visible.sync="timeVisible"
-      width="30%"
-      :before-close="handleClose"
-      :show-close="false"
-      class="hidden-sm-and-down"
-    >
-      <el-form
-        :model="timeForm"
-        status-icon
-        :rules="rules"
-        ref="timeForm"
-        label-width="120px"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="实习开始时间" placeholder="选择日期" prop="gmtStart">
-          <el-date-picker type="date" v-model="timeForm.gmtStart" autocomplete="off"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="实习结束时间" placeholder="选择日期" prop="gmtEnd">
-          <el-date-picker type="date" v-model="timeForm.gmtEnd" autocomplete="off"></el-date-picker>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="timeVisible = false">取 消</el-button>
-        <el-button type="primary" :loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
-      </span>
-    </el-dialog>
-    <!-- 修改实习时间手机版 -->
-    <el-dialog
-      title
-      :visible.sync="timeVisible"
-      width="300px"
-      class="hidden-sm-and-up"
-      :before-close="handleClose"
-      :modal="false"
-      :show-close="false"
-    >
-      <el-form
-        :model="timeForm"
-        status-icon
-        :rules="rules"
-        ref="timeForm"
-        label-width="120px"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="实习开始时间" placeholder="选择日期" prop="gmtStart">
-          <el-date-picker type="date" v-model="timeForm.gmtStart" autocomplete="off"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="实习结束时间" placeholder="选择日期" prop="gmtEnd">
-          <el-date-picker type="date" v-model="timeForm.gmtEnd" autocomplete="off"></el-date-picker>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="timeVisible = false">取 消</el-button>
-        <el-button type="primary" :loading="timeBtnLoading" @click="submitTime('timeForm')">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -294,12 +235,12 @@ export default {
         if (valid) {
           // alert("submit!");
           this.btnLoading = true;
-          console.log(this.ruleForm);
+          // console.log(this.ruleForm);
           let hasStartTime = !!this.ruleForm.starttime
           let hasEndTime = !!this.ruleForm.endtime
           hasStartTime&&formatTime(this.ruleForm,"starttime")
           hasEndTime&&formatTime(this.ruleForm,"endtime")
-          console.log(this.ruleForm);
+          // console.log(this.ruleForm);
           modifySelfInfo(this.ruleForm)
             .then(res => {
               // console.log(res);

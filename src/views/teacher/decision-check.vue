@@ -119,7 +119,7 @@ import { getStudentIdentify, completeDecision } from "../../network/index";
 export default {
   components: {
     formItem,
-    limit,
+    limit
   },
   data() {
     return {
@@ -133,64 +133,69 @@ export default {
         corp: "加载中",
         position: "加载中",
         starttime: "加载中",
-        endtime: "加载中",
+        endtime: "加载中"
       },
       appraisaldate: {},
       appraisal: {},
       options: [
         {
           value: "优秀",
-          label: "优秀",
+          label: "优秀"
         },
         {
           value: "良好",
-          label: "良好",
+          label: "良好"
         },
         {
           value: "中等",
-          label: "中等",
+          label: "中等"
         },
         {
           value: "及格",
-          label: "及格",
+          label: "及格"
         },
         {
           value: "不及格",
-          label: "不及格",
-        },
+          label: "不及格"
+        }
       ],
-      rules: {},
+      rules: {}
     };
   },
   methods: {
     submitDecision() {
       let obj = {
-        corpTeacherGrade: this.appraisal.corpTeacherGrade,
-        teacherGrade: this.appraisal.teacherGrade,
-        leaderOpinion: this.appraisal.leaderOpinion,
+        corpTeacherGrade: this.appraisal.corpTeacherGrade
+          ? this.appraisal.corpTeacherGrade
+          : "",
+        teacherGrade: this.appraisal.teacherGrade
+          ? this.appraisal.teacherGrade
+          : "",
+        leaderOpinion: this.appraisal.leaderOpinion
+          ? this.appraisal.leaderOpinion
+          : ""
       };
-
       console.log(obj);
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
-        type: "info",
+        type: "info"
       })
         .then(() => {
           this.loading = true;
-          completeDecision(this.$route.params.stuNo, obj).then((res) => {
+          completeDecision(this.$route.params.stuNo, obj).then(res => {
             console.log(res);
             if (res.data.status == 100) {
               this.$message({
                 type: "success",
-                message: "提交成功!",
+                message: "提交成功!"
               });
               this.$router.back();
             } else {
               this.loading = false;
               this.$message({
                 type: "error",
-                message: "提交失败：" + res.data.message,
+                message: "提交失败：" + res.data.message
               });
             }
           });
@@ -199,15 +204,15 @@ export default {
           this.loading = false;
           this.$message({
             type: "info",
-            message: "已取消提交",
+            message: "已取消提交"
           });
         });
-    },
+    }
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    console.log(stuNo)
-    getStudentIdentify(stuNo).then((res) => {
+    console.log(stuNo);
+    getStudentIdentify(stuNo).then(res => {
       console.log(res.data.data);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
@@ -239,7 +244,7 @@ export default {
         this.errorLoading = true;
       }
     });
-  },
+  }
 };
 </script>
 

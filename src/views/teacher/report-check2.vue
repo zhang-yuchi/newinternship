@@ -235,35 +235,44 @@ export default {
             ? this.report.stage2Grade
             : "";
           obj.stage2Comment = this.report.stage2Comment;
-          console.log(this.report.totalEval);
-          console.log(obj);
-          Promise.all([
-            completeRep2(this.$route.params.stuNo, obj),
-            completeRepTotal(this.$route.params.stuNo, {
-              total_eval: this.report.totalEval
-            })
-          ])
+          // console.log(this.report.totalEval);
+          // console.log(obj);
+          completeRep2(this.$route.params.stuNo, obj)
             .then(res => {
-              console.log(res);
-              if (res[0].data.status == 100 && res[1].data.status == 100) {
-                this.$message({
-                  type: "success",
-                  message: "提交成功!"
+              // console.log(res);
+              if (res.data.status == 100) {
+                completeRepTotal(this.$route.params.stuNo, {
+                  total_eval: this.report.totalEval
+                }).then(res => {
+                  if (res.data.status == 100) {
+                    // console.log(res);
+                    this.$message({
+                      type: "success",
+                      message: "提交成功!"
+                    });
+                    this.$router.back();
+                  } else {
+                    this.loading = false;
+                    this.$message({
+                      type: "info",
+                      message: "总评 提交失败：" + res.data.message
+                    });
+                  }
                 });
-                this.$router.back();
               } else {
                 this.loading = false;
                 this.$message({
                   type: "info",
-                  message:
-                    "提交失败：" + res[0].data.status !== 100
-                      ? res[0].data.message
-                      : res[1].data.message
+                  message: "提交失败:" + res.data.message
                 });
               }
             })
             .catch(err => {
-              console.log(err);
+              this.loading = false;
+              this.$message({
+                type: "info",
+                message: "程序遇到错误，详情：" + err
+              });
             });
         })
         .catch(() => {

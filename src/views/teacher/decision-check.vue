@@ -66,7 +66,7 @@
         </el-option>
       </el-select>
       <form-item
-        title="实习单位指审核意见"
+        title="实习单位审核意见"
         :content="appraisal.corpOpinion ? appraisal.corpOpinion : '暂无'"
         :time="appraisaldate.corp ? appraisaldate.corp : '暂无'"
       ></form-item>

@@ -341,9 +341,9 @@ export default {
         username: account,
         verifyCode: code
       });
-      console.log(this.forgetForm);
+      // console.log(this.forgetForm);
       modifyPassword(this.forgetForm).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status < 0) {
           this.$message.error(res.data.message);
           this.getVerifyImg();

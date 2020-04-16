@@ -130,7 +130,7 @@ export default {
       }).then(res => {
         // console.log(res);
         if (res.data.status === 100) {
-          this.$message.success(res.data.message);
+          this.$message.success("请等待后刷新");
         }
       })
       .finally(()=>{
@@ -196,12 +196,12 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.getList();
-    this.poller = new Poller({axios:getTask,success:(res)=>{
-      // console.log(res);
-      this.reportMsg = res.data.data.report
-      this.appiMsg = res.data.data.appraisal
-    }})
-    this.poller.start(3000)
+    // this.poller = new Poller({axios:getTask,success:(res)=>{
+    //   // console.log(res);
+    //   this.reportMsg = res.data.data.report
+    //   this.appiMsg = res.data.data.appraisal
+    // }})
+    // this.poller.start(3000)
 
   },
   beforeCreate() {}, //生命周期 - 创建之前
@@ -210,7 +210,7 @@ export default {
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {
-    this.poller.destroy()
+    // this.poller.destroy()
   }, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发

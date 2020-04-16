@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import vm from 'element-ui'
 const isDev = process.env.NODE_ENV === 'development'
-const baseURL = isDev ? "http://ruankun.xyz:8255/internship" : "http://sx.cdcas.edu.cn:8890/internship"
+const baseURL = isDev ? "http://hz.nadev.xyz:8255/internship" : "http://sx.cdcas.edu.cn:8890/internship"
 const service = axios.create({
   baseURL
 })
@@ -120,7 +120,6 @@ export const modifyPosition = (params) => {
 }
 //企业信息更改
 export const modifyCorp = (params) => {
-  console.log(params);
   return service.post('/student/corp',params)
 }
 //获取学生报告册信息
@@ -155,9 +154,10 @@ export const download = (params) => {
   return service.post('/pdf/convert',params)
 }
 export const getTask = () => {
-  return service.get('/pdf/task')
+  return ser.get('/pdf')
 }
 export const getTaskList = () => {
+  
   return service.get('/pdf')
 }
 export const deleteTask = (params)=>{

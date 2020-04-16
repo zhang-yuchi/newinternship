@@ -64,10 +64,10 @@ export default {
     //这里存放数据
     return {
       ruleForm: {
-        content: "",
-        summary: "",
-        corpOpinion: "",
-        corpTeacherOpinion: ""
+        content: " ",
+        summary: " ",
+        corpOpinion: " ",
+        corpTeacherOpinion: " "
       },
       rules: {},
       btnLoading:false,
@@ -120,10 +120,10 @@ export default {
           let temp = res.data.data.appraisal;
           // temp = Obj2text(temp);
           this.ruleForm = {
-            content: temp.content,
-            summary: temp.summary,
-            corpOpinion: temp.corpOpinion,
-            corpTeacherOpinion: temp.corpTeacherOpinion
+            content: temp.content||" ",
+            summary: temp.summary||" ",
+            corpOpinion: temp.corpOpinion||" ",
+            corpTeacherOpinion: temp.corpTeacherOpinion||" "
           };
           console.log(this.ruleForm);
         }

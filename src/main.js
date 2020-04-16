@@ -18,25 +18,23 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-
+import { errorLog } from './network/logerror'
 // Promise内全局异常捕获
-window.addEventListener('unhandledrejection',e=>{
+window.addEventListener('unhandledrejection', e => {
   e.preventDefault()
-  console.log('log-error:::\n'+e.reason.stack)
-  //  
+  let str = `error::: ${e.reason.stack}`
+  errorLog(str)
   return true
 })
 
 // window error捕获的错误
 window.onerror = (msg, url, line, col, error) => {
-  console.log('log-error:::\n'+msg+',发生在:'+url,'第'+line+'行')
-  //  发给后台
-  //  
+  let str = `error::: ${msg} 发生在: ${url} 第${line}行`
+  errorLog(str)
   return true // error不会以error形式打印到控制台
 }
 // vue捕获的错误不会上报到window.error
 Vue.config.errorHandler = function (error, vm, msg) {
-  let e = 'log-error:::\n'+error+'in：'+msg+vm
-  // 发给后台
-
+  let str = `error::: ${error} 发生在组件：${vm.$options._componentTag} 的 ${msg} 中`
+  errorLog(str)
 }

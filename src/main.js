@@ -17,6 +17,7 @@ import { errorLog } from './network/logerror'
 window.addEventListener('unhandledrejection', e => {
   e.preventDefault()
   let str = `error::: ${e.reason.stack}`
+  console.log(str)
   errorLog(str)
   return true
 })
@@ -24,12 +25,14 @@ window.addEventListener('unhandledrejection', e => {
 // window error捕获的错误
 window.onerror = (msg, url, line, col, error) => {
   let str = `error::: ${msg} 发生在: ${url} 第${line}行`
+  console.log(str)
   errorLog(str)
   return true // error不会以error形式打印到控制台
 }
 // vue捕获的错误不会上报到window.error
 Vue.config.errorHandler = function (error, vm, msg) {
   let str = `error::: ${error} 发生在组件：${vm.$options._componentTag} 的 ${msg} 中`
+  console.log(str)
   errorLog(str)
 }
 

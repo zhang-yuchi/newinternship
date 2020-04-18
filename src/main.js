@@ -12,12 +12,6 @@ Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
-
 import { errorLog } from './network/logerror'
 // Promise内全局异常捕获
 window.addEventListener('unhandledrejection', e => {
@@ -38,3 +32,9 @@ Vue.config.errorHandler = function (error, vm, msg) {
   let str = `error::: ${error} 发生在组件：${vm.$options._componentTag} 的 ${msg} 中`
   errorLog(str)
 }
+
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')

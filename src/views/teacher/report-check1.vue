@@ -46,8 +46,10 @@
         <div class="text item twoItem">
           <span class="header-title">实习日期</span>
           <span class="header-content"
-            >{{ info.starttime ? info.starttime : "未填写" }} 至
-            {{ info.endtime ? info.endtime : "未填写" }}</span
+            >{{reportdate.stage1Duration ? reportdate.stage1Duration:'未填写'}}
+            <!-- {{ info.starttime ? info.starttime : "未填写" }} 至
+            {{ info.endtime ? info.endtime : "未填写" }} -->
+            </span
           >
         </div>
       </div>
@@ -123,8 +125,8 @@ export default {
         teachno: "加载中",
         corp: "加载中",
         position: "加载中",
-        starttime: "加载中",
-        endtime: "加载中"
+        // starttime: "加载中",
+        // endtime: "加载中"
       },
       reportdate: {
         stage1Duration: "",

@@ -168,9 +168,9 @@ export default {
         }
         this.loading = false;
       })
-      .catch(err => {
-        console.log(err);
-      });
+      // .catch(err => {
+      //   console.log(err);
+      // });
   },
   mounted() {}
 };

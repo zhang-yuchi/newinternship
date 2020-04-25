@@ -255,15 +255,15 @@ export default {
         type: loginType
       })
         .then(res => {
-          if (res.data.status === 1001) {
+          if (res && res.data.status === 1001) {
             sessionStorage.setItem("token", res.data.data);
             callback();
           } else {
-            var reg = /username/;
-            let errorMsg = reg.test(res.data.message)
-              ? "用户名或密码错误!"
-              : res.data.message;
-            this.$message.error(errorMsg);
+            // var reg = /username/;
+            // let errorMsg = reg.test(res.data.message)
+            //   ? "用户名或密码错误!"
+            //   : res.data.message;
+            // this.$message.error(errorMsg);
           }
         })
         .finally(() => {

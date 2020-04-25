@@ -196,12 +196,30 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.getList();
-    // this.poller = new Poller({axios:getTask,success:(res)=>{
-    //   // console.log(res);
-    //   this.reportMsg = res.data.data.report
-    //   this.appiMsg = res.data.data.appraisal
-    // }})
-    // this.poller.start(3000)
+    this.poller = new Poller({axios:getTaskList,success:(res)=>{
+      // console.log(res);
+      // console.log(this.tableData);
+      let flag = false//表格未改变
+      this.tableData.map((item,index)=>{
+        res.data.data.map((data,i)=>{
+          if(index===i&&item.id!==data.id){
+            //此时判断数组不相同
+            console.log("数组不同了");
+            flag = true
+          }
+        })
+      })
+      // this.reportMsg = res.data.data.report
+      // this.appiMsg = res.data.data.appraisal
+      if(flag){
+        this.tableData = res.data.data.map(item => {
+            // console.log(item);
+            item.created = moment(item.created).format("YYYY-MM-DD HH:mm:ss");
+            return item;
+          });
+      }
+    }})
+    this.poller.start(3000)
 
   },
   beforeCreate() {}, //生命周期 - 创建之前
@@ -210,7 +228,7 @@ export default {
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {
-    // this.poller.destroy()
+    this.poller.destroy()
   }, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发

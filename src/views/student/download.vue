@@ -204,8 +204,10 @@ export default {
         res.data.data.map((data,i)=>{
           if(index===i&&item.id!==data.id){
             //此时判断数组不相同
-            console.log("数组不同了");
+            // console.log("数组不同了");
+            
             flag = true
+            
           }
         })
       })

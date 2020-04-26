@@ -46,11 +46,12 @@
         <div class="text item twoItem">
           <span class="header-title">实习日期</span>
           <span class="header-content"
-            >{{reportdate.stage1Duration ? reportdate.stage1Duration:'未填写'}}
+            >{{
+              reportdate.stage1Duration ? reportdate.stage1Duration : "未填写"
+            }}
             <!-- {{ info.starttime ? info.starttime : "未填写" }} 至
             {{ info.endtime ? info.endtime : "未填写" }} -->
-            </span
-          >
+          </span>
         </div>
       </div>
 
@@ -111,7 +112,7 @@ import { getStudentReport, completeRep1 } from "../../network/index";
 export default {
   components: {
     formItem,
-    limit
+    limit,
   },
   data() {
     return {
@@ -130,60 +131,55 @@ export default {
       },
       reportdate: {
         stage1Duration: "",
-        stage1Fill: ""
+        stage1Fill: "",
       },
       report: {
         stage1GuideWay: "加载中",
         stage1Summary: "加载中",
         stage1Comment: "",
-        stage1Grade: ""
+        stage1Grade: "",
       },
       rules: {},
       options: [
         {
-          value:'',
-          label:'请选择'
-        },
-        {
           value: "优秀",
-          label: "优秀"
+          label: "优秀",
         },
         {
           value: "良好",
-          label: "良好"
+          label: "良好",
         },
         {
           value: "中等",
-          label: "中等"
+          label: "中等",
         },
         {
           value: "及格",
-          label: "及格"
+          label: "及格",
         },
         {
           value: "不及格",
-          label: "不及格"
-        }
-      ]
+          label: "不及格",
+        },
+      ],
     };
   },
   methods: {
     submitReport1() {
+      console.log(this.report.stage1Comment);
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(() => {
-          // console.log(this.res);
           this.loading = true;
           if (
             !this.report.stage1Comment ||
             this.report.stage1Comment.length < 60
           ) {
-            console.log(1);
             this.$alert("一阶段评语不能低于60字", "提交失败", {
-              confirmButtonText: "确定"
+              confirmButtonText: "确定",
             });
             this.loading = false;
             throw "false";
@@ -194,35 +190,35 @@ export default {
             ? this.report.stage1Grade
             : "";
           console.log(obj);
-          completeRep1(this.$route.params.stuNo, obj).then(res => {
-            console.log("提交：", res);
+          completeRep1(this.$route.params.stuNo, obj).then((res) => {
+            console.log(res);
             if (res.data.status == 100) {
               this.$message({
                 type: "success",
-                message: "提交成功!"
+                message: "提交成功!",
               });
               this.$router.back();
             } else {
               this.$message({
                 type: "error",
-                message: "提交失败：" + res.data.message
+                message: "提交失败：" + res.data.message,
               });
               this.loading = false;
             }
           });
         })
-        .catch(err => {
+        .catch((err) => {
           // console.log(err)
           this.$message({
             type: "info",
-            message: "已取消提交"
+            message: "已取消提交",
           });
         });
-    }
+    },
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    getStudentReport(stuNo).then(res => {
+    getStudentReport(stuNo).then((res) => {
       console.log(res);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
@@ -239,14 +235,14 @@ export default {
           }
         }
         this.report.stage1Summary = Obj2html({
-          str: this.report.stage1Summary
+          str: this.report.stage1Summary,
         }).str;
         this.report = res.data.data.report;
       } else {
         this.errorLoading = true;
       }
     });
-  }
+  },
 };
 </script>
 

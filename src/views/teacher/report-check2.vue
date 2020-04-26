@@ -158,10 +158,6 @@ export default {
       },
       options: [
         {
-          value:'',
-          label:'请选择'
-        },
-        {
           value: "优秀",
           label: "优秀"
         },
@@ -222,8 +218,7 @@ export default {
         .then(() => {
           this.loading = true;
           if (
-            !this.report.stage2Comment ||
-            this.report.stage2Comment.length < 60
+            !this.report.stage2Comment || this.report.stage2Comment.length < 60
           ) {
             this.$alert("二阶段评语不能低于60字", "提交失败", {
               confirmButtonText: "确定"
@@ -241,8 +236,8 @@ export default {
             ? this.report.stage2Grade
             : "";
           obj.stage2Comment = this.report.stage2Comment;
-          console.log(this.report.totalEval);
-          console.log(obj);
+          // console.log(this.report.totalEval);
+          // console.log(obj);
           completeRep2(this.$route.params.stuNo, obj)
             .then(res => {
               // console.log(res);

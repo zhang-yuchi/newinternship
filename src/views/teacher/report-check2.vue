@@ -158,6 +158,10 @@ export default {
       },
       options: [
         {
+          value:'',
+          label:'请选择'
+        },
+        {
           value: "优秀",
           label: "优秀"
         },
@@ -237,8 +241,8 @@ export default {
             ? this.report.stage2Grade
             : "";
           obj.stage2Comment = this.report.stage2Comment;
-          // console.log(this.report.totalEval);
-          // console.log(obj);
+          console.log(this.report.totalEval);
+          console.log(obj);
           completeRep2(this.$route.params.stuNo, obj)
             .then(res => {
               // console.log(res);

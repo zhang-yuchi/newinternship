@@ -141,6 +141,10 @@ export default {
       rules: {},
       options: [
         {
+          value:'',
+          label:'请选择'
+        },
+        {
           value: "优秀",
           label: "优秀"
         },

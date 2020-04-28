@@ -5,7 +5,6 @@ import store from './store'
 import 'babel-polyfill'
 //引入element-ui
 import ElementUI, { Form } from 'element-ui'
-import vm from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css';
 import './assets/css/hidden.css'
@@ -19,10 +18,6 @@ window.addEventListener('unhandledrejection', e => {
   e.preventDefault()
   let str = `error::: ${e.reason.stack}`
   console.log(str)
-  vm.Message({
-    message:"服务器开小差了...",
-    type:"error"
-  })
   errorLog(str)
   return true
 })

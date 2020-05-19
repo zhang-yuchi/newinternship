@@ -6,11 +6,15 @@
 <template>
   <div class="download">
     <div class="load-title">文件下载</div>
-    <div class="target">{{reportMsg}}</div>
-    <div class="target">{{appiMsg}}</div>
+    <el-alert title="列表中的文件为历史文件,若要下载最新的文件请先点击加入队列按钮,等待转换完成后再进行下载!" style="margin:20px 0;" :closable="false" type="warning"></el-alert>
     <el-button type="primary" @click="downloadFile(true)" size="mini">加入报告册到队列</el-button>
     <el-button type="warning" @click="downloadFile(false)" size="mini">加入鉴定表到队列</el-button>
-    <el-button type="danger" size="mini" @click="DeleteSelected" :disabled="multipleSelection.length<=0">删除所选项</el-button>
+    <el-button
+      type="danger"
+      size="mini"
+      @click="DeleteSelected"
+      :disabled="multipleSelection.length<=0"
+    >删除所选项</el-button>
     <el-button icon="el-icon-refresh" size="mini" @click="getList">刷新列表</el-button>
     <el-table
       ref="multipleTable"
@@ -35,22 +39,13 @@
             v-if="!scope.row.failed"
             :type="scope.row.converting?'warning':'success'"
           >{{scope.row.converting?"转换中":"转换完成"}}</el-tag>
-          <el-tag
-            v-if="scope.row.failed"
-            :type="'danger'"
-          >转换失败</el-tag>
+          <el-tag v-if="scope.row.failed" :type="'danger'">转换失败</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="结果" width="120">
         <template slot-scope="scope">
-          <el-tag
-            v-if="scope.row.failed"
-            type='danger'
-          >失败</el-tag>
-          <el-tag
-            v-else-if="!scope.row.converting"
-            type='success'
-          >成功</el-tag>
+          <el-tag v-if="scope.row.failed" type="danger">失败</el-tag>
+          <el-tag v-else-if="!scope.row.converting" type="success">成功</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -90,11 +85,11 @@ export default {
       tableData: [],
       multipleSelection: [],
       reportMsg: "",
-      appiMsg:"",
+      appiMsg: "",
       currentPage: 0,
       pageSize: 7,
       tableLoading: false,
-      poller:null
+      poller: null
     };
   },
   //监听属性 类似于data概念
@@ -127,17 +122,18 @@ export default {
       download({
         report: isReport,
         token: sessionStorage.getItem("token")
-      }).then(res => {
-        // console.log(res);
-        if (res.data.status === 100) {
-          this.$message.success("请等待后刷新");
-        }
       })
-      .finally(()=>{
-        setTimeout(()=>{
-          this.getList()
-        },1000)
-      })
+        .then(res => {
+          // console.log(res);
+          if (res.data.status === 100) {
+            this.$message.success("请等待后刷新");
+          }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.getList();
+          }, 1000);
+        });
     },
     pageChange(size) {
       // console.log(size);
@@ -162,33 +158,33 @@ export default {
       // console.log(item);
       deleteTask({ data: [item.id] }).then(res => {
         // console.log(res);
-        if(res.data.status===100){
-          this.$message.success("删除成功")
-          this.getList()
-        }else{
-          this.$message.error(res.data.message)
+        if (res.data.status === 100) {
+          this.$message.success("删除成功");
+          this.getList();
+        } else {
+          this.$message.error(res.data.message);
         }
       });
     },
     DeleteSelected() {
       // console.log(this.multipleSelection);
-      const idList =  this.multipleSelection.map(item=>{
-        return item.id
-      })
-      deleteTask({data:idList}).then(res=>{
+      const idList = this.multipleSelection.map(item => {
+        return item.id;
+      });
+      deleteTask({ data: idList }).then(res => {
         // console.log(res);
-        if(res.data.status===100){
-          this.$message.success(res.data.data)
-          this.getList()
-        }else{
-          this.$message.error(res.data.message)
+        if (res.data.status === 100) {
+          this.$message.success(res.data.data);
+          this.getList();
+        } else {
+          this.$message.error(res.data.message);
         }
-      })
+      });
     },
-    handleDownload(index,item){
+    handleDownload(index, item) {
       // console.log();
       // console.log(item);
-      window.open("http://"+item.url)
+      window.open("http://" + item.url);
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -196,33 +192,34 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.getList();
-    this.poller = new Poller({axios:getTaskList,success:(res)=>{
-      // console.log(res);
-      // console.log(this.tableData);
-      let flag = false//表格未改变
-      this.tableData.map((item,index)=>{
-        res.data.data.map((data,i)=>{
-          if(index===i&&item.id!==data.id){
-            //此时判断数组不相同
-            // console.log("数组不同了");
-            
-            flag = true
-            
-          }
-        })
-      })
-      // this.reportMsg = res.data.data.report
-      // this.appiMsg = res.data.data.appraisal
-      if(flag){
-        this.tableData = res.data.data.map(item => {
+    this.poller = new Poller({
+      axios: getTaskList,
+      success: res => {
+        // console.log(res);
+        // console.log(this.tableData);
+        let flag = false; //表格未改变
+        this.tableData.map((item, index) => {
+          res.data.data.map((data, i) => {
+            if (index === i && item.id !== data.id) {
+              //此时判断数组不相同
+              // console.log("数组不同了");
+
+              flag = true;
+            }
+          });
+        });
+        // this.reportMsg = res.data.data.report
+        // this.appiMsg = res.data.data.appraisal
+        if (flag) {
+          this.tableData = res.data.data.map(item => {
             // console.log(item);
             item.created = moment(item.created).format("YYYY-MM-DD HH:mm:ss");
             return item;
           });
+        }
       }
-    }})
-    this.poller.start(3000)
-
+    });
+    this.poller.start(3000);
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -230,7 +227,7 @@ export default {
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {
-    this.poller.destroy()
+    this.poller.destroy();
   }, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发

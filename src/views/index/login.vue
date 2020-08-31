@@ -160,7 +160,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getVerify, login, modifyPassword } from "../../network";
+import { getVerify, login, modifyPassword, getNowStage } from "../../network";
 
 // import validator from 'validator'
 export default {
@@ -201,28 +201,28 @@ export default {
         password: "",
         checkPass: "",
         account: "",
-        code: ""
+        code: "",
       },
       forgetForm: {
         account: "",
         pass: "",
         checkPass: "",
         identify: "",
-        type: ""
+        type: "",
       },
       loginLoading: false,
       checkUrl: "",
       rules: {
         password: [{ validator: validatePass, trigger: "blur" }],
         account: [{ validator: checkAge, trigger: "blur" }],
-        code: [{ validator: checkVerify, trigger: "blur" }]
+        code: [{ validator: checkVerify, trigger: "blur" }],
       },
       islog: true,
       form: {
         account: "",
         passowrd: "",
-        identify: ""
-      }
+        identify: "",
+      },
     };
   },
   //监听属性 类似于data概念
@@ -252,18 +252,14 @@ export default {
         username: this.ruleForm.account,
         verifyCode: this.ruleForm.code,
         password: this.ruleForm.password,
-        type: loginType
+        type: loginType,
       })
-        .then(res => {
+        .then((res) => {
+          console.log(res);
           if (res && res.data.status === 1001) {
             sessionStorage.setItem("token", res.data.data);
             callback();
           } else {
-            // var reg = /username/;
-            // let errorMsg = reg.test(res.data.message)
-            //   ? "用户名或密码错误!"
-            //   : res.data.message;
-            // this.$message.error(errorMsg);
           }
         })
         .finally(() => {
@@ -272,7 +268,7 @@ export default {
         });
     },
     onSubmit(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           // console.log(111)
           // console.log(this.form.identify);
@@ -281,12 +277,21 @@ export default {
             return;
           }
           this.getLogin(this.form.identify, () => {
-            // console.log(this.form.identify);
-            if (this.form.identify === "学生") {
-              this.$router.push("/student");
-            } else if (this.form.identify === "教师") {
-              this.$router.push("/teacher");
-            }
+            getNowStage().then((res) => {
+              let stage = res.data.data;
+              if (!stage.reportStage && !stage.appraisalStage) {
+                //不允许登录 给弹窗给用户
+                this.$alert("当前还未开启填写阶段", "提示", {
+                  confirmButtonText: "确定"
+                });
+              } else {
+                if (this.form.identify === "学生") {
+                  this.$router.push("/student");
+                } else if (this.form.identify === "教师") {
+                  this.$router.push("/teacher");
+                }
+              }
+            });
           });
         } else {
           // console.log("error submit!!");
@@ -298,7 +303,7 @@ export default {
       this.islog = false;
     },
     getVerifyImg() {
-      getVerify().then(res => {
+      getVerify().then((res) => {
         // console.log(res);
         let blob = res.data;
         let src = window.URL.createObjectURL(blob);
@@ -339,10 +344,10 @@ export default {
         password: pass,
         idcard: identify,
         username: account,
-        verifyCode: code
+        verifyCode: code,
       });
       // console.log(this.forgetForm);
-      modifyPassword(this.forgetForm).then(res => {
+      modifyPassword(this.forgetForm).then((res) => {
         // console.log(res);
         if (res.data.status < 0) {
           this.$message.error(res.data.message);
@@ -353,7 +358,7 @@ export default {
           this.islog = true;
         }
       });
-    }
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
@@ -368,7 +373,7 @@ export default {
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-  deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
+  deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>
 <style scoped>

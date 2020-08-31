@@ -202,3 +202,7 @@ export const completeRep2 = (stuNo,params) => {
 export const completeRepTotal = (stuNo,params) => {
   return service.post('/teacher/student/' + stuNo+'/report/total',params)
 }
+//判断阶段
+export const getNowStage = ()=>{
+  return service.get('/stage/college')
+}

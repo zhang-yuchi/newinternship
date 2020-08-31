@@ -125,7 +125,7 @@ export default {
 <style scoped>
 #main {
   height: 100%;
-  min-width: 1200px;
+  min-width: 1000px;
 }
 .el-menu {
   height: 100%;
@@ -158,5 +158,21 @@ export default {
   max-width: 150px;
   background-color: white;
 }
-
+</style>
+<style>
+#fenye {
+  display: flex;
+  justify-content: flex-end;
+}
+.search {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.input-with-select {
+  width: 400px;
+}
+.el-select .el-input__inner{
+  width: 90px;
+}
 </style>

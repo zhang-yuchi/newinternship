@@ -1,9 +1,28 @@
 <template>
   <div>
+    <div class="search">
+      <el-input
+        placeholder="输入搜索内容"
+        @input="computedSearch"
+        v-model="searchValue"
+        class="input-with-select"
+      >
+        <el-select
+          style="width=200px"
+          v-model="searchField"
+          slot="prepend"
+          @change="changeSearchFiled"
+        >
+          <el-option label="学号" value="stuno"></el-option>
+          <el-option label="姓名" value="name"></el-option>
+          <el-option label="学院" value="college"></el-option>
+        </el-select>
+      </el-input>
+      <fillfilter @filter-click="filterClick"></fillfilter>
+    </div>
     <el-table
-      :data="data[currentPage - 1]"
+      :data="searchedData2[currentPage - 1]"
       border
-      height="628"
       v-loading="loading"
       element-loading-text="加 载 中"
       style="width: 100%"
@@ -60,7 +79,7 @@
       id="fenye"
       background
       layout="prev, pager, next"
-      :total="arrlength"
+      :total="searchedData.length"
       :current-page="currentPage"
       :page-size="pageSize"
       @prev-click="prevClick()"
@@ -68,7 +87,6 @@
       @current-change="pageChange"
     >
     </el-pagination>
-    <fillfilter @filter-click="filterClick"></fillfilter>
   </div>
 </template>
 
@@ -78,19 +96,32 @@ import fillfilter from "../../components/content/Filter";
 import { one2arr } from "../../command/utils";
 export default {
   components: {
-    fillfilter
+    fillfilter,
   },
   data() {
     return {
       tableData: [],
-      data: [],
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 9,
       loading: true,
-      arrlength: 0
+      searchField: "stuno",
+      searchValue: "",
+      searchedData: [],
+      filterIndex: 3,
     };
   },
+  computed: {
+    searchedData2() {
+      return one2arr(this.searchedData, this.pageSize);
+    },
+  },
   methods: {
+    changeSearchFiled() {
+      this.filterClick(this.filterIndex);
+    },
+    computedSearch() {
+      this.filterClick(this.filterIndex);
+    },
     reportCheck1(item) {
       this.$router.push("/teacher/report-check1/" + item.stuno);
     },
@@ -143,40 +174,43 @@ export default {
           }
         }
       }
-      this.arrlength = arr.length;
-      this.data = one2arr(arr, this.pageSize);
-    }
+      this.filterIndex = e;
+      if (!this.searchValue) {
+        this.searchedData = arr;
+      } else {
+        this.searchedData = arr.filter((item) => {
+          return item[this.searchField]
+            .toLowerCase()
+            .includes(this.searchValue.toLowerCase());
+        });
+      }
+    },
   },
   created() {
-    getStudentList()
-      .then(res => {
-        if (res.data.status == 100) {
-          console.log(res);
-          this.tableData = res.data.data;
-          this.arrlength = this.tableData.length;
-          this.data = one2arr(this.tableData, this.pageSize);
-          console.log(this.data);
-        } else if (res.data.status == -100) {
-          // this.$alert('无法获取到您的信息，请重新登陆','身份失效',{
-          //   confirmButtonText: '确定',
-          //   callback: action => {
-          //     if(action == 'confirm'){
-          //       this.$router.push('/')
-          //     }
-          //   }
-          // })
-        }
-        this.loading = false;
-      })
+    getStudentList().then((res) => {
+      if (res.data.status == 100) {
+        console.log(res);
+        this.tableData = res.data.data;
+        this.searchedData = this.tableData;
+      } else if (res.data.status == -100) {
+        // this.$alert('无法获取到您的信息，请重新登陆','身份失效',{
+        //   confirmButtonText: '确定',
+        //   callback: action => {
+        //     if(action == 'confirm'){
+        //       this.$router.push('/')
+        //     }
+        //   }
+        // })
+      }
+      this.loading = false;
+    });
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 
 <style scoped>
-#fenye {
-  position: absolute;
-  right: 0;
-  top: 640px;
+.el-input--suffix {
+  width: 200px;
 }
 </style>

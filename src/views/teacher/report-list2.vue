@@ -1,10 +1,29 @@
 <template>
   <div>
+    <div class="search">
+      <el-input
+        placeholder="输入搜索内容"
+        v-model="searchValue"
+        @input="computedSearch"
+        class="input-with-select"
+      >
+        <el-select
+          v-model="searchField"
+          slot="prepend"
+          @change="changeSearchFiled"
+        >
+          <el-option label="学号" value="stuno"></el-option>
+          <el-option label="姓名" value="name"></el-option>
+          <el-option label="学院" value="college"></el-option>
+        </el-select>
+      </el-input>
+      <fillfilter @filter-click="filterClick"></fillfilter>
+    </div>
+
     <el-table
-      :data="data[currentPage - 1]"
+      :data="searchedData2[currentPage - 1]"
       :row-class-name="tableRowClassName"
       border
-      height="628"
       style="width: 100%"
       v-loading="loading"
       element-loading-text="加 载 中"
@@ -60,7 +79,7 @@
       id="fenye"
       background
       layout="prev, pager, next"
-      :total="arrlength"
+      :total="searchedData.length"
       :current-page="currentPage"
       :page-size="pageSize"
       @prev-click="prevClick()"
@@ -68,25 +87,8 @@
       @current-change="pageChange"
     >
     </el-pagination>
-    <fillfilter @filter-click="filterClick"></fillfilter>
   </div>
 </template>
-
-<style>
-.el-table .warning-row {
-  background: oldlace;
-}
-
-.el-table .success-row {
-  background: #f0f9eb;
-}
-#fenye {
-  position: absolute;
-  right: 0;
-  top: 640px;
-}
-</style>
-
 <script>
 import { getStudentList } from "../../network/index";
 import fillfilter from "../../components/content/Filter";
@@ -98,19 +100,32 @@ export default {
   data() {
     return {
       tableData: [],
-      data: [],
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 9,
       loading: true,
-      arrlength: 0
+      searchField: "stuno",
+      searchValue: "",
+      searchedData: [],
+      filterIndex: 3,
     };
   },
+  computed: {
+    searchedData2() {
+      return one2arr(this.searchedData, this.pageSize);
+    },
+  },
   methods: {
+     changeSearchFiled() {
+      this.filterClick(this.filterIndex);
+    },
+    computedSearch() {
+      this.filterClick(this.filterIndex);
+    },
     reportCheck2(item) {
       this.$router.push("/teacher/report-check2/" + item.stuno);
     },
     tableRowClassName({ row, rowIndex }) {
-      let item = this.data[this.currentPage - 1][rowIndex]
+      let item = this.searchedData2[this.currentPage - 1][rowIndex]
       if (!item.reportStage2Comment || !item.reportStage2Grade || !item.reportTotalEval) {
         return "warning-row";
       }
@@ -124,7 +139,6 @@ export default {
     },
     pageChange(e) {
       this.currentPage = e;
-      console.log(this.currentPage);
     },
     filterClick(e) {
       let arr = [];
@@ -149,8 +163,16 @@ export default {
           }
         }
       }
-      this.arrlength = arr.length;
-      this.data = one2arr(arr, this.pageSize);
+      this.filterIndex = e;
+      if (!this.searchValue) {
+        this.searchedData = arr;
+      } else {
+        this.searchedData = arr.filter((item) => {
+          return item[this.searchField]
+            .toLowerCase()
+            .includes(this.searchValue.toLowerCase());
+        });
+      }
     }
   },
   mounted() {
@@ -158,8 +180,7 @@ export default {
       if (res.data.status == 100) {
         // console.log(res);
         this.tableData = res.data.data;
-        this.arrlength = this.tableData.length;
-        this.data = one2arr(this.tableData, this.pageSize);
+        this.searchedData = this.tableData;
         if (this.tableData.length) {
           for (let item of this.tableData) {
             if (item.reportStage2Comment && item.reportStage2Grade && item.reportTotalEval) {
@@ -180,3 +201,12 @@ export default {
   }
 };
 </script>
+<style>
+.el-table .warning-row {
+  background: oldlace;
+}
+
+.el-table .success-row {
+  background: #f0f9eb;
+}
+</style>

@@ -80,19 +80,19 @@
             </template>
             <el-menu-item-group>
               <template slot="title">第一阶段</template>
-              <el-menu-item index="/student/report-check/first-stage">查看报告册</el-menu-item>
               <el-menu-item
-                index="/student/report/first-stage"
-                :disabled="!$store.state.isReportStage1Open"
-              >填写报告册</el-menu-item>
+                :disabled="reportStage<1"
+                index="/student/report-check/first-stage"
+              >查看报告册</el-menu-item>
+              <el-menu-item index="/student/report/first-stage" :disabled="reportStage<1">填写报告册</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group>
               <template slot="title">第二阶段</template>
-              <el-menu-item index="/student/report-check/second-stage">查看报告册</el-menu-item>
               <el-menu-item
-                index="/student/report/second-stage"
-                :disabled="!$store.state.isReportStage2Open"
-              >填写报告册</el-menu-item>
+                :disabled="reportStage<=1"
+                index="/student/report-check/second-stage"
+              >查看报告册</el-menu-item>
+              <el-menu-item :disabled="reportStage<=1" index="/student/report/second-stage">填写报告册</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="4">
@@ -101,8 +101,8 @@
               <span>我的鉴定表</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/student/decision-check">查看鉴定表</el-menu-item>
-              <el-menu-item index="/student/decision">填写鉴定表</el-menu-item>
+              <el-menu-item :disabled="!decisionStage" index="/student/decision-check">查看鉴定表</el-menu-item>
+              <el-menu-item :disabled="!decisionStage" index="/student/decision">填写鉴定表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item index="/student/download">
@@ -119,17 +119,19 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import layout from "../../components/content/layout.vue";
-import { getStage } from "../../network";
+import { getStage, getNowStage } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
-    layout
+    layout,
   },
   data() {
     //这里存放数据
     return {
       activeNav: "profile",
-      isphone: false
+      isphone: false,
+      reportStage: 0,
+      decisionStage: 0,
     };
   },
   //监听属性 类似于data概念
@@ -138,7 +140,7 @@ export default {
   watch: {
     $route(newc, cur) {
       this.activeNav = newc.path;
-    }
+    },
   },
   //方法集合
   methods: {
@@ -147,7 +149,7 @@ export default {
     },
     hiddenMenu() {
       this.isphone = false;
-    }
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
@@ -178,6 +180,12 @@ export default {
     // catch(()=>{
     //   this.$message.error("阶段控制接口出错!请检测网络或告知管理员!!")
     // })
+    this.$nextTick(() => {
+      getNowStage().then((res) => {
+        this.reportStage = res.data.data.reportStage;
+        this.decisionStage = res.data.data.appraisalStage;
+      });
+    });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -186,7 +194,7 @@ export default {
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-  deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
+  deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>
 <style scoped>

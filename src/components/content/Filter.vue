@@ -12,23 +12,21 @@
 export default {
   data() {
     return {
-      radio: 3
+      radio: 3,
     };
   },
   methods: {
     change(e) {
       // console.log(e);
-      this.$emit('filter-click',e)
-    }
-  }
+      this.$emit("filter-click", e);
+    },
+  },
 };
 </script>
 
 <style scoped>
 #fillFilter {
-  position: absolute;
-  right: 18px;
-  top: -20px;
-  cursor: pointer;
+  margin: 0 20px;
+  display: flex;
 }
 </style>

@@ -19,6 +19,8 @@ module.exports = {
     },
     changeScreenHeight(state,height){
         state.screenHeight = height
+    },
+    setStuNo(state,arr){
+      state.stuNo = arr
     }
-
 }

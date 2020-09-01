@@ -42,11 +42,12 @@
         <div class="text item twoItem">
           <span class="header-title">实习日期</span>
           <span class="header-content"
-            >{{reportdate.stage2Duration ? reportdate.stage2Duration : '未填写'}}
+            >{{
+              reportdate.stage2Duration ? reportdate.stage2Duration : "未填写"
+            }}
             <!-- {{ info.starttime ? info.starttime : "未填写" }} 至
             {{ info.endtime ? info.endtime : "未填写" }} -->
-            </span
-          >
+          </span>
         </div>
       </div>
 
@@ -107,9 +108,11 @@
           ></el-input>
           <limit :maxLength="500" :testString="report.totalEval"></limit>
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="report-btn-line">
           <el-button type="primary" @click="submitReport2" :loading="loading"
             >提交</el-button
+          ><el-button class="nextBtn" type="primary" @click="toNext"
+            >下一个</el-button
           >
         </el-form-item>
       </el-form>
@@ -123,13 +126,13 @@ import { Obj2html, date2str } from "../../command/utils";
 import {
   getStudentReport,
   completeRep2,
-  completeRepTotal
+  completeRepTotal,
 } from "../../network/index";
 export default {
   name: "Report-check2",
   components: {
     formItem,
-    limit
+    limit,
   },
   data() {
     return {
@@ -148,42 +151,42 @@ export default {
       },
       reportdate: {
         stage2Duration: "",
-        stage2Fill: ""
+        stage2Fill: "",
       },
       report: {
         stage2GuideWay: "加载中",
         stage2Summary: "加载中",
         stage2Comment: "",
-        totalEval: ""
+        totalEval: "",
       },
       options: [
         {
           value: "优秀",
-          label: "优秀"
+          label: "优秀",
         },
         {
           value: "良好",
-          label: "良好"
+          label: "良好",
         },
         {
           value: "中等",
-          label: "中等"
+          label: "中等",
         },
         {
           value: "及格",
-          label: "及格"
+          label: "及格",
         },
         {
           value: "不及格",
-          label: "不及格"
-        }
+          label: "不及格",
+        },
       ],
-      rules: {}
+      rules: {},
     };
   },
   mounted() {
     let stuNo = this.$route.params.stuNo;
-    getStudentReport(stuNo).then(res => {
+    getStudentReport(stuNo).then((res) => {
       // console.log(res);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
@@ -200,7 +203,7 @@ export default {
           }
         }
         this.report.stage2Summary = Obj2html({
-          str: this.report.stage2Summary
+          str: this.report.stage2Summary,
         }).str;
         this.report = res.data.data.report;
       } else {
@@ -209,25 +212,34 @@ export default {
     });
   },
   methods: {
+    toNext() {
+      let index = this.$store.state.index;
+      this.$store.commit("incrementIndex");
+      let stuno = this.$store.state.stuNo[index + 1];
+      this.$router.replace("/teacher/report-check2/" + stuno);
+      this.$router.go(0);
+      window.scrollTo(0, 0);
+    },
     submitReport2() {
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(() => {
           this.loading = true;
           if (
-            !this.report.stage2Comment || this.report.stage2Comment.length < 60
+            !this.report.stage2Comment ||
+            this.report.stage2Comment.length < 60
           ) {
             this.$alert("二阶段评语不能低于60字", "提交失败", {
-              confirmButtonText: "确定"
+              confirmButtonText: "确定",
             });
             throw "false";
           }
           if (!this.report.totalEval || this.report.totalEval.length < 60) {
             this.$alert("总评不能低于60字", "提交失败", {
-              confirmButtonText: "确定"
+              confirmButtonText: "确定",
             });
             throw "false";
           }
@@ -239,52 +251,50 @@ export default {
           // console.log(this.report.totalEval);
           // console.log(obj);
           completeRep2(this.$route.params.stuNo, obj)
-            .then(res => {
+            .then((res) => {
               // console.log(res);
               if (res.data.status == 100) {
                 completeRepTotal(this.$route.params.stuNo, {
-                  total_eval: this.report.totalEval
-                }).then(res => {
+                  total_eval: this.report.totalEval,
+                }).then((res) => {
                   if (res.data.status == 100) {
                     // console.log(res);
                     this.$message({
                       type: "success",
-                      message: "提交成功!"
+                      message: "提交成功!",
                     });
-                    this.$router.back();
                   } else {
-                    this.loading = false;
                     this.$message({
                       type: "info",
-                      message: "总评 提交失败：" + res.data.message
+                      message: "总评 提交失败：" + res.data.message,
                     });
                   }
                 });
               } else {
-                this.loading = false;
                 this.$message({
                   type: "info",
-                  message: "提交失败:" + res.data.message
+                  message: "提交失败:" + res.data.message,
                 });
               }
             })
-            .catch(err => {
-              this.loading = false;
+            .catch((err) => {
               this.$message({
                 type: "info",
-                message: "程序遇到错误，详情：" + err
+                message: "程序遇到错误，详情：" + err,
               });
             });
         })
         .catch(() => {
-          this.loading = false;
           this.$message({
             type: "info",
-            message: "已取消提交"
+            message: "已取消提交",
           });
+        })
+        .finally(() => {
+          this.loading = false;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

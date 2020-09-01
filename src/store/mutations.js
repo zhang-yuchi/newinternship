@@ -22,5 +22,11 @@ module.exports = {
     },
     setStuNo(state,arr){
       state.stuNo = arr
+    },
+    incrementIndex(state){
+      ++state.index
+    },
+    setIndex(state,index){
+      state.index = index
     }
 }

@@ -277,23 +277,23 @@ export default {
             return;
           }
           this.getLogin(this.form.identify, () => {
-            if (this.form.identify === "学生") {
-              getNowStage().then((res) => {
-                console.log(res);
-                let stage = res.data.data;
-                // console.log(res);
-                if (!stage.reportStage && !stage.appraisalStage) {
-                  //不允许登录 给弹窗给用户
-                  this.$alert("当前还未开启填写阶段", "提示", {
-                    confirmButtonText: "确定",
-                  });
-                } else {
-                  this.$router.push("/student");
+            getNowStage().then((res) => {
+              console.log(res);
+              let stage = res.data.data;
+              console.log(res);
+              if (!stage.reportStage && !stage.appraisalStage) {
+                //不允许登录 给弹窗给用户
+                this.$alert("当前还未开启填写阶段", "提示", {
+                  confirmButtonText: "确定",
+                });
+              } else {
+                if (this.form.identify === "学生") {
+                  this.$router.push('/student')
+                } else if (this.form.identify === "教师") {
+                  this.$router.push("/teacher");
                 }
-              });
-            } else if (this.form.identify === "教师") {
-              this.$router.push("/teacher");
-            }
+              }
+            });
           });
         } else {
           // console.log("error submit!!");

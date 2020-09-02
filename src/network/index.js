@@ -26,7 +26,7 @@ service.interceptors.request.use((config) => {
   return config
 })
 service.interceptors.response.use((res) => {
-  // console.log(res);
+  console.log(res);
   //做全局处理
   const SUCCESS_STATUS = 200
   if (res.status == SUCCESS_STATUS) {

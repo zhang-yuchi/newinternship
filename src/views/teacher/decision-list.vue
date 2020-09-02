@@ -135,6 +135,8 @@ export default {
       }
     },
     decisionCheck(item) {
+      let index = this.$store.state.stuNo.indexOf(item.stuno);
+      this.$store.commit("setIndex", index);
       this.$router.push("/teacher/decision-check/" + item.stuno);
     },
     prevClick() {
@@ -195,7 +197,7 @@ export default {
   mounted() {
     getStudentList().then((res) => {
       if (res.data.status == 100) {
-        console.log(res);
+        // console.log(res);
         this.tableData = res.data.data;
         this.searchedData = this.tableData
         if (this.tableData.length) {

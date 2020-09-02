@@ -26,7 +26,7 @@
             <i class="el-icon-user"></i>我的信息
           </el-menu-item>
           <el-menu-item index="/teacher/stu-list">
-              <i class="el-icon-s-order"></i>学生列表
+            <i class="el-icon-s-order"></i>学生列表
           </el-menu-item>
           <el-submenu index="1">
             <template slot="title">
@@ -77,6 +77,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import layout from "../../components/content/layout";
 import { getStage } from "../../network";
+import { getStudentList } from "../../network/index";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -107,10 +108,34 @@ export default {
     },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
+  created() {
+    if (sessionStorage.getItem("store")) {
+      this.$store.replaceState(
+        Object.assign(
+          {},
+          this.$store.state,
+          JSON.parse(sessionStorage.getItem("store"))
+        )
+      );
+    }
+    //在页面刷新时将vuex里的信息保存到sessionStorage里
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.setItem("store", JSON.stringify(this.$store.state));
+    });
+  },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.activeNav = this.$router.history.current.path;
+    getStudentList().then((res) => {
+      if (res.data.status == 100) {
+        let arr = [];
+        for (let item of res.data.data) {
+          arr.push(item.stuno);
+        }
+        this.$store.commit("setStuNo", arr);
+        // console.log(this.$store.state.stuNo);
+      }
+    });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -153,7 +178,8 @@ export default {
   position: absolute;
   background-color: white !important;
 }
-.phone-menu .el-submenu ,.phone-menu .el-menu-item{
+.phone-menu .el-submenu,
+.phone-menu .el-menu-item {
   width: 150px;
   max-width: 150px;
   background-color: white;
@@ -172,7 +198,12 @@ export default {
 .input-with-select {
   width: 400px;
 }
-.el-select .el-input__inner{
+.el-select .el-input__inner {
   width: 90px;
+}
+.report-btn-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -122,6 +122,8 @@ export default {
       this.filterClick(this.filterIndex);
     },
     reportCheck2(item) {
+      let index = this.$store.state.stuNo.indexOf(item.stuno);
+      this.$store.commit("setIndex", index);
       this.$router.push("/teacher/report-check2/" + item.stuno);
     },
     tableRowClassName({ row, rowIndex }) {

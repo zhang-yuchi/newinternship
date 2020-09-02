@@ -122,13 +122,20 @@ export default {
     computedSearch() {
       this.filterClick(this.filterIndex);
     },
+    setStore(item) {
+      let index = this.$store.state.stuNo.indexOf(item.stuno);
+      this.$store.commit("setIndex", index);
+    },
     reportCheck1(item) {
+      this.setStore(item);
       this.$router.push("/teacher/report-check1/" + item.stuno);
     },
     reportCheck2(item) {
+      this.setStore(item);
       this.$router.push("/teacher/report-check2/" + item.stuno);
     },
     decisionCheck(item) {
+      this.setStore(item);
       this.$router.push("/teacher/decision-check/" + item.stuno);
     },
     prevClick() {
@@ -189,7 +196,7 @@ export default {
   created() {
     getStudentList().then((res) => {
       if (res.data.status == 100) {
-        console.log(res);
+        // console.log(res);
         this.tableData = res.data.data;
         this.searchedData = this.tableData;
       } else if (res.data.status == -100) {

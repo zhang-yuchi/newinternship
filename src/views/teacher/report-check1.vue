@@ -94,9 +94,15 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="report-btn-line">
           <el-button type="primary" @click="submitReport1" :loading="loading"
-            >提交</el-button
+            >提 交</el-button
+          >
+          <el-button
+            class="nextBtn"
+            type="primary"
+            @click="toNext"
+            >下一个</el-button
           >
         </el-form-item>
       </el-form>
@@ -165,8 +171,15 @@ export default {
     };
   },
   methods: {
+    toNext() {
+      let index = this.$store.state.index;
+      this.$store.commit("incrementIndex");
+      let stuno = this.$store.state.stuNo[index + 1];
+      this.$router.replace("/teacher/report-check1/" + stuno);
+      this.$router.go(0);
+      window.scrollTo(0,0)
+    },
     submitReport1() {
-      console.log(this.report.stage1Comment);
       this.$confirm("确认提交？", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
@@ -189,23 +202,25 @@ export default {
           obj.stage1Grade = this.report.stage1Grade
             ? this.report.stage1Grade
             : "";
-          console.log(obj);
-          completeRep1(this.$route.params.stuNo, obj).then((res) => {
-            console.log(res);
-            if (res.data.status == 100) {
-              this.$message({
-                type: "success",
-                message: "提交成功!",
-              });
-              this.$router.back();
-            } else {
-              this.$message({
-                type: "error",
-                message: "提交失败：" + res.data.message,
-              });
+          // console.log(obj);
+          completeRep1(this.$route.params.stuNo, obj)
+            .then((res) => {
+              // console.log(res);
+              if (res.data.status == 100) {
+                this.$message({
+                  type: "success",
+                  message: "提交成功!",
+                });
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "提交失败：" + res.data.message,
+                });
+              }
+            })
+            .finally(() => {
               this.loading = false;
-            }
-          });
+            });
         })
         .catch((err) => {
           // console.log(err)
@@ -219,7 +234,7 @@ export default {
   mounted() {
     let stuNo = this.$route.params.stuNo;
     getStudentReport(stuNo).then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res.data.status == 100) {
         this.info = res.data.data.student;
         if (this.info.starttime) {

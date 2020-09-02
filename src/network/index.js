@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import vm from 'element-ui'
 let isDev = process.env.NODE_ENV === 'development'
-isDev = false
+// isDev = false
 const baseURL = isDev ? "http://hz.nadev.cn:8255/internship" : "http://sx.cdcas.edu.cn:8890/internship"
 const service = axios.create({
   baseURL

@@ -204,6 +204,7 @@ export default {
       timeBtnLoading: false,
       formLoading: false,
       rules: {
+        teachno:[{required:true,validator: checkNull,trigger:['blur']}],
         pass: [{ required: true, validator: validatePass, trigger: "blur" }],
         checkPass: [
           { required: true, validator: validatePass2, trigger: "blur" }

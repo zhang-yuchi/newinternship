@@ -17,6 +17,9 @@
         class="demo-ruleForm"
         label-position="left"
       >
+      <el-form-item label="导师工号" prop="teachno">
+          <el-input type="text" v-model="ruleForm.teachno" autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="实习岗位" prop="position">
           <el-input type="text" v-model="ruleForm.position" autocomplete="off"></el-input>
         </el-form-item>
@@ -187,6 +190,7 @@ export default {
         position:"",
         starttime:"",
         endtime:"",
+        teachno:"",
       },
       pswForm: {
         oldPsw: "",
@@ -200,6 +204,7 @@ export default {
       timeBtnLoading: false,
       formLoading: false,
       rules: {
+        teachno:[{required:true,validator: checkNull,trigger:['blur']}],
         pass: [{ required: true, validator: validatePass, trigger: "blur" }],
         checkPass: [
           { required: true, validator: validatePass2, trigger: "blur" }
@@ -348,8 +353,8 @@ export default {
       getStudentInfo()
         .then(res => {
           console.log(res);
-          let {qq,age,phone,wechat,position,starttime,endtime} = res.data.data
-          this.ruleForm = {qq,age,phone,wechat,position,starttime,endtime};
+          let {qq,age,phone,wechat,position,starttime,endtime,teachno} = res.data.data
+          this.ruleForm = {qq,age,phone,wechat,position,starttime,endtime,teachno};
           console.log(this.ruleForm);
           this.timeForm.gmtStart = res.data.data.gmtStart;
           this.timeForm.gmtEnd = res.data.data.gmtEnd;

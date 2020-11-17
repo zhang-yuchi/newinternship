@@ -178,47 +178,57 @@ export default {
       window.scrollTo(0, 0);
     },
     submitDecision() {
-      let obj = {
-        corpTeacherGrade: this.appraisal.corpTeacherGrade
-          ? this.appraisal.corpTeacherGrade
-          : "",
-        teacherGrade: this.appraisal.teacherGrade
-          ? this.appraisal.teacherGrade
-          : "",
-        leaderOpinion: this.appraisal.leaderOpinion || " ",
-      };
-      // console.log(obj);
-      this.$confirm("确认提交？", "提示", {
-        confirmButtonText: "提交",
-        cancelButtonText: "取消",
-        type: "info",
-      })
-        .then(() => {
-          this.loading = true;
-          completeDecision(this.$route.params.stuNo, obj).then((res) => {
-            // console.log(res);
-            if (res.data.status == 100) {
-              this.$message({
-                type: "success",
-                message: "提交成功!",
-              });
-            } else {
-              this.$message({
-                type: "error",
-                message: "提交失败：" + res.data.message,
-              });
-            }
-          });
+      if (
+        !this.appraisal.corpTeacherOpinion ||
+        this.appraisal.corpTeacherOpinion.length >= 60
+      ) {
+        let obj = {
+          corpTeacherGrade: this.appraisal.corpTeacherGrade
+            ? this.appraisal.corpTeacherGrade
+            : "",
+          teacherGrade: this.appraisal.teacherGrade
+            ? this.appraisal.teacherGrade
+            : "",
+          leaderOpinion: this.appraisal.leaderOpinion || " ",
+        };
+        // console.log(obj);
+        this.$confirm("确认提交？", "提示", {
+          confirmButtonText: "提交",
+          cancelButtonText: "取消",
+          type: "info",
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消提交",
+          .then(() => {
+            this.loading = true;
+            completeDecision(this.$route.params.stuNo, obj).then((res) => {
+              // console.log(res);
+              if (res.data.status == 100) {
+                this.$message({
+                  type: "success",
+                  message: "提交成功!",
+                });
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "提交失败：" + res.data.message,
+                });
+              }
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消提交",
+            });
+          })
+          .finally(() => {
+            this.loading = false;
           });
-        })
-        .finally(() => {
-          this.loading = false;
+      } else {
+        this.$message({
+          type: "info",
+          message: "实习单位指导教师评语不能少于60字",
         });
+      }
     },
   },
   mounted() {

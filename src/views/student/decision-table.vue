@@ -87,8 +87,13 @@ export default {
       //   this.$message.warning('实习内容字数应该在800-1200字')
       //   return
       // }
+      let corpTeacherOpinionValidator = this.ruleForm.corpTeacherOpinion.length>60
       if(!summaryValidator){
         this.$message.warning('个人总结字数应该在800-1200字')
+        return
+      }
+      if(!corpTeacherOpinionValidator){
+        this.$message.warning('实习单位指导教师评语不少于60字')
         return
       }
       this.$refs[formName].validate(valid => {
